@@ -1,4 +1,4 @@
-# On the Dot — step 0
+# On the Dot — step 1 playtest
 
 A keyboard-only, solo marching prototype rebuilt from architecture §13. Static Vite + TypeScript + Three.js; native Web Audio supplies the master clock. No downloaded art, audio, fonts or models.
 
@@ -16,7 +16,7 @@ Open the printed localhost URL in a landscape desktop browser. Click **Calibrate
 - **Escape:** pause / resume, including the audio-clock timeline.
 - Holds: stand still; steering incurs a fault.
 
-Gold is your marcher, the gold ring is your destination, and the top-right map shows the full field. Ten 8-count pages at 112 BPM include line, arc, holds, backward marching and a block. Finish for the recap and another rep with a new recorded seed.
+Gold is your marcher, the gold ring is your destination, and the top-right map shows the full field. Ten 8-count pages at 112 BPM include line, arc, holds, backward marching and a block. Finish for the recap. **Replay same seed** keeps the same band drift and marching tendency so you can compare an idle rep with a steered rep; **New band drift** rolls fresh luck.
 
 ## Verify
 
@@ -38,6 +38,6 @@ Tests cover tempo conversion and changing beat maps/meters, timing windows, cali
 
 ## Scope and remaining work
 
-This is step **0**, not the Game Week finished product. No multiplayer, phone input, hazards, recorded/generated repertoire, crowd or voices yet. The simple procedural uniforms and field are the slice's presentation; the detailed style pass remains step 2. FORM estimates the local live form from four neighboring performers' displacement, rather than full line/arc/block regression. Calibration estimates phase within one beat; it cannot identify whole-beat device delays.
+This is the step **1** steering playtest, not the Game Week finished product. No multiplayer, phone input, hazards, recorded/generated repertoire, crowd or voices yet. The simple procedural uniforms and field are the slice's presentation; the detailed style pass remains step 2. FORM estimates the local live form from four neighboring performers' displacement, rather than full line/arc/block regression. Calibration estimates phase within one beat; it cannot identify whole-beat device delays.
 
-**The §13 no-steering tuning issue is intentionally retained for step 1.** Automatic dot pull remains forgiving and computer drift modest. Do not infer that high idle scores mean tuning is complete. No Locked architecture decision was changed.
+**Step 1:** reduced dot pull, seeded spatial marching tendency, stronger coherent band drift and bounded on-beat steering make correction useful. Holds plant all marchers. Visual scoring splits DOT/FORM equally; timing modifies it rather than awarding idle bonus points. A 24-seed reference-controller comparison checks active steering beats idle; this is not a substitute for a human playtest. Full shape-aware FORM scoring and the visible podium drum major are documented follow-ups, not included visuals in this checkpoint. No Locked architecture decision was changed.

@@ -14,13 +14,34 @@ export function target(count: number, id: number): Dot {
     prev = page ? show.pages[page - 1].dots : show.initial;
   return mix(prev[id], p.dots[id], Math.min(1, (count - page * 8) / 8));
 }
+export const STEERING = {
+  nudgeRadians: 0.16,
+  headingRetention: 0.96,
+  dotPull: 0.035,
+  tendencyRadians: 0.34,
+  maxHeading: 0.7,
+};
+
+// Spatial drift advances only on move pages; a hold never makes feet slide.
 export function drift(count: number, id: number, seed: number): Dot {
-  const base = target(count, id),
-    phase = (Math.max(0, count) % 8) / 8;
-  const strength = Math.sin(Math.PI * phase) * 0.9 + 0.12;
+  count = Math.max(0, Math.min(80, count));
+  let travel = 0;
+  for (let page = 0; page < 10; page++) {
+    const prev = page ? show.pages[page - 1].dots[id] : show.initial[id];
+    if (distance(prev, show.pages[page].dots[id]) > 0)
+      travel += Math.max(0, Math.min(8, count - page * 8));
+  }
+  const base = target(count, id);
+  const strength = 0.35 + 0.85 * Math.sin((Math.PI * travel) / 8) ** 2;
   return {
-    x: base.x + Math.sin(seed * 1.79 + id * 3.1 + count * 0.035) * strength,
-    y: base.y + Math.cos(seed * 0.93 + id * 1.7 + count * 0.04) * strength,
+    x:
+      base.x +
+      Math.sin(seed * 0.17 + travel * 0.045) * 0.9 +
+      Math.sin(seed * 1.79 + id * 3.1 + travel * 0.035) * strength,
+    y:
+      base.y +
+      Math.cos(seed * 0.13 + travel * 0.04) * 0.6 +
+      Math.cos(seed * 0.93 + id * 1.7 + travel * 0.04) * strength,
   };
 }
 export function formError(player: Dot, actual: Dot[], count: number) {
@@ -100,16 +121,26 @@ export class Run {
         : show.initial[PLAYER];
       const goal = show.pages[page].dots[PLAYER];
       const step = distance(start, goal) / 8;
-      this.heading = this.heading * 0.94 + (this.queue.get(k) ?? 0) * 0.12;
+      this.heading = Math.max(
+        -STEERING.maxHeading,
+        Math.min(
+          STEERING.maxHeading,
+          this.heading * STEERING.headingRetention +
+            (this.queue.get(k) ?? 0) * STEERING.nudgeRadians,
+        ),
+      );
       this.queue.delete(k);
       if (step > 0) {
         const angle =
-          Math.atan2(goal.y - this.from.y, goal.x - this.from.x) + this.heading;
+          Math.atan2(goal.y - this.from.y, goal.x - this.from.x) +
+          this.heading +
+          STEERING.tendencyRadians *
+            (Math.sin(this.seed * 1.71 + page * 0.3) >= 0 ? 1 : -1);
         const moved = {
           x: this.from.x + Math.cos(angle) * step,
           y: this.from.y + Math.sin(angle) * step,
         };
-        this.to = mix(moved, end, 0.18);
+        this.to = mix(moved, end, STEERING.dotPull);
       } else this.to = { ...this.from };
       this.completed++;
       const actual = Array.from({ length: 12 }, (_, id) =>
@@ -142,9 +173,7 @@ export class Run {
       band,
       total: Math.max(
         0,
-        dot * 0.4 +
-          form * 0.4 +
-          timing * 0.15 +
+        (dot * 0.5 + form * 0.5) * (0.85 + timing * 0.0015) * 0.95 +
           band * 0.05 -
           this.faults * 0.5,
       ),

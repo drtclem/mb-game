@@ -123,6 +123,11 @@ North star: keep it cheap, and keep the option to put it online for people to pl
   - **FORM:** how well your position fits the form *as the band actually is*, **including the other human player**.
 - **Timing** (how well your nudges land on the beat), **horns**, and **collisions** also count toward the player's result. With no nudges, DOT and FORM decide alone.
 - **(Game Week)** **Not steering must not win.** The known Level 1 issue (#13) is fixed before anything else: more band drift and less pull, so a player who never steers scores clearly worse than one who does.
+- **Improved FORM judging (confirmed Nov 2; required before multiplayer competition):** replace the step-0 four-neighbor average with shape-aware fitting and a separate interval error. Fit the form from the other members' **actual**, count-aligned positions, excluding the player being judged so they cannot move their own reference. Use line alignment and even intervals for lines; smooth fitted curvature and along-arc spacing for arcs; rank/file alignment and intervals for blocks. During transitions, blend the outgoing and incoming form references continuously instead of abruptly changing the scoring target.
+  - Both human players are members of the fit and each other's immediate-neighbor spacing checks. A player on their written dot can lose FORM when their partner or band drifts, and can improve FORM by following the live shape at some DOT cost.
+  - Weight immediate neighbors more heavily, but bound any one member's influence so one wildly misplaced marcher cannot drag the entire reference across the field. Use the same rules for humans and computer marchers. Keep fitting local and driven by each device's music clock; never wait for a network response to judge a beat.
+  - Validate translated/rotated lines, curved arcs, rank/file distortions, uneven intervals, partner-only drift, self-exclusion, continuity through transitions, and both player slots symmetrically. Tune the shape/spacing weights in playtests; do not hide fixed weighting decisions in rendering code.
+  - **Implementation boundary:** step 1 tunes steering against the existing local-neighbor FORM approximation. The full fitter and spacing caption above are a required follow-up before step 4; they are not claimed as complete by the step-1 build.
 - **What "clean" means** (matches real drill charts): even spacing (intervals), straight lines, blocks with aligned ranks and files, smooth arcs, wedge rows parallel and evenly spaced. Measured by fitting the ideal shape to everyone's actual positions, then scoring deviation and spacing evenness.
 - **The band's performance is partly luck:** its baseline comes from the computer marchers' temperature that run. The final result combines **your DOT and FORM scores** with **the band's rolled performance**.
 - Tune the mix so a strong run passes almost every time, but the band can still have an off night.
@@ -162,6 +167,7 @@ North star: keep it cheap, and keep the option to put it online for people to pl
 - **(Game Week)** **How the hero model gets made** is decided with the style sheet: either built in code at higher detail, or AI-generated and rigged (if the instructor allows it, #0). Either way, no asset-store or library characters.
 - **(Game Week)** **A realistic field:** turf with mowing stripes, painted yard numbers, hashes and sidelines, and an invented center logo.
 - **(Game Week)** **A stadium around the field:** stands, lights and a simple crowd (instanced shapes), so the field feels like a place.
+- **Visible drum major on a podium (Taylor, Nov 2):** the conductor is a drum major, visibly depicted on a raised podium at the front sideline. The player must be able to see the drum major's figure/image in the game, not just hear a voice or see a label. Conducting follows the same music clock and meter as the count-off and show; it never becomes a separate timing authority. The walking band director/staff are separate characters. Create the visual for this game, with no stock assets or real insignia. Choose a detailed code-built/rigged figure or an original generated image/animated sprite during the step-2 style pass, and frame it clearly from the playing camera (an inset may preserve visibility when the camera swings backward).
 - The marcher lives in one module so a better model can replace it later without touching the rest of the game.
 
 ### 11. Crowd and director audio
@@ -190,9 +196,12 @@ North star: keep it cheap, and keep the option to put it online for people to pl
 - Tempo map, calibration screen, beat judging, auto-march with steering and pull, band marching in step with the player, drifting marchers, DOT and FORM scores, corner map, camera with backward swing, recap screen.
 - Drill-sheet translator and show checker, with automated tests.
 
-**Known tuning issue:** with automatic marching, a player who never steers still scores well (DOT is perfect and the band only drifts a little on Level 1). Next tuning pass: more band drift, and/or less pull, so FORM pushes the player to steer. **(Game Week: first task, see #7.)**
+**Step 1 tuning (Nov 2):** idle marching no longer follows a mathematically perfect path. Each run/page has a small seeded spatial heading tendency (not a timing error); on-beat steering counters it. Heading still resets each page. Dot pull is reduced from 0.18 to 0.035; nudge size is 0.16 radians with bounded accumulated heading and 0.96 retention. Computer drift includes a shared smooth offset plus individual errors, advances only during moves and settles to a smaller residual at arrivals. Holds keep feet planted. The constants live together in `STEERING` for playtest tuning.
+
+**Scoring for this playtest:** DOT retains arrival-heavy checking (75% arrivals / 25% mid-move). DOT and FORM share the visual result equally; timing modifies that visual result by up to 15%, rather than awarding free points for never steering. With no nudges, only visual accuracy and the 5% shared band result determine the total. Hold faults still subtract points. Automated fixed-seed comparisons require corrective on-beat steering to beat idle by at least 3 points on every tested seed and by over 10 points at the median. This proves a useful correction is reachable, not that first-time-player difficulty is settled; Taylor's playtest is the next gate.
 
 ### 14. Multiplayer (Game Week)
+- **Confirmed scope (Taylor, Nov 2): exactly two human players for now.** Both occupy adjacent slots in the same form for most pages. Neither is an independent lane or a visual ghost: each player's actual displacement affects the other's FORM integrity. More than two players remains out of scope.
 - **Two players, online, peer-to-peer.** Laptop vs laptop, phone vs phone, or mixed.
 - **Joining:** one player taps **Host** and gets a short room code plus a share link; the other enters the code or opens the link. Both land in a lobby showing who's there and which show is picked.
 - **How devices find each other:** WebRTC. A tiny **matchmaker** (signaling, on a free tier such as Cloudflare Workers or PeerJS) passes a few setup messages, then steps out. A **relay** (TURN) carries traffic when a direct connection is blocked, which is common on cellular and school Wi-Fi. Built in from day one, not added later.
@@ -223,7 +232,7 @@ Each show also gets its own field look (invented logo, colors, time of day).
 - Online two-player: host / join, shared start, live positions, side-by-side recap, rematch.
 - Phone steering (tilt plus tap-zones fallback) and laptop keyboard.
 - Judges and staff, collisions, big moments.
-- Stylized-realistic look: style sheet, detailed hero marchers, lighter band marchers, left/right footwork, realistic field, stadium, title screen, HUD, recap (#10).
+- Stylized-realistic look: style sheet, visible podium drum major, detailed hero marchers, lighter band marchers, left/right footwork, realistic field, stadium, title screen, HUD, recap (#10).
 - Generated audio: AI tracks, click, crowd, director lines (#9, #11).
 - **How to play:** a short screen with the controls, plus a guided first run on show 1 (prompts like "steer back toward your dot").
 - Clear sound levels: music, voices and crowd balanced, with a volume setting.
@@ -231,8 +240,8 @@ Each show also gets its own field look (invented logo, colors, time of day).
 **Out until after Game Week:** horns, manual dynamics, rehearsal mode, more than two players, saves beyond settings and calibration, cloud anything, Steam and app stores.
 
 **Order of work (each step playable before the next):**
-1. Steering tuning fix.
-2. Style sheet (including the realism level and how the hero model is made), then restyle the existing slice: marchers, footwork, field.
+1. Steering tuning fix; stop for Taylor to playtest before proceeding.
+2. Style sheet (including the realism level, hero model and visible podium drum-major visual), then restyle the existing slice: marchers, footwork, field. Complete shape-aware FORM judging and spacing validation before step 4.
 3. Show 1: generate and beat-map the track, then write the drill.
 4. Multiplayer (two browser windows first, then phones).
 5. Phone controls.
@@ -244,5 +253,5 @@ Each show also gets its own field look (invented logo, colors, time of day).
 Start generating show 1 and show 2 tracks early (in parallel with steps 1–2), since picking good takes can take several tries.
 
 ### 17. Source control
-- The repo lives on **GitHub** (moved from GitLab, Nov 2026). Planning docs live in the repo's `docs/` folder next to the code; `AGENTS.md` at the root holds the rules for AI coding agents.
+- The active repo is **GitLab**, `https://labs.gauntletai.com/taylorclements/mb-game` (confirmed Nov 2). Push completed playable checkpoints there; no GitHub migration is assumed. Planning docs live in the repo's `docs/` folder next to the code; `AGENTS.md` at the root holds the rules for AI coding agents.
 - Free playtest builds can come from GitHub Pages or Cloudflare Pages.

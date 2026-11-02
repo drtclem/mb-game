@@ -131,8 +131,8 @@ function menu() {
   mode = "menu";
   hud.hidden = true;
   overlay.hidden = false;
-  overlay.innerHTML = `<div class="intro"><p class="eyebrow">A MARCHING FIELD EXPERIMENT</p><h1>Find your dot.<br>Feel the line.</h1><p>You march automatically. Nudge <strong>← / → on the click</strong> to bend your path. Gold is you; the ring is your dot. Balance your written dot against a drifting band.</p><div class="instructions"><span>01 &nbsp; Listen to the count-off</span><span>02 &nbsp; Steer relative to your path</span><span>03 &nbsp; Stand still on holds</span></div><button class="primary" id="start">Take the field <span>↗</span></button><button id="calibrate">Calibrate timing</button><small id="calinfo">Calibration saved on this device · ${Math.round(offset * 1000)} ms</small><details><summary>Drill-sheet translator</summary><input id="drill" aria-label="Drill sheet coordinates" value="2 outside S1 40, 3 behind FH"><button id="translate">Translate & check</button><output id="translated"></output></details></div><div class="stamp">L1<span>THE FIRST<br>EIGHT COUNTS</span></div>`;
-  $("start").onclick = startRun;
+  overlay.innerHTML = `<div class="intro"><p class="eyebrow">A MARCHING FIELD EXPERIMENT</p><h1>Find your dot.<br>Feel the line.</h1><p>You march automatically, with a slight tendency to drift. Nudge <strong>← / → on the click</strong> to bend your path. Gold is you; the ring is your dot. Balance your written dot against a drifting band.</p><div class="instructions"><span>01 &nbsp; Listen to the count-off</span><span>02 &nbsp; Steer relative to your path</span><span>03 &nbsp; Stand still on holds</span></div><button class="primary" id="start">Take the field <span>↗</span></button><button id="calibrate">Calibrate timing</button><small id="calinfo">Calibration saved on this device · ${Math.round(offset * 1000)} ms</small><details><summary>Drill-sheet translator</summary><input id="drill" aria-label="Drill sheet coordinates" value="2 outside S1 40, 3 behind FH"><button id="translate">Translate & check</button><output id="translated"></output></details></div><div class="stamp">L1<span>THE FIRST<br>EIGHT COUNTS</span></div>`;
+  $("start").onclick = () => startRun();
   $("calibrate").onclick = calibrate;
   $("translate").onclick = () => {
     try {
@@ -144,9 +144,9 @@ function menu() {
     }
   };
 }
-function startRun() {
+function startRun(seed = Math.floor(Math.random() * 100000)) {
   initAudio();
-  run = new Run(Math.floor(Math.random() * 100000));
+  run = new Run(seed);
   start = audio.currentTime + 0.15 + tempo.seconds(8);
   nextClick = -8;
   lastCount = -8;
@@ -189,8 +189,9 @@ function recap() {
   hud.hidden = true;
   overlay.hidden = false;
   const s = run.scores();
-  overlay.innerHTML = `<div class="panel recap"><p class="eyebrow">REHEARSAL RECAP · SEED ${run.seed}</p><h1>${s.total.toFixed(2)}<small> / 100</small></h1><p>One rep in the books.</p><div class="caption"><span>VISUAL · DOT</span><b>${s.dot.toFixed(2)}</b></div><div class="caption"><span>VISUAL · FORM</span><b>${s.form.toFixed(2)}</b></div><div class="caption"><span>MUSIC · TIMING</span><b>${s.timing.toFixed(2)}</b></div><div class="caption"><span>BAND PERFORMANCE</span><b>${s.band.toFixed(2)}</b></div><p>${run.grades.length} nudges · ${run.faults} hold faults<br>Dot 40% · form 40% · timing 15% · band 5%</p><button id="again" class="primary">Another rep ↗</button><button id="home">Back to field notes</button></div>`;
-  $("again").onclick = startRun;
+  overlay.innerHTML = `<div class="panel recap"><p class="eyebrow">REHEARSAL RECAP · SEED ${run.seed}</p><h1>${s.total.toFixed(2)}<small> / 100</small></h1><p>One rep in the books.</p><div class="caption"><span>VISUAL · DOT</span><b>${s.dot.toFixed(2)}</b></div><div class="caption"><span>VISUAL · FORM</span><b>${s.form.toFixed(2)}</b></div><div class="caption"><span>MUSIC · TIMING</span><b>${s.timing.toFixed(2)}</b></div><div class="caption"><span>BAND PERFORMANCE</span><b>${s.band.toFixed(2)}</b></div><p>${run.grades.length} nudges · ${run.faults} hold faults<br>Visual: dot / form equally · timing modifier · band 5%</p><button id="same" class="primary">Replay same seed ↗</button><button id="again">New band drift</button><button id="home">Back to field notes</button></div>`;
+  $("same").onclick = () => startRun(run.seed);
+  $("again").onclick = () => startRun();
   $("home").onclick = menu;
 }
 function togglePause() {

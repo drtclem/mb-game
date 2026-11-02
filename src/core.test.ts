@@ -73,7 +73,7 @@ describe("show checker", () => {
   });
 });
 describe("marching", () => {
-  it("replays seeded drift and returns smoothly to page arrivals", () => {
+  it("replays seeded drift continuously and keeps arrival errors bounded", () => {
     expect(drift(3, 4, 22)).toEqual(drift(3, 4, 22));
     expect(drift(3, 4, 22)).not.toEqual(drift(3, 4, 23));
     expect(
@@ -81,7 +81,13 @@ describe("marching", () => {
         drift(8, 4, 22).x - target(8, 4).x,
         drift(8, 4, 22).y - target(8, 4).y,
       ),
-    ).toBeLessThan(0.2);
+    ).toBeLessThan(1.6);
+    expect(
+      Math.hypot(
+        drift(8.00001, 4, 22).x - drift(7.99999, 4, 22).x,
+        drift(8.00001, 4, 22).y - drift(7.99999, 4, 22).y,
+      ),
+    ).toBeLessThan(0.001);
   });
   it("has frame-rate-independent movement and scoring", () => {
     const a = new Run(42),
