@@ -48,8 +48,10 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **Early/late physical response confirmed:** feet move early/late with the tap timestamp; the music clock remains unchanged and judges timing separately.
 
-**Hold mistake confirmed:** a rhythm tap during a hold causes a small physical step and a fault. Total displacement from repeated taps is bounded. It must be visible movement, not a score-only penalty or normal mark time. The bound is anchored at the actual hold-start position, even when far off-dot; mistaken steps cannot automatically repair a missed dot. The radius, movement direction, extra-tap/rate handling and held steering/tilt behavior remain open.
+**Hold mistake confirmed:** a rhythm tap during a hold causes a small physical step and a fault. Total displacement from repeated taps is bounded. It must be visible movement, not a score-only penalty or normal mark time. The bound is anchored at the actual hold-start position, even when far off-dot; mistaken steps cannot automatically repair a missed dot. The radius, movement direction and held steering/tilt behavior remain open. Every distinct extra rhythm tap also causes a physical step; hold displacement remains bounded.
 
-**Next question, one at a time:** should extra taps between moving counts cause extra physical steps and timing penalties, or should each count accept at most one step? Then settle DOT/FORM/step-size scoring weights.
+**Extra taps confirmed:** every distinct rhythm tap causes a physical step, even multiple taps within one count. Rapid taps make the legs move faster and disrupt timing and positioning, with scoring consequences. Do not discard extra taps or limit physical steps to one per count. Keyboard auto-repeat does not represent a new physical tap. Exact deductions and rapid-step animation transitions remain open.
+
+**Next question, one at a time:** should DOT accuracy or FORM integrity carry more weight, or should they be equal? Recommend 50/50 as the starting balance; settle timing and step-size scoring after the core balance.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.
