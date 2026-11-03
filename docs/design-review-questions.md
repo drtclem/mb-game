@@ -106,6 +106,8 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **Retry scope confirmed:** full shows only for now; no selected-set practice. Per-set analytics remain available for review.
 
-**Next question, one at a time:** should the next written dot stay visible throughout each moving set? Recommend a small, precise field marker, scored from its exact center rather than giving the whole marker a perfect-score zone.
+**Dot visibility confirmed:** the next dot stays visible throughout each moving set, using a small precise field marker. Score distance from the exact center, not the whole marker area.
+
+**Next question, one at a time:** should players also see a path line toward the dot, or only the dot itself? Recommend only the dot initially, so players judge their route and the surrounding form.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.

@@ -339,3 +339,7 @@ The results screen lets players inspect each set to understand where they lost p
 ### Retry scope (Taylor, Nov 3)
 
 For now, players play and retry full shows only. Do not add selected-set practice or restart-from-set controls. Per-set results inspection remains available for analysis.
+
+### Dot target visibility (Taylor, Nov 3)
+
+Keep the next written dot visible throughout each moving set as a small, precise field marker. Measure DOT accuracy from the exact target center; the visible marker is not an enlarged perfect-score zone. Marker dimensions and scoring tolerance curves remain to be tuned.
