@@ -387,3 +387,7 @@ Offer **Easy, Medium and Hard** as the initial difficulty presets. The confirmed
 ### Difficulty and tempo (Taylor, Nov 3)
 
 For now, each show keeps the same musical tempo across Easy, Medium and Hard. Difficulty-dependent tempo variation is deferred for later, not permanently ruled out.
+
+### Difficulty eligibility for unlocks (Taylor, Nov 3)
+
+A qualifying individual score on any difficulty can unlock additional shows for now; no specific difficulty is required. Retain the difficulty with recorded results and personal bests. Numerical unlock thresholds remain to be tuned.
