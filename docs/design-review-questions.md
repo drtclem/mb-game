@@ -56,8 +56,10 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **Technique scoring confirmed:** every intended step toward a dot has an ideal size, timing and direction. Any deviation directly reduces the score, beyond its DOT/FORM consequences. Track all three in analytics; arrival does not erase earlier mistakes. Compare recovery against the written ideal. Exact penalty curves and weights remain undecided.
 
-**Form adjustment weighting confirmed:** justified adjustments improve FORM and receive a reduced DOT penalty for the form-preserving portion of their displacement. Keep 50/50 as the base balance, with a configurable eligible-error discount. Show actual written-dot error in analytics. Correct form-preserving direction/step-size adjustments are not technique faults; timing still matters. Eligibility and discount amount remain open.
+**Form adjustment weighting confirmed:** justified adjustments improve FORM and receive a reduced DOT penalty for the form-preserving portion of their displacement. Keep 50/50 as the base balance, with a configurable eligible-error discount. Show actual written-dot error in analytics. Correct form-preserving direction/step-size adjustments are not technique faults; timing still matters. The initial eligible-error DOT-penalty discount is confirmed at 50%, configurable for later tuning. Eligibility remains open.
 
-**Next question, one at a time:** should justified form-adjustment DOT error receive half the normal penalty as a starting value? This is a proposed tunable 50% discount, not yet approved. Unrelated error remains fully penalized.
+**Form-adjustment discount confirmed:** charge half the normal DOT penalty for justified form-preserving error. Keep this configurable; unrelated error remains fully penalized.
+
+**Next question, one at a time:** should FORM judging include the whole local rank/file/curve as well as spacing between immediate neighbors? Recommend both, so equal spacing alone cannot earn a perfect FORM score when the intended shape is broken. Exact component weights remain open.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.
