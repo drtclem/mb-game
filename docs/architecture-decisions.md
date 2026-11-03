@@ -343,3 +343,7 @@ For now, players play and retry full shows only. Do not add selected-set practic
 ### Dot target visibility (Taylor, Nov 3)
 
 Keep the next written dot visible throughout each moving set as a small, precise field marker. Measure DOT accuracy from the exact target center; the visible marker is not an enlarged perfect-score zone. Show just the dot for now, without a path line toward it. Marker dimensions and scoring tolerance curves remain to be tuned.
+
+### Count-in and drum major (Taylor, Nov 3)
+
+Begin each show with an eight-beat ascending count-in: **“5… 6… 5, 6, 7, 8.”** Place calls on beats 1, 3, 5, 6, 7 and 8 respectively, with movement beginning on the following beat. Multiplayer performers begin together. Add an actual human drum-major visualization; start with a rough concept sketch now and refine its character art later. Final placement, conducting animation and presentation remain open.

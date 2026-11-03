@@ -110,6 +110,10 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **Route aid confirmed:** show just the dot for now; no path line.
 
-**Next question, one at a time:** before each full show, should players get a brief count-in to establish the tempo before movement starts? Recommend an eight-count lead-in, with everyone starting together in multiplayer.
+**Count-in confirmed:** eight beats, counting up “5… 6… 5, 6, 7, 8” (calls on beats 1, 3, 5, 6, 7, 8). Begin movement on the next beat; multiplayer starts together.
+
+**Drum major requested:** actual human visualization, rough concept sketch now; detailed character and animation design later.
+
+**Next question, one at a time:** should the drum major remain visible during the show, or appear only for the count-in?
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.
