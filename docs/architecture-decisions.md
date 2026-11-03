@@ -306,4 +306,4 @@ Desktop keyboard players and iPhone tap/tilt players can join the same multiplay
 
 ### Multiplayer disconnect handling (Taylor, Nov 3)
 
-If a human player disconnects mid-show, AI takes over their performer and the remaining players continue. Mark the disconnected player’s individual result incomplete. Notify the other players of the disconnect and AI takeover. Reconnection and return of control remain undecided.
+If a human player disconnects mid-show, AI takes over their performer and the remaining players continue. Mark the disconnected player’s individual result incomplete. Notify the other players of the disconnect and AI takeover. If the player reconnects during the show, return control on an announced count after a short countdown. Keep their individual result marked incomplete. The show continues during reconnection; the exact countdown length remains to be tuned.

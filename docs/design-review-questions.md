@@ -80,6 +80,8 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **Disconnect handling confirmed:** AI takes over the disconnected performer while everyone else continues; mark that player’s individual result incomplete and notify the other players of the disconnect and takeover.
 
-**Next question, one at a time:** if that player reconnects during the show, should they be allowed to resume control? Recommend returning control on a clearly announced count after a short countdown, while keeping the result marked incomplete.
+**Reconnection confirmed:** return control after a short countdown on an announced count, without stopping the show. The individual result remains incomplete.
+
+**Next question, one at a time:** on iPhone, should play use landscape orientation (phone sideways)? Recommend landscape for a wider view of neighboring performers and a large tap area; tilt steering still needs calibration and a fallback.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.
