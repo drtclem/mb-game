@@ -33,9 +33,8 @@ Tests cover tempo conversion and changing beat maps/meters, timing windows, cali
 - `drill.ts`: quarter-step coordinate translator and show checker.
 - `show.ts`: original 12-performer, 80-count drill.
 - `game.ts`: deterministic movement, drift, judging and scores.
-- `rigged-marcher.ts`: shared original character assets and count-driven skeletal pose.
-- `hand-grip.ts`: glove deformation for the simplified woman hand rig.
-- `baritone.ts`: original silver-plated instrument and grip targets.
+- `combined-marcher.ts`: shared complete playing-pose assets with independent leg rigs.
+- `combined-skin.ts`: leg weights that leave the complete upper body fixed.
 - `main.ts`: keyboard input adapter, Web Audio scheduling, Three.js view and screens.
 
 ## Scope and remaining work
@@ -46,14 +45,14 @@ This is the step **1** steering playtest, not the Game Week finished product. No
 
 ## Detailed character review (November 3)
 
-Open `/uniform.html` for the revised **combined playing-pose prototype**: the
-woman, hands and baritone are modeled together. This is a static pose review,
-with orbit and front/side/back/detail cameras. It does not run the rejected arm
-IK or attach a separate horn. Marching and the male counterpart await review of
-this combined sculpt. The playable band's six-women/six-men cast still uses the
-previous separate-asset rig; it has not been upgraded to this new prototype.
-Asset provenance, generation prompts and remaining work:
-`docs/art/character-pipeline.md`, `docs/art/posed-marcher-prompt.txt`.
+The playable band now uses **combined character-and-baritone sculpts** for all
+12 marchers: six women and six men. Arms, hands and instruments stay rigid;
+a separate original seven-bone lower-body rig provides count-driven steps,
+forward foot roll, backward marching and planted holds. Geometry and textures
+are shared by gender while each marcher owns its leg skeleton.
+
+Open `/uniform.html` to inspect either model and preview forward/backward steps.
+Asset provenance and remaining work: `docs/art/character-pipeline.md`.
 
 GitLab CI runs type/unused-code checks, tests, production build and dependency
 audit on branch and merge-request pipelines, retaining `dist/` for review.

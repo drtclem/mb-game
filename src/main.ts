@@ -4,8 +4,7 @@ import { show } from "./show";
 import { checkShow, distance, formatDot, parseDot, type Dot } from "./drill";
 import { Run, tempo, target, drift, PLAYER } from "./game";
 import { calibrationOffset } from "./tempo";
-import { loadRiggedMarcher } from "./rigged-marcher";
-import { loadBaritone } from "./baritone";
+import { loadCombinedMarcher } from "./combined-marcher";
 import { roster } from "./marching-motion";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 const errors = checkShow(show);
@@ -87,24 +86,14 @@ for (let x = -80; x <= 80; x += 8) {
 for (const y of [0, 85.33]) box(160, 0.08, 0.15, 0xe1ddc0, 0, 0.04, y);
 for (let tier = 0; tier < 5; tier++)
   box(175, 2, 5, 0x263c4e, 0, tier * 2, 98 + tier * 5);
-type DetailedMarcher = Awaited<ReturnType<typeof loadRiggedMarcher>>;
+type DetailedMarcher = Awaited<ReturnType<typeof loadCombinedMarcher>>;
 const band: (DetailedMarcher | undefined)[] = new Array(show.performers.length);
 let bandReady = false,
   bandError = false;
 Promise.all(
   show.performers.map(async (_, id) => {
     const person = roster[id];
-    const [model, instrument] = await Promise.all([
-      loadRiggedMarcher(person.gender, person.height),
-      loadBaritone(),
-    ]);
-    instrument.group.position.copy(model.mouth);
-    model.group.add(instrument.group);
-    model.setHandTargets(
-      model.mouth.clone().add(instrument.leftGrip),
-      model.mouth.clone().add(instrument.rightGrip),
-    );
-    model.setPlaying(true);
+    const model = await loadCombinedMarcher(person.gender, person.height);
     band[id] = model;
     scene.add(model.group);
   }),

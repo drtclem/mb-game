@@ -40,23 +40,24 @@ for (const gender of ["woman", "man"]) {
 }
 
 // The combined pose must remain a rigid sculpt: no arm rig or imported animation can tear the grip apart.
-describe("combined playing-pose prototype", () => {
-  const file = readFileSync(
-    new URL("../public/models/posed-baritone-woman.glb", import.meta.url),
-  );
-  const length = file.readUInt32LE(12);
-  const asset = JSON.parse(file.subarray(20, 20 + length).toString());
-  it("ships a complete textured rigid sculpt within the prototype payload budget", () => {
-    expect(asset.meshes).toHaveLength(1);
-    expect(asset.skins ?? []).toHaveLength(0);
-    expect(asset.animations).toBeUndefined();
-    expect(asset.materials[0].normalTexture).toBeDefined();
-    expect(
-      asset.materials[0].pbrMetallicRoughness.baseColorTexture,
-    ).toBeDefined();
-    expect(
-      asset.materials[0].pbrMetallicRoughness.metallicRoughnessTexture,
-    ).toBeDefined();
-    expect(file.byteLength).toBeLessThan(15 * 1024 * 1024);
+for (const gender of ["woman", "man"])
+  describe(`combined ${gender} playing-pose asset`, () => {
+    const file = readFileSync(
+      new URL(`../public/models/posed-baritone-${gender}.glb`, import.meta.url),
+    );
+    const length = file.readUInt32LE(12);
+    const asset = JSON.parse(file.subarray(20, 20 + length).toString());
+    it("ships a complete textured rigid sculpt within the prototype payload budget", () => {
+      expect(asset.meshes).toHaveLength(1);
+      expect(asset.skins ?? []).toHaveLength(0);
+      expect(asset.animations).toBeUndefined();
+      expect(asset.materials[0].normalTexture).toBeDefined();
+      expect(
+        asset.materials[0].pbrMetallicRoughness.baseColorTexture,
+      ).toBeDefined();
+      expect(
+        asset.materials[0].pbrMetallicRoughness.metallicRoughnessTexture,
+      ).toBeDefined();
+      expect(file.byteLength).toBeLessThan(15 * 1024 * 1024);
+    });
   });
-});

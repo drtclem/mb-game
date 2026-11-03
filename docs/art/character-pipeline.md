@@ -86,3 +86,40 @@ retained in Downloads (50,436,020 bytes). Meshy 7.1 High Detail, Ultra 4K geomet
 bytes, one rigid mesh, three embedded PBR images, no skeleton and no animations.
 Reproducible texture repack: `scripts/optimize-model.py` (Python plus Pillow),
 retaining normal PNG and reducing embedded images to at most 2048 pixels.
+
+
+## Game integration and valve/grip correction — November 3
+
+Taylor requested exactly three valves (no duplicated stems/caps) and a higher
+left support grip behind the valve block, then authorized rollout into the game.
+Input `posed-baritone-woman-reference-v3.png` preserves the approved costume and
+right arm, simplifies the valve assembly, and moves support behind the upper
+bell tube. Source: `Meshy_AI_Silver_Fanfare_1103190218_texture.glb` in Downloads,
+45,794,144 bytes. Meshy 7.1 High Detail / Ultra 4K, 4K texture, private, pose and
+image enhancement off; zero-credit 100K remesh yielded 103,366 faces / 138,652
+vertices. Runtime `posed-baritone-woman.glb` replaces the earlier prototype:
+12,655,216 bytes, three 2K PBR images, rigid geometry with no provider animation.
+
+A head-splice experiment failed visual review and was not shipped. Instead,
+`posed-baritone-man-reference.png` generates the complete matching adult man
+already holding the same horn. Source `Meshy_AI_Silver_Fanfare_1103204834_texture.glb`
+in Downloads: 13,907,764 bytes. Meshy T2 Smart Topology, 15K target, 4K texture,
+private, pose off: 14,998 faces / 14,177 vertices. Runtime
+`posed-baritone-man.glb`: 4,985,020 bytes, three 2K PBR images.
+
+This stage spent 35 credits on the corrected woman and 15 on the full man.
+Extension spending is now **190 / 200 approved credits**, leaving 10. Balance
+changed from 3,025 to 2,975. No additional credit authorization was assumed.
+
+`combined-marcher.ts` normalizes each original sculpt, centers its feet, caches
+geometry/materials by gender and binds a separate original seven-bone leg rig
+for each instance. `combined-skin.ts` gives the torso/arms/hands/horn only root
+weight, so leg motion cannot tear or detach the grip. Two-bone leg targets and
+foot roll use the existing count-based motion. No supplied stock motion is used.
+The band uses six women and six men with original roster height variation.
+The studio can preview both genders, halt, forward and backward motion.
+
+The lower-poly man and higher-detail woman share costume/lighting; they are two
+base sculpts, not twelve unique faces. Phone performance, exact thumb/valve detail,
+field/stadium polish and the drum major remain further review work. This visual
+checkpoint does not implement multiplayer, phone controls or new scoring rules.
