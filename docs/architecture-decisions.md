@@ -370,4 +370,8 @@ Players choose a display name shown above their controlled marcher and in multip
 
 ### Player marcher appearance (Taylor, Nov 3)
 
-Do not add player selection between woman and man marcher models for now. Assign the player’s model through the roster while preserving the confirmed half-women/half-men band composition.
+Defer player model selection to a future feature covering gender, instrument and possibly uniform. For now, assign the player’s model through the roster while preserving the confirmed half-women/half-men band composition. This is deferred scope, not a rejection of future customization.
+
+### Multiplayer ready gate (Taylor, Nov 3)
+
+Every participating player must confirm Ready before the host can start the multiplayer count-in. Ensure control and audio setup is complete before accepting readiness.

@@ -138,8 +138,10 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **Display names confirmed:** player-chosen names appear above their marcher and in multiplayer results.
 
-**Appearance selection declined:** no player model picker for now; roster assignment preserves the half-women/half-men band composition.
+**Appearance selection deferred:** future customization will include gender and instrument, and possibly uniform. No picker for the current scope; roster assignment preserves the half-women/half-men band composition.
 
-**Next question, one at a time:** should every player confirm Ready before the host can start the multiplayer count-in? Recommend yes, so nobody starts before their controls and audio are ready.
+**Ready gate confirmed:** everyone confirms Ready before the host can start the multiplayer count-in.
+
+**Next question, one at a time:** should the host choose the show and difficulty for the whole multiplayer room? Recommend yes, with the selection visible to everyone before they confirm Ready.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.
