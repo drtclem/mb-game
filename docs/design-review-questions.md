@@ -82,6 +82,8 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **Reconnection confirmed:** return control after a short countdown on an announced count, without stopping the show. The individual result remains incomplete.
 
-**Next question, one at a time:** on iPhone, should play use landscape orientation (phone sideways)? Recommend landscape for a wider view of neighboring performers and a large tap area; tilt steering still needs calibration and a fallback.
+**iPhone orientation confirmed:** landscape gameplay, with screen taps for rhythm and tilt for steering.
+
+**Next question, one at a time:** if tilt is unavailable or a player prefers touch controls, should mobile offer on-screen left/right steering buttons while keeping a separate rhythm tap area? Recommend yes as an optional alternative to tilt.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.

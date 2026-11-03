@@ -307,3 +307,7 @@ Desktop keyboard players and iPhone tap/tilt players can join the same multiplay
 ### Multiplayer disconnect handling (Taylor, Nov 3)
 
 If a human player disconnects mid-show, AI takes over their performer and the remaining players continue. Mark the disconnected player’s individual result incomplete. Notify the other players of the disconnect and AI takeover. If the player reconnects during the show, return control on an announced count after a short countdown. Keep their individual result marked incomplete. The show continues during reconnection; the exact countdown length remains to be tuned.
+
+### iPhone orientation (Taylor, Nov 3)
+
+Design iPhone gameplay for **landscape orientation**, with screen taps for rhythm and phone tilt for steering. Tilt calibration and an alternative when motion input is unavailable remain to be decided.
