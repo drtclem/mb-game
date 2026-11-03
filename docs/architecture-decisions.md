@@ -342,4 +342,4 @@ For now, players play and retry full shows only. Do not add selected-set practic
 
 ### Dot target visibility (Taylor, Nov 3)
 
-Keep the next written dot visible throughout each moving set as a small, precise field marker. Measure DOT accuracy from the exact target center; the visible marker is not an enlarged perfect-score zone. Marker dimensions and scoring tolerance curves remain to be tuned.
+Keep the next written dot visible throughout each moving set as a small, precise field marker. Measure DOT accuracy from the exact target center; the visible marker is not an enlarged perfect-score zone. Show just the dot for now, without a path line toward it. Marker dimensions and scoring tolerance curves remain to be tuned.

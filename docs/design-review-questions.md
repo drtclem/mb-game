@@ -108,6 +108,8 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **Dot visibility confirmed:** the next dot stays visible throughout each moving set, using a small precise field marker. Score distance from the exact center, not the whole marker area.
 
-**Next question, one at a time:** should players also see a path line toward the dot, or only the dot itself? Recommend only the dot initially, so players judge their route and the surrounding form.
+**Route aid confirmed:** show just the dot for now; no path line.
+
+**Next question, one at a time:** before each full show, should players get a brief count-in to establish the tempo before movement starts? Recommend an eight-count lead-in, with everyone starting together in multiplayer.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.
