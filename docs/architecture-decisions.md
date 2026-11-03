@@ -363,3 +363,7 @@ Players earn scores to unlock additional shows; do not make every show available
 ### Local progression saves (Taylor, Nov 3)
 
 Save personal bests and unlocked shows in the current browser/device for now, without requiring an account. Cross-device progress syncing is deferred. Progress is specific to that browser’s stored data; do not imply it follows an invite link or player display name.
+
+### Multiplayer display names (Taylor, Nov 3)
+
+Players choose a display name shown above their controlled marcher and in multiplayer results. Names identify performers within the session; they are not accounts or cross-device progression identities.

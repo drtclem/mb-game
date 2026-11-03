@@ -136,6 +136,8 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **Progress persistence confirmed:** personal bests and unlocked shows are saved in the current browser/device, without required accounts. Cross-device syncing is deferred.
 
-**Next question, one at a time:** should multiplayer use a player-chosen display name shown above their marcher and in results? Recommend yes so adjacent human performers and individual rankings are easy to identify.
+**Display names confirmed:** player-chosen names appear above their marcher and in multiplayer results.
+
+**Next question, one at a time:** should players choose between the available woman and man marcher models before playing? Recommend offering that choice while retaining the six-women/six-men band composition requirement.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.
