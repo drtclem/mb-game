@@ -98,6 +98,8 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **Camera/control revision confirmed:** follow behind by default with an optional overhead view, but keep the camera orientation unchanged during backward marching—no flip. Use Down arrow / backward phone tilt plus rhythm taps for backward travel, and Up / forward tilt for forward travel. This supersedes the earlier flip and forward-input-only assumptions for backward sets.
 
-**Next question, one at a time:** if a player presses Up during a backward set (or Down during a forward set), should they physically step the wrong way and lose points? Recommend yes, consistent with visibly following player mistakes.
+**Wrong-direction consequences confirmed:** wrong-direction input physically steps the wrong way on each tap and costs points. Correcting it may require larger recovery steps, capped at 4-to-5 (45 inches / 2 stored units per step). Missing the dot when too few counts remain is intended; no cap override or arrival assistance.
+
+**Next question, one at a time:** should players see live feedback for timing, step size and dot/form errors during the show, or save detailed feedback for the results screen? Recommend brief live cues with detailed analytics afterward.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.
