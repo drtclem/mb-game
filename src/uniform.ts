@@ -1,14 +1,13 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
-import { loadRiggedMarcher } from "./rigged-marcher";
-import { loadBaritone } from "./baritone";
+import { loadPosedMarcher } from "./posed-marcher";
 import "./uniform.css";
 
 const root = document.querySelector<HTMLDivElement>("#studio")!;
-root.innerHTML = `<header><a href="/">ON THE DOT <span>↗ TAKE THE FIELD</span></a><p>THE UNIFORM STUDIO <b> / 01</b></p></header>
-<main><section class="copy"><p class="eyebrow">CRAFTED FOR THE FIELD</p><h1>White.<br>Silver.<br>In step.</h1><p class="description">Our original uniform, brought into 3D. Sculpted features, tailored seams, a layered plume, and a real skeleton.</p><div class="rule"></div><label for="performer">THE PERFORMER</label><select id="performer"><option value="woman">Leah · woman</option><option value="man">Eli · man</option></select><label for="pose">THE POSE</label><select id="pose"><option value="playing">Baritone · playing position</option><option value="attention">Uniform inspection · A-pose</option></select><label for="motion">THE MOVEMENT</label><select id="motion"><option value="hold">Halt · attention</option><option value="forward">Forward · roll step</option><option value="backward">Backward · raised heel</option></select><button id="play">Pause animation</button><p class="note">Drag to orbit · scroll to inspect<br>Original detailed cast · 6 women / 6 men</p><a class="field" href="/">Try them on the field ↗</a></section>
-<section class="view" aria-label="Interactive 3D marcher preview"><div id="model"></div><div class="view-top"><span>HERO UNIFORM</span><span>TEXTURED MESH / ORIGINAL CHARACTER</span></div><div class="angles"><button id="front">Front</button><button id="side">Side</button><button id="back">Back</button><button id="detail">Face & horn</button></div><div class="view-bottom"><span id="name">LEAH</span><span id="count">COUNT 1</span></div></section></main><footer><span>PURE WHITE / BRUSHED SILVER / NO EPAULETTES</span><span>DETAILED CHARACTER / RIG REVIEW</span></footer>`;
+root.innerHTML = `<header><a href="/">ON THE DOT <span>↗ TAKE THE FIELD</span></a><p>THE UNIFORM STUDIO <b> / 02</b></p></header>
+<main><section class="copy"><p class="eyebrow">ONE COMPLETE PLAYING POSE</p><h1>White.<br>Silver.<br>Together.</h1><p class="description">The marcher, hands, and baritone are one original sculpt. A fixed playing pose to inspect before adding marching movement.</p><div class="rule"></div><p class="eyebrow">THE PERFORMER</p><p>Woman · combined pose prototype</p><p class="eyebrow">THE GRIP</p><p>Right fingertips on the valves.<br>Left hand around the valve block.</p><p class="note">Drag to orbit · scroll to inspect<br>One prototype · not yet the full cast</p><a class="field" href="/">Current field rehearsal ↗</a></section>
+<section class="view" aria-label="Interactive 3D marcher preview"><div id="model"></div><div class="view-top"><span>COMBINED POSE / 02</span><span>ORIGINAL TEXTURED 3D SCULPT</span></div><div class="angles"><button id="front">Front</button><button id="side">Side</button><button id="back">Back</button><button id="detail">Face & horn</button></div><div class="view-bottom"><span id="name">LOADING…</span><span>STATIC POSE REVIEW</span></div></section></main><footer><span>PURE WHITE / BRUSHED SILVER / NO EPAULETTES</span><span>FIXED UPPER BODY / ORIGINAL CHARACTER</span></footer>`;
 const $ = (id: string) => document.getElementById(id)!;
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x0b1422);
@@ -73,38 +72,15 @@ controls.minDistance = 1.4;
 controls.maxDistance = 14;
 controls.maxPolarAngle = Math.PI * 0.51;
 camera.position.set(4, 2.8, -7);
-let model: Awaited<ReturnType<typeof loadRiggedMarcher>> | undefined;
-$("name").textContent = "LOADING CHARACTER…";
-let requestNumber = 0;
-async function selectCharacter(gender: "woman" | "man") {
-  const request = ++requestNumber;
-  $("name").textContent = "LOADING…";
-  try {
-    const [character, instrument] = await Promise.all([
-      loadRiggedMarcher(gender),
-      loadBaritone(),
-    ]);
-    if (request !== requestNumber) return;
-    if (model) scene.remove(model.group);
-    instrument.group.position.copy(character.mouth);
-    character.group.add(instrument.group);
-    character.setHandTargets(
-      character.mouth.clone().add(instrument.leftGrip),
-      character.mouth.clone().add(instrument.rightGrip),
-    );
-    model = character;
-    scene.add(model.group);
-    $("name").textContent = gender === "woman" ? "LEAH" : "ELI";
-  } catch (error) {
-    $("name").textContent = "Character failed to load";
+void loadPosedMarcher()
+  .then((model) => {
+    scene.add(model);
+    $("name").textContent = "COMBINED PROTOTYPE";
+  })
+  .catch((error) => {
+    $("name").textContent = "Model failed to load · reload to retry";
     console.error(error);
-  }
-}
-$("performer").onchange = () =>
-  void selectCharacter(
-    ($("performer") as HTMLSelectElement).value as "woman" | "man",
-  );
-void selectCharacter("woman");
+  });
 for (const [id, position] of Object.entries({
   front: [0, 2.2, -8],
   side: [8, 2.2, 0],
@@ -119,13 +95,6 @@ for (const [id, position] of Object.entries({
       id === "detail" ? -0.4 : 0,
     );
   };
-let paused = false,
-  count = 0,
-  previous = performance.now();
-$("play").onclick = () => {
-  paused = !paused;
-  $("play").textContent = paused ? "Resume animation" : "Pause animation";
-};
 function resize() {
   const host = $("model");
   renderer.setSize(host.clientWidth, host.clientHeight);
@@ -134,27 +103,8 @@ function resize() {
 }
 window.addEventListener("resize", resize);
 resize();
-function frame(now: number) {
+function frame() {
   requestAnimationFrame(frame);
-  if (!paused) count += (Math.min(0.05, (now - previous) / 1000) * 112) / 60;
-  previous = now;
-  const motion = ($("motion") as HTMLSelectElement).value;
-  const playing = ($("pose") as HTMLSelectElement).value === "playing";
-  if (model) {
-    const horn = model.group.getObjectByName(
-      "Original silver-plated marching baritone",
-    );
-    if (horn) horn.visible = playing;
-  }
-  model?.setPlaying(($("pose") as HTMLSelectElement).value === "playing");
-  model?.animate(
-    count,
-    motion === "hold",
-    motion === "backward",
-    0,
-    motion === "backward" ? 0.65 : -0.65,
-  );
-  $("count").textContent = `COUNT ${(Math.floor(count) % 4) + 1}`;
   controls.update();
   renderer.render(scene, camera);
 }

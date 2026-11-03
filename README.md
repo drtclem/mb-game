@@ -46,13 +46,14 @@ This is the step **1** steering playtest, not the Game Week finished product. No
 
 ## Detailed character review (November 3)
 
-Open `/uniform.html` on the local dev server to inspect the original woman and man
-characters, baritone, playing pose and forward/backward motion. The playable band
-now uses six women and six men, sharing geometry and textures with independent
-skeletons. Hand posing remains an approximation: the woman export lacks individual
-finger joints, so a grip shape curls its open glove; the man uses finger joints.
-Neither model animates individual valve presses. Asset provenance and remaining
-work: `docs/art/character-pipeline.md`.
+Open `/uniform.html` for the revised **combined playing-pose prototype**: the
+woman, hands and baritone are modeled together. This is a static pose review,
+with orbit and front/side/back/detail cameras. It does not run the rejected arm
+IK or attach a separate horn. Marching and the male counterpart await review of
+this combined sculpt. The playable band's six-women/six-men cast still uses the
+previous separate-asset rig; it has not been upgraded to this new prototype.
+Asset provenance, generation prompts and remaining work:
+`docs/art/character-pipeline.md`, `docs/art/posed-marcher-prompt.txt`.
 
 GitLab CI runs type/unused-code checks, tests, production build and dependency
 audit on branch and merge-request pipelines, retaining `dist/` for review.

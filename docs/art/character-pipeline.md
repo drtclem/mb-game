@@ -28,9 +28,9 @@ humanoid rigging quoted zero. No further generation is needed for this checkpoin
   reference and game use are a marching baritone. Runtime `silver-baritone.glb`:
   6,489,504 bytes, 30,959 faces. Embedded textures reduced to 2048 pixels.
 
-## What this checkpoint demonstrates
+## Earlier checkpoint (superseded studio pose)
 
-`/uniform.html` loads both textured characters and the detailed instrument.
+The earlier `/uniform.html` loaded both textured characters and the separate instrument. Taylor rejected that hand/arm result; it is not the approved final pose.
 Front/side/back/face inspection and original count-driven forward/backward leg
 motion are available. The playable field now uses these assets for all twelve
 marchers, six women and six men, with shared geometry/textures and independent
@@ -54,3 +54,35 @@ outstanding. No stock motion or real corps logo is shipped.
 
 Original marching motion reference: https://www.youtube.com/watch?v=_RKfyF29eTs
 (especially 0:19–0:20). This is visual reference only, not a game asset.
+
+## Combined pose revision — November 3
+
+Taylor authorized a new approach: model one woman with arms, hands and horn
+already in a playing pose. Keep upper body fixed and assess that pose before
+adding marching or extending to the cast. Built-in image generation produced
+`posed-baritone-woman-reference.png`; Taylor then requested fingertips on the
+valve buttons and the left support hand at the central valve block, guided by
+`images-4.jpeg`. The revised input is `posed-baritone-woman-reference-v2.png`.
+Prompt records: `posed-marcher-prompt.txt`.
+
+Two combined image-to-3D generations used 35 credits each. Including the previous
+70-credit male/instrument generation, extension spending is now **140 / 200
+credits**, leaving 60. Meshy balance changed from 3,095 before these two attempts
+to 3,025. Pose normalization and image enhancement were disabled to preserve
+hands/instrument contact. The first attempt remains in Meshy as a comparison;
+it was superseded by the corrected reference. Remeshing is quoted at zero.
+
+The revised studio loads a single static sculpt through `posed-marcher.ts`.
+It does not use wrist IK, hand morphs, or a separately positioned horn. Static
+review is intentional: no marching controls imply that locomotion is finished.
+The playable game's older independent rigs remain unchanged by this prototype.
+Next: assess the combined 3D grip, preserve this upper body while rigging legs,
+then create the matching man and retain the six-women/six-men cast requirement.
+
+Corrected combined source: `Meshy_AI_Silver_Fanfare_1103175939_texture.glb`,
+retained in Downloads (50,436,020 bytes). Meshy 7.1 High Detail, Ultra 4K geometry,
+4K texture, private. Remeshed after texturing at the 100K target: 103,516 faces,
+123,877 vertices. Runtime `public/models/posed-baritone-woman.glb`: 12,889,668
+bytes, one rigid mesh, three embedded PBR images, no skeleton and no animations.
+Reproducible texture repack: `scripts/optimize-model.py` (Python plus Pillow),
+retaining normal PNG and reducing embedded images to at most 2048 pixels.
