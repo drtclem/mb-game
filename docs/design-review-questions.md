@@ -13,7 +13,7 @@ Discuss these with Taylor **one question at a time**. This is a queue, not a bat
 
 Browser/landscape and cross-device play; Web Audio as the judging clock; positions/counts in show files; automatic travel and alternating feet; path-relative corrections rather than free roaming; smooth imperfect AI neighbors; holds stand still and input is penalized; DOT and FORM remain separate visible captions. Original assets only, two distinct shows, a complete start-to-results/replay flow, and a visible drum major remain assignment/scope requirements. Three.js stays the engine.
 
-The current playtest uses 50/50 DOT/FORM within Visual, arrival-heavy DOT sampling, a timing modifier, a small shared band result, and hold deductions. These are a starting point for tuning, not the answer to Taylor's requested weighting discussion. The current FORM implementation is still a neighboring-displacement approximation; shape-aware form fitting and interval checks are specified but not complete. The displayed dot ring is a visual marker; distance must be scored from the actual dot point rather than treating the entire ring as a perfect zone.
+The current playtest uses 50/50 DOT/FORM within Visual, arrival-heavy DOT sampling, a timing modifier, a small shared band result, and hold deductions. Taylor has now confirmed 50/50 DOT/FORM as the configurable starting balance; it may change later or vary by level. Timing, band-result and deduction rules remain subject to review. The current FORM implementation is still a neighboring-displacement approximation; shape-aware form fitting and interval checks are specified but not complete. The displayed dot ring is a visual marker; distance must be scored from the actual dot point rather than treating the entire ring as a perfect zone.
 
 The earlier locked multiplayer scope says exactly two humans; Taylor's latest requested target is **2–4**. Carry that change into the revised multiplayer design rather than silently building only two. Multiplayer and iPhone controls are not implemented by the art checkpoint.
 
@@ -52,6 +52,8 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **Extra taps confirmed:** every distinct rhythm tap causes a physical step, even multiple taps within one count. Rapid taps make the legs move faster and disrupt timing and positioning, with scoring consequences. Do not discard extra taps or limit physical steps to one per count. Keyboard auto-repeat does not represent a new physical tap. Exact deductions and rapid-step animation transitions remain open.
 
-**Next question, one at a time:** should DOT accuracy or FORM integrity carry more weight, or should they be equal? Recommend 50/50 as the starting balance; settle timing and step-size scoring after the core balance.
+**DOT/FORM balance confirmed:** start at 50/50, configurable for future tuning and possible level-specific overrides. No alternate level weights selected yet.
+
+**Next question, one at a time:** should timing and step-size mistakes reduce the overall score separately, in addition to their effects on DOT and FORM? Recommend a separate technique deduction so a player cannot erase poor marching merely by arriving in the right place. Exact weights remain undecided.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.

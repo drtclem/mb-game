@@ -271,3 +271,7 @@ will be recorded through `docs/design-review-questions.md` before implementation
 Reconfirm input cadence, phone equivalence, DOT/FORM weighting and detailed
 analytics through that review; do not infer changes from this visual checkpoint.
 Multiplayer, iPhone tilt and full shape-aware FORM judging remain unimplemented.
+
+### Scoring balance update (Taylor, Nov 3)
+
+DOT accuracy and FORM integrity start at **50/50**. This is a tunable default, not a permanent universal balance. Keep the weights configurable so Taylor can revise them later and levels can override them when explicitly designed. No level-specific weights are chosen yet. Timing, step-size and hold-fault scoring still require separate decisions.
