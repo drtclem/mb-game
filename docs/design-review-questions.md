@@ -104,6 +104,8 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **Results inspection confirmed:** inspect each set for lost points, alongside overall DOT, FORM, timing, step-size and direction summaries. Full animated replay is not implied.
 
-**Next question, one at a time:** after reviewing results, should players be able to practice one selected set as well as retry the full show? Recommend yes, with practice runs kept separate from full-show rankings.
+**Retry scope confirmed:** full shows only for now; no selected-set practice. Per-set analytics remain available for review.
+
+**Next question, one at a time:** should the next written dot stay visible throughout each moving set? Recommend a small, precise field marker, scored from its exact center rather than giving the whole marker a perfect-score zone.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.

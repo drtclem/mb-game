@@ -335,3 +335,7 @@ For initial playtesting, do not display live numerical performance feedback. Use
 ### Per-set results analytics (Taylor, Nov 3)
 
 The results screen lets players inspect each set to understand where they lost points, alongside overall DOT accuracy, FORM integrity, timing, step-size and direction summaries. Preserve the actual dot-distance measurements and distinguish discounted form-preserving error when explaining DOT deductions. This confirms per-set inspection, not a full animated replay.
+
+### Retry scope (Taylor, Nov 3)
+
+For now, players play and retry full shows only. Do not add selected-set practice or restart-from-set controls. Per-set results inspection remains available for analysis.
