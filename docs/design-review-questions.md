@@ -64,6 +64,8 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **FORM split confirmed:** start at 50% nearby-performer spacing and 50% shape alignment, configurable for later tuning. This is separate from the overall 50/50 DOT/FORM balance.
 
-**Next question, one at a time:** should neighboring AI mistakes be predictable within a difficulty level (same show and seed), or vary on every attempt? Recommend repeatable practice attempts, with an explicit option for fresh variation, so learning and score comparisons are fair. This choice is not yet approved.
+**AI retry variation confirmed:** neighboring AI performers make different mistakes on every new attempt, including retries. Severity stays within the selected difficulty; exact ranges remain open.
+
+**Next question, one at a time:** should easier levels use smaller and less frequent neighboring AI mistakes, with harder levels using larger and more frequent mistakes? Recommend yes; numerical ranges can be tuned through playtesting.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.

@@ -287,3 +287,7 @@ A justified adjustment to imperfect neighboring performers improves FORM integri
 ### FORM components confirmed (Taylor, Nov 3)
 
 FORM integrity judges both spacing between nearby performers and alignment with the intended rank, file, line or curve. Equal spacing alone does not earn full FORM credit if the intended shape is broken. Start FORM at **50% nearby-performer spacing / 50% shape alignment**, configurable for later tuning. This is an internal FORM split and does not change the confirmed 50/50 overall DOT/FORM default.
+
+### AI variation on retries (Taylor, Nov 3)
+
+Neighboring AI performers make different mistakes on every new attempt, including retries of the same show. Do not reuse a fixed practice pattern by default. Keep error severity within the selected difficulty; exact difficulty ranges remain to be decided. A replay of an existing attempt should preserve that attempt’s recorded variation rather than inventing new mistakes.
