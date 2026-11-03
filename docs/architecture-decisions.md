@@ -319,3 +319,7 @@ For initial playtesting, held left/right arrows or current phone tilt set the di
 ### Neutral steering marks time (Taylor, Nov 3)
 
 During a moving set, rhythm taps with no arrow held (or phone tilt at calibrated neutral) produce tiny alternating steps in place: mark time with essentially no net travel. Do not automatically advance toward the dot at neutral. This revises the earlier automatic-travel assumption; travel requires steering input plus rhythm taps. Keep the leg motion small rather than a high-knee mark time. Missed travel leaves the marcher behind and recovery remains subject to the confirmed cap. Hold taps remain unwanted bounded steps with penalties, not valid mark time. The mapping of non-neutral left/right steering to dot-directed travel still needs clarification before implementation.
+
+### Travel and correction controls (Taylor, Nov 3)
+
+Up arrow on desktop or forward phone tilt on mobile enables travel toward the current written dot. Left/right arrows or sideways tilt adjust the travel direction. Each physical step still requires a rhythm tap (Space or the single mobile rhythm button); steering alone causes no travel. Neutral steering plus taps produces the confirmed tiny mark-time steps. This expands the earlier left/right-only steering scheme. Whether left/right alone permits travel, versus requiring Up/forward tilt simultaneously, remains to be clarified. Down/backward tilt behavior is not assigned.

@@ -92,6 +92,8 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **Neutral steering revised:** taps with no arrow held or neutral tilt produce tiny alternating steps in place (mark time), with essentially no net travel. No automatic dot-directed travel at neutral. Travel now requires steering plus taps. Small leg motion, not high knees. This is a recorded design change, not implemented yet.
 
-**Next question, one at a time:** with only left/right steering, what input means travel straight toward the dot? One option is adding an up arrow (and forward phone tilt) for straight travel, leaving left/right for adjustments. Another is having either left/right input initiate dot-directed travel with a side bias. Clarify before implementation.
+**Travel controls confirmed:** Up arrow / forward phone tilt enables travel toward the current dot; left/right arrows / sideways tilt adjust direction. Space / the single mobile rhythm button triggers each step. Neutral plus taps marks time with tiny steps. Steering alone causes no travel.
+
+**Next question, one at a time:** should the player keep Up held (or the phone tilted forward) while adding left/right adjustments to travel? Recommend yes; without the forward travel input, rhythm taps mark time rather than moving sideways.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.
