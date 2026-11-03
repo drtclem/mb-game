@@ -279,3 +279,7 @@ DOT accuracy and FORM integrity start at **50/50**. This is a tunable default, n
 ### Ideal step technique (Taylor, Nov 3)
 
 Each route to a written dot defines an ideal step size, timing and direction for each intended step. Deviations in any of these directly reduce the score, in addition to their resulting DOT accuracy and FORM integrity effects. Arriving at the correct dot does not erase technique mistakes along the route. Compare recovery steps against the original written ideal, not a recalculated catch-up ideal that would excuse the missed counts. The 50/50 DOT/FORM default remains; the technique deduction formula, tolerance curves and direction baseline during form-preserving adjustments still need to be settled. Record timing, step-size and direction deviations for play analytics.
+
+### Form-preserving adjustment credit (Taylor, Nov 3)
+
+A justified adjustment to imperfect neighboring performers improves FORM integrity and receives a reduced DOT penalty for the portion of displacement attributable to preserving the intended form. Keep the configurable base DOT/FORM balance at 50/50; apply a separate configurable discount to eligible DOT error rather than changing all DOT weights. Actual distance from the written dot remains visible in analytics. Unrelated wandering and self-caused recovery do not automatically qualify. Correct form-preserving direction/step-size adjustments are not technique faults; timing errors still count. The discount amount and eligibility criteria remain to be specified.

@@ -56,6 +56,8 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **Technique scoring confirmed:** every intended step toward a dot has an ideal size, timing and direction. Any deviation directly reduces the score, beyond its DOT/FORM consequences. Track all three in analytics; arrival does not erase earlier mistakes. Compare recovery against the written ideal. Exact penalty curves and weights remain undecided.
 
-**Next question, one at a time:** when imperfect neighbors require a slight direction or step-size adjustment to preserve the form, should that still incur a technique deduction against the written route, or should a correct form-preserving adjustment count as good technique? This baseline must be decided before specifying direction and step-size penalties.
+**Form adjustment weighting confirmed:** justified adjustments improve FORM and receive a reduced DOT penalty for the form-preserving portion of their displacement. Keep 50/50 as the base balance, with a configurable eligible-error discount. Show actual written-dot error in analytics. Correct form-preserving direction/step-size adjustments are not technique faults; timing still matters. Eligibility and discount amount remain open.
+
+**Next question, one at a time:** should justified form-adjustment DOT error receive half the normal penalty as a starting value? This is a proposed tunable 50% discount, not yet approved. Unrelated error remains fully penalized.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.
