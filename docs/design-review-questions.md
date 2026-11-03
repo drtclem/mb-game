@@ -96,6 +96,8 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **Forward input requirement confirmed:** keep Up held / forward tilt engaged while adding left/right adjustments. Without forward input, taps mark time; left/right alone does not produce sideways travel.
 
-**Next question, one at a time:** during play, should the main camera follow just behind the controlled marcher, keeping nearby performers and the next dot visible? Recommend this as the default, with an overhead view available separately.
+**Camera confirmed:** follow just behind the controlled marcher by default, showing nearby performers and the next dot, with an optional overhead view. Flip around during backward marching as in the earlier behavior.
+
+**Next question, one at a time:** should Up / forward phone tilt continue to mean travel toward the dot during a backward-marching set, with the show deciding the marcher’s body facing? Recommend yes: input is route-relative, so players do not need to switch to Down / backward tilt when the camera flips.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.

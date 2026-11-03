@@ -323,3 +323,7 @@ During a moving set, rhythm taps with no arrow held (or phone tilt at calibrated
 ### Travel and correction controls (Taylor, Nov 3)
 
 Up arrow on desktop or forward phone tilt on mobile enables travel toward the current written dot. Left/right arrows or sideways tilt adjust the travel direction. Each physical step still requires a rhythm tap (Space or the single mobile rhythm button); steering alone causes no travel. Neutral steering plus taps produces the confirmed tiny mark-time steps. This expands the earlier left/right-only steering scheme. Taylor confirmed that Up must remain held, or the phone remain tilted forward, while adding left/right adjustments. Without that forward travel input, rhythm taps mark time; left/right alone does not cause sideways travel. Down/backward tilt behavior is not assigned.
+
+### Gameplay camera default (Taylor, Nov 3)
+
+Default to a camera following just behind the controlled marcher, framing nearby performers and the next dot, with an optional overhead view. During backward marching, flip the camera around as in the earlier camera behavior so the direction of travel remains visible. Preserve this requested backward-marching camera behavior when implementing the revised controls.
