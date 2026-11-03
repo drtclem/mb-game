@@ -331,3 +331,7 @@ Default to a camera following just behind the controlled marcher, framing nearby
 ### In-show performance feedback (Taylor, Nov 3)
 
 For initial playtesting, do not display live numerical performance feedback. Use brief plain-language coaching warnings when needed, such as a prompt to get closer to the dot. Reserve numerical performance scores and detailed analytics for the results screen. This is provisional and may change after playtesting. Warning triggers, wording and frequency remain to be designed; avoid constant distracting messages. This decision concerns performance feedback, not the musical count display.
+
+### Per-set results analytics (Taylor, Nov 3)
+
+The results screen lets players inspect each set to understand where they lost points, alongside overall DOT accuracy, FORM integrity, timing, step-size and direction summaries. Preserve the actual dot-distance measurements and distinguish discounted form-preserving error when explaining DOT deductions. This confirms per-set inspection, not a full animated replay.

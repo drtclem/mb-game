@@ -102,6 +102,8 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **Live feedback provisionally confirmed:** no live numerical performance feedback. Try brief plain-language coaching warnings (for example, get closer to the dot), with numerical scores and detailed analytics afterward. Revisit after playtesting; warning triggers/frequency remain open.
 
-**Next question, one at a time:** should the results screen let players inspect each set to see where they lost points, alongside overall DOT, FORM, timing, step-size and direction summaries? Recommend yes, so they can identify specific mistakes rather than just receive a final score.
+**Results inspection confirmed:** inspect each set for lost points, alongside overall DOT, FORM, timing, step-size and direction summaries. Full animated replay is not implied.
+
+**Next question, one at a time:** after reviewing results, should players be able to practice one selected set as well as retry the full show? Recommend yes, with practice runs kept separate from full-show rankings.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.
