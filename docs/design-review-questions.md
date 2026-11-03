@@ -78,6 +78,8 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **Private room entry confirmed:** friends join through an invite link or short room code, without requiring accounts. Public matchmaking is not yet decided.
 
-**Next question, one at a time:** if a player disconnects mid-show, should an AI take over their performer while the others continue? Recommend yes, with the disconnected player’s individual result marked incomplete; reconnection behavior remains to be settled.
+**Disconnect handling confirmed:** AI takes over the disconnected performer while everyone else continues; mark that player’s individual result incomplete and notify the other players of the disconnect and takeover.
+
+**Next question, one at a time:** if that player reconnects during the show, should they be allowed to resume control? Recommend returning control on a clearly announced count after a short countdown, while keeping the result marked incomplete.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.
