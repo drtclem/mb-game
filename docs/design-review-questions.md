@@ -132,6 +132,8 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **Unlock basis confirmed:** reach a target individual score in one completed performance; no accumulated-attempt points or shared-band-score unlock basis. Numerical thresholds remain open.
 
-**Next question, one at a time:** in multiplayer, can everyone play a show if the host has unlocked it, even if guests have not? Recommend yes for playing together; guests’ permanent unlocks still require their own qualifying individual scores.
+**Multiplayer unlock access confirmed:** everyone can play shows unlocked by the host; permanent unlocks require each player’s own qualifying score.
+
+**Next question, one at a time:** with no required accounts, should personal bests and unlocked shows be saved on the current browser/device for now? Recommend yes; cross-device progress syncing would require an additional identity or transfer design.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.
