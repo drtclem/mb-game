@@ -60,6 +60,8 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **Form-adjustment discount confirmed:** charge half the normal DOT penalty for justified form-preserving error. Keep this configurable; unrelated error remains fully penalized.
 
-**Next question, one at a time:** should FORM judging include the whole local rank/file/curve as well as spacing between immediate neighbors? Recommend both, so equal spacing alone cannot earn a perfect FORM score when the intended shape is broken. Exact component weights remain open.
+**FORM components confirmed:** judge both nearby-performer spacing and alignment with the intended line/curve (including ranks and files). Equal spacing alone cannot earn full FORM credit when the shape is broken.
+
+**Next question, one at a time:** should spacing and shape alignment each contribute 50% of FORM initially? Recommend an equal, configurable starting split; this is separate from the overall 50/50 DOT/FORM balance.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.

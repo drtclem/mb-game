@@ -283,3 +283,7 @@ Each route to a written dot defines an ideal step size, timing and direction for
 ### Form-preserving adjustment credit (Taylor, Nov 3)
 
 A justified adjustment to imperfect neighboring performers improves FORM integrity and receives a reduced DOT penalty for the portion of displacement attributable to preserving the intended form. Keep the configurable base DOT/FORM balance at 50/50; apply a separate configurable discount to eligible DOT error rather than changing all DOT weights. Actual distance from the written dot remains visible in analytics. Unrelated wandering and self-caused recovery do not automatically qualify. Correct form-preserving direction/step-size adjustments are not technique faults; timing errors still count. Taylor confirmed an initial **50% DOT-penalty discount** for eligible form-preserving error: charge half the normal penalty for that portion, with the discount configurable for later tuning. Eligibility criteria remain to be specified.
+
+### FORM components confirmed (Taylor, Nov 3)
+
+FORM integrity judges both spacing between nearby performers and alignment with the intended rank, file, line or curve. Equal spacing alone does not earn full FORM credit if the intended shape is broken. The relative component weights remain undecided; this does not change the confirmed 50/50 overall DOT/FORM default.
