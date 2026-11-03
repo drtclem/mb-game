@@ -299,3 +299,7 @@ Support **2–4 human players**, each controlling one performer, all next to eac
 ### Multiplayer competition and shared result (Taylor, Nov 3)
 
 Players compete against each other through individual scores and analytics while performing together to make the band good. Present both individual scores/rankings and a shared band score. The shared result reflects the same joint performance, not a separate opposing-team mode. The shared band score stays separate from individual totals and rankings; it does not add a shared bonus or multiplier to individual results. This supersedes the earlier prototype shared-band contribution to individual scoring.
+
+### Mixed-device multiplayer (Taylor, Nov 3)
+
+Desktop keyboard players and iPhone tap/tilt players can join the same multiplayer session, each on their own device. Use the same gameplay and scoring rules across input methods. Room entry and connection flow remain to be decided.

@@ -74,6 +74,8 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **Band score separation confirmed:** the shared band score stays separate from individual totals and rankings. No shared-band bonus or multiplier applies to individual results; this supersedes the prototype contribution.
 
-**Next question, one at a time:** should multiplayer support a mix of desktop keyboard players and iPhone tap/tilt players in the same session? Recommend yes, each on their own device.
+**Mixed-device multiplayer confirmed:** keyboard and iPhone tap/tilt players can join the same session, each on their own device, under the same gameplay/scoring rules.
+
+**Next question, one at a time:** should friends join a private game using a short room code or invite link, without needing accounts? Recommend this as the initial multiplayer entry flow; public matchmaking remains undecided.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.
