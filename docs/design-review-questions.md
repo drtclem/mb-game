@@ -120,6 +120,8 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **Conducting during holds confirmed:** drum major continues conducting in sync with the music clock through holds; intended performer steps stop, but musical counts continue.
 
-**Next question, one at a time:** should players see an explicit HOLD / MOVE cue when a hold starts or ends? Recommend a brief cue so the required action is clear without adding live numerical performance feedback.
+**Transition cues confirmed:** brief HOLD / MOVE cues appear when those phases start.
+
+**Next question, one at a time:** should players also get a brief FORWARD / BACKWARD cue when the required marching direction changes? Recommend yes, since the camera stays oriented the same way and the correct Up/Down or tilt input changes.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.

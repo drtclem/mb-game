@@ -347,3 +347,7 @@ Keep the next written dot visible throughout each moving set as a small, precise
 ### Count-in and drum major (Taylor, Nov 3)
 
 Begin each show with an eight-beat ascending count-in: **“5… 6… 5, 6, 7, 8.”** Place calls on beats 1, 3, 5, 6, 7 and 8 respectively, with movement beginning on the following beat. Multiplayer performers begin together. Add an actual human drum-major visualization; start with a rough concept sketch now and refine its character art later. Keep the drum major visible and conducting throughout the show, including the count-in and holds, synchronized to the music clock. Holds stop the performer’s intended steps, not the conducting or musical count. Show the conducting drum major clearly in a persistent top-right screen inset, independent of field-camera movement. Detailed character art, conducting animation and inset sizing remain to be designed.
+
+### Hold and move transition cues (Taylor, Nov 3)
+
+Display a brief **HOLD** or **MOVE** cue when the corresponding phase starts. These are action instructions, not live numerical performance feedback. The drum major and music clock continue through both phases.
