@@ -138,6 +138,8 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **Display names confirmed:** player-chosen names appear above their marcher and in multiplayer results.
 
-**Next question, one at a time:** should players choose between the available woman and man marcher models before playing? Recommend offering that choice while retaining the six-women/six-men band composition requirement.
+**Appearance selection declined:** no player model picker for now; roster assignment preserves the half-women/half-men band composition.
+
+**Next question, one at a time:** should every player confirm Ready before the host can start the multiplayer count-in? Recommend yes, so nobody starts before their controls and audio are ready.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.

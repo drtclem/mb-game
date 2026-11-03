@@ -367,3 +367,7 @@ Save personal bests and unlocked shows in the current browser/device for now, wi
 ### Multiplayer display names (Taylor, Nov 3)
 
 Players choose a display name shown above their controlled marcher and in multiplayer results. Names identify performers within the session; they are not accounts or cross-device progression identities.
+
+### Player marcher appearance (Taylor, Nov 3)
+
+Do not add player selection between woman and man marcher models for now. Assign the player’s model through the roster while preserving the confirmed half-women/half-men band composition.
