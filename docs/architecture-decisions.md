@@ -302,4 +302,4 @@ Players compete against each other through individual scores and analytics while
 
 ### Mixed-device multiplayer (Taylor, Nov 3)
 
-Desktop keyboard players and iPhone tap/tilt players can join the same multiplayer session, each on their own device. Use the same gameplay and scoring rules across input methods. Room entry and connection flow remain to be decided.
+Desktop keyboard players and iPhone tap/tilt players can join the same multiplayer session, each on their own device. Use the same gameplay and scoring rules across input methods. For the initial multiplayer entry flow, friends join a private game through an invite link or short room code, without requiring accounts. Public matchmaking is not yet decided.
