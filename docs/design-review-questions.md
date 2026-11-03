@@ -84,6 +84,8 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **iPhone orientation confirmed:** landscape gameplay, with screen taps for rhythm and tilt for steering.
 
-**Next question, one at a time:** if tilt is unavailable or a player prefers touch controls, should mobile offer on-screen left/right steering buttons while keeping a separate rhythm tap area? Recommend yes as an optional alternative to tilt.
+**Mobile controls clarified:** no alternative to tilt for mobile steering. Provide dedicated on-screen rhythm tap buttons, not steering buttons. Button count/layout and foot assignment remain open.
+
+**Next question, one at a time:** should mobile have two rhythm buttons that both trigger the next alternating foot, or separate left-foot/right-foot buttons that require the correct foot? Recommend two equivalent tap buttons to preserve the desktop single-Space rhythm mechanic.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.

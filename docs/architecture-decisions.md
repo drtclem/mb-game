@@ -310,4 +310,4 @@ If a human player disconnects mid-show, AI takes over their performer and the re
 
 ### iPhone orientation (Taylor, Nov 3)
 
-Design iPhone gameplay for **landscape orientation**, with screen taps for rhythm and phone tilt for steering. Tilt calibration and an alternative when motion input is unavailable remain to be decided.
+Design iPhone gameplay for **landscape orientation**, with screen taps for rhythm and phone tilt for steering. Tilt is the only mobile steering control; Taylor declined an on-screen steering alternative. Provide dedicated on-screen buttons for rhythm tapping. Tilt calibration and the experience when motion input is unavailable remain to be specified; do not silently add touch steering. The number/layout of rhythm buttons and any foot assignment remain undecided.
