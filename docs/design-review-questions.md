@@ -134,6 +134,8 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **Multiplayer unlock access confirmed:** everyone can play shows unlocked by the host; permanent unlocks require each player’s own qualifying score.
 
-**Next question, one at a time:** with no required accounts, should personal bests and unlocked shows be saved on the current browser/device for now? Recommend yes; cross-device progress syncing would require an additional identity or transfer design.
+**Progress persistence confirmed:** personal bests and unlocked shows are saved in the current browser/device, without required accounts. Cross-device syncing is deferred.
+
+**Next question, one at a time:** should multiplayer use a player-chosen display name shown above their marcher and in results? Recommend yes so adjacent human performers and individual rankings are easy to identify.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.
