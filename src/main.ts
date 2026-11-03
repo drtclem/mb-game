@@ -4,7 +4,10 @@ import { show } from "./show";
 import { checkShow, distance, formatDot, parseDot, type Dot } from "./drill";
 import { Run, tempo, target, drift, PLAYER } from "./game";
 import { calibrationOffset } from "./tempo";
-import { marcher } from "./marcher";
+import { loadRiggedMarcher } from "./rigged-marcher";
+import { loadBaritone } from "./baritone";
+import { roster } from "./marching-motion";
+import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 const errors = checkShow(show);
 if (errors.length) throw Error(errors.join("\n"));
 const app = document.querySelector<HTMLDivElement>("#app")!;
@@ -33,6 +36,16 @@ const camera = new THREE.PerspectiveCamera(48, 1, 0.1, 400),
   renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setPixelRatio(Math.min(devicePixelRatio, 1.75));
 renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 0.95;
+const pmrem = new THREE.PMREMGenerator(renderer),
+  reflectionRoom = new RoomEnvironment();
+const reflections = pmrem.fromScene(reflectionRoom);
+scene.environment = reflections.texture;
+scene.environmentIntensity = 0.7;
+reflectionRoom.dispose();
+pmrem.dispose();
 $("scene").append(renderer.domElement);
 scene.add(new THREE.HemisphereLight(0xcce9ff, 0x304234, 2));
 const light = new THREE.DirectionalLight(0xffedcd, 3);
@@ -74,11 +87,50 @@ for (let x = -80; x <= 80; x += 8) {
 for (const y of [0, 85.33]) box(160, 0.08, 0.15, 0xe1ddc0, 0, 0.04, y);
 for (let tier = 0; tier < 5; tier++)
   box(175, 2, 5, 0x263c4e, 0, tier * 2, 98 + tier * 5);
-const band = Array.from({ length: 12 }, (_, id) => {
-  const m = marcher(id === PLAYER);
-  scene.add(m.group);
-  return m;
-});
+type DetailedMarcher = Awaited<ReturnType<typeof loadRiggedMarcher>>;
+const band: (DetailedMarcher | undefined)[] = new Array(show.performers.length);
+let bandReady = false,
+  bandError = false;
+Promise.all(
+  show.performers.map(async (_, id) => {
+    const person = roster[id];
+    const [model, instrument] = await Promise.all([
+      loadRiggedMarcher(person.gender, person.height),
+      loadBaritone(),
+    ]);
+    instrument.group.position.copy(model.mouth);
+    model.group.add(instrument.group);
+    model.setHandTargets(
+      model.mouth.clone().add(instrument.leftGrip),
+      model.mouth.clone().add(instrument.rightGrip),
+    );
+    model.setPlaying(true);
+    band[id] = model;
+    scene.add(model.group);
+  }),
+)
+  .then(() => {
+    bandReady = true;
+    updateAssetStatus();
+  })
+  .catch((error) => {
+    bandError = true;
+    updateAssetStatus();
+    console.error(error);
+  });
+function updateAssetStatus() {
+  const status = document.getElementById("asset-status");
+  if (status)
+    status.textContent = bandError
+      ? "The band could not load. Reload to retry."
+      : bandReady
+        ? "12 detailed marchers · 6 women / 6 men"
+        : "Loading the detailed band…";
+  const startButton = document.getElementById(
+    "start",
+  ) as HTMLButtonElement | null;
+  if (startButton) startButton.disabled = !bandReady;
+}
 const ring = new THREE.Mesh(
   new THREE.RingGeometry(0.65, 0.8, 40),
   new THREE.MeshBasicMaterial({ color: 0xffd17c, side: THREE.DoubleSide }),
@@ -86,6 +138,12 @@ const ring = new THREE.Mesh(
 ring.rotation.x = -Math.PI / 2;
 ring.position.y = 0.1;
 scene.add(ring);
+const playerMarker = new THREE.Mesh(
+  new THREE.RingGeometry(0.42, 0.52, 32),
+  new THREE.MeshBasicMaterial({ color: 0xffd17c, side: THREE.DoubleSide }),
+);
+playerMarker.rotation.x = -Math.PI / 2;
+scene.add(playerMarker);
 const map = $("map") as HTMLCanvasElement,
   ctx = map.getContext("2d")!;
 function drawMap(actual: Dot[], dot: Dot) {
@@ -131,7 +189,8 @@ function menu() {
   mode = "menu";
   hud.hidden = true;
   overlay.hidden = false;
-  overlay.innerHTML = `<div class="intro"><p class="eyebrow">A MARCHING FIELD EXPERIMENT</p><h1>Find your dot.<br>Feel the line.</h1><p>You march automatically, with a slight tendency to drift. Nudge <strong>← / → on the click</strong> to bend your path. Gold is you; the ring is your dot. Balance your written dot against a drifting band.</p><div class="instructions"><span>01 &nbsp; Listen to the count-off</span><span>02 &nbsp; Steer relative to your path</span><span>03 &nbsp; Stand still on holds</span></div><button class="primary" id="start">Take the field <span>↗</span></button><button id="calibrate">Calibrate timing</button><a href="/uniform.html" style="display:block;margin-top:14px;color:#efc17a">Review the detailed character ↗</a><small id="calinfo">Calibration saved on this device · ${Math.round(offset * 1000)} ms</small><details><summary>Drill-sheet translator</summary><input id="drill" aria-label="Drill sheet coordinates" value="2 outside S1 40, 3 behind FH"><button id="translate">Translate & check</button><output id="translated"></output></details></div><div class="stamp">L1<span>THE FIRST<br>EIGHT COUNTS</span></div>`;
+  overlay.innerHTML = `<div class="intro"><p class="eyebrow">A MARCHING FIELD EXPERIMENT</p><h1>Find your dot.<br>Feel the line.</h1><p>You march automatically, with a slight tendency to drift. Nudge <strong>← / → on the click</strong> to bend your path. The gold marker is you; the larger ring is your dot. Balance your written dot against a drifting band.</p><div class="instructions"><span>01 &nbsp; Listen to the count-off</span><span>02 &nbsp; Steer relative to your path</span><span>03 &nbsp; Stand still on holds</span></div><button class="primary" id="start">Take the field <span>↗</span></button><button id="calibrate">Calibrate timing</button><a href="/uniform.html" style="display:block;margin-top:14px;color:#efc17a">Review the detailed character ↗</a><small id="asset-status"></small><small id="calinfo">Calibration saved on this device · ${Math.round(offset * 1000)} ms</small><details><summary>Drill-sheet translator</summary><input id="drill" aria-label="Drill sheet coordinates" value="2 outside S1 40, 3 behind FH"><button id="translate">Translate & check</button><output id="translated"></output></details></div><div class="stamp">L1<span>THE FIRST<br>EIGHT COUNTS</span></div>`;
+  updateAssetStatus();
   $("start").onclick = () => startRun();
   $("calibrate").onclick = calibrate;
   $("translate").onclick = () => {
@@ -145,6 +204,7 @@ function menu() {
   };
 }
 function startRun(seed = Math.floor(Math.random() * 100000)) {
+  if (!bandReady) return;
   initAudio();
   run = new Run(seed);
   start = audio.currentTime + 0.15 + tempo.seconds(8);
@@ -307,12 +367,23 @@ function frame() {
     ? show.pages[page - 1].dots[PLAYER]
     : show.initial[PLAYER];
   const backwards = show.pages[page].dots[PLAYER].y > before.y;
-  const hold = mode === "run" && run.isHold(c);
   band.forEach((m, i) => {
+    if (!m) return;
     m.group.position.set(positions[i].x, 0, positions[i].y);
-    m.animate(c, mode !== "run" || count < 0 || hold, backwards);
+    const prev = page ? show.pages[page - 1].dots[i] : show.initial[i];
+    const goal = show.pages[page].dots[i];
+    const dx = (goal.x - prev.x) / 8,
+      dz = (goal.y - prev.y) / 8;
+    m.animate(
+      c,
+      mode !== "run" || count < 0 || Math.hypot(dx, dz) === 0,
+      dz > 0,
+      dx,
+      dz,
+    );
   });
   const player = positions[PLAYER];
+  playerMarker.position.set(player.x, 0.1, player.y);
   cameraBack += (Number(backwards && mode === "run") - cameraBack) * 0.035;
   camera.position.lerp(
     new THREE.Vector3(player.x + 12, 17, player.y - 23 + cameraBack * 46),

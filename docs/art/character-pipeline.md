@@ -12,12 +12,45 @@ Taylor approved the white uniform concept, then requested smooth shoulders (no e
 - Source export: `Meshy_AI_Ivory_Plume_Marcher_20261103_animated_mixamo_All_animation.glb`, retained locally in Downloads, 40,803,044 bytes. Contains one mesh, one skin, and two provider preview animations.
 - Runtime: `public/models/white-marcher-woman.glb`, 9,359,180 bytes. Embedded textures reduced to 2048 px; normal map retained as PNG, color and metallic/roughness packed map encoded as high-quality JPEG. The original high-detail export remains untouched. Provider preview animation definitions removed; the game uses original count-driven animation.
 
+## Male and instrument extension
+
+Taylor explicitly approved 200 additional Meshy credits. Generation used 35 for
+the man and 35 for the instrument: **70 / 200 credits consumed**. Remeshing and
+humanoid rigging quoted zero. No further generation is needed for this checkpoint.
+
+- Original project-generated inputs: `man-marcher-modeling-reference.png` and
+  `baritone-modeling-reference.png`.
+- Male source: `Meshy_AI_Ivory_Sentinel_20261103_animated_mixamo_Running.glb`,
+  retained in Downloads. Runtime `white-marcher-man.glb`: 10,401,684 bytes,
+  31,216 faces, independent Mixamo humanoid/finger skeleton. Provider animation removed.
+- Instrument source: `Meshy_AI_Silver_Cornet_on_Gray_1103170341_texture.glb`,
+  retained in Downloads. The provider filename says cornet; the submitted original
+  reference and game use are a marching baritone. Runtime `silver-baritone.glb`:
+  6,489,504 bytes, 30,959 faces. Embedded textures reduced to 2048 pixels.
+
 ## What this checkpoint demonstrates
 
-`/uniform.html` loads the real textured mesh and skeleton in Three.js. Front/side/back/face inspection, original procedural forward/backward leg targets, and a separate experimental arm-position study are available. No stock motion is used. Source appearance can be reviewed independently from animation.
+`/uniform.html` loads both textured characters and the detailed instrument.
+Front/side/back/face inspection and original count-driven forward/backward leg
+motion are available. The playable field now uses these assets for all twelve
+marchers, six women and six men, with shared geometry/textures and independent
+skeletons. Shoe rotation includes ankle-pivot compensation at heel/toe contact.
+
+Taylor supplied three additional baritone-player photos on November 3 to guide
+elbows, support-hand placement and curved valve fingers. These are visual references,
+not shipped game assets. The woman's generated rig has duplicate wrist helpers but
+no individual finger joints. Consolidating the helper weights prevents glove tearing;
+a separate grip morph curls distal glove geometry while preserving wrist/palm.
+The male export has individual finger joints and uses joint curls instead.
 
 ## Remaining work
 
-This is one woman character, not the completed 12-person cast. The playable field still uses the earlier procedural models. Do not describe the whole band as using this detailed asset. Finish believable foot roll, shoe-ground contact and hands-on-instrument posing; add the detailed baritone; review this character with Taylor before extending the asset pipeline. Generate the male counterpart and cast variation while preserving the six-women/six-men requirement. Share geometries/textures between instances and profile on phone before the full band rollout.
+Grip shapes approximate contact rather than a fully articulated hand rig. Inspect
+finger/tube intersections, improve thumb placement and add individual valve motion
+if needed. Only two base faces and height variants are present; this is not twelve
+unique character sculpts. Profile the full cast on phones before calling the art
+pass complete. The visible drum major and wider field/environment polish remain
+outstanding. No stock motion or real corps logo is shipped.
 
-Original marching motion reference: https://www.youtube.com/watch?v=_RKfyF29eTs (especially 0:19–0:20). This is visual reference only, not a game asset.
+Original marching motion reference: https://www.youtube.com/watch?v=_RKfyF29eTs
+(especially 0:19–0:20). This is visual reference only, not a game asset.
