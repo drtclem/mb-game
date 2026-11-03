@@ -114,6 +114,8 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **Drum major requested:** actual human visualization, rough concept sketch now; detailed character and animation design later.
 
-**Next question, one at a time:** should the drum major remain visible during the show, or appear only for the count-in?
+**Drum-major visibility confirmed:** remain visible and conducting throughout the show, including the count-in. Camera presentation must preserve visibility.
+
+**Next question, one at a time:** should the drum major appear in a small persistent screen inset, so they remain visible even when the field camera moves? Recommend this for reliable visibility; final artwork remains for later.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.
