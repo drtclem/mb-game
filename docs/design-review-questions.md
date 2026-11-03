@@ -118,6 +118,8 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **Drum-major placement confirmed:** persistent top-right inset, clearly visible independently of field-camera movement. Final character art and conducting animation remain for later.
 
-**Next question, one at a time:** should the drum major keep conducting during holds, so players can follow the counts until the next move? Recommend yes; holding means no steps, not a stopped musical clock.
+**Conducting during holds confirmed:** drum major continues conducting in sync with the music clock through holds; intended performer steps stop, but musical counts continue.
+
+**Next question, one at a time:** should players see an explicit HOLD / MOVE cue when a hold starts or ends? Recommend a brief cue so the required action is clear without adding live numerical performance feedback.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.
