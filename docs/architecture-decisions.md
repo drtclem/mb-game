@@ -379,3 +379,7 @@ Every participating player must confirm Ready before the host can start the mult
 ### Multiplayer show selection (Taylor, Nov 3)
 
 The host chooses the show and difficulty for the whole room. Display that selection to all players before they confirm Ready. Changing the selection requires renewed readiness so the count-in cannot start under a different selection than players accepted.
+
+### Initial difficulty choices (Taylor, Nov 3)
+
+Offer **Easy, Medium and Hard** as the initial difficulty presets. The confirmed AI mistake size/frequency increases with difficulty. Exact numerical settings and any other difficulty-dependent changes remain to be tuned or explicitly decided; do not assume changes to show tempo or scoring weights.

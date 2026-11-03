@@ -144,6 +144,8 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **Host selection confirmed:** host chooses the room’s show and difficulty, visible to everyone before confirming Ready.
 
-**Next question, one at a time:** should the initial difficulty choices be Easy, Medium and Hard? Recommend three clear presets; exact AI error ranges, steering assistance and score thresholds can be tuned through playtesting.
+**Difficulty choices confirmed:** Easy, Medium and Hard. AI error size/frequency scales as already agreed; exact settings await tuning.
+
+**Next question, one at a time:** should each show keep its original tempo across all difficulties? Recommend yes initially, with difficulty changing neighboring AI mistakes rather than speeding up the music.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.
