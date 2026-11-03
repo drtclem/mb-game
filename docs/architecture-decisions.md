@@ -286,4 +286,4 @@ A justified adjustment to imperfect neighboring performers improves FORM integri
 
 ### FORM components confirmed (Taylor, Nov 3)
 
-FORM integrity judges both spacing between nearby performers and alignment with the intended rank, file, line or curve. Equal spacing alone does not earn full FORM credit if the intended shape is broken. The relative component weights remain undecided; this does not change the confirmed 50/50 overall DOT/FORM default.
+FORM integrity judges both spacing between nearby performers and alignment with the intended rank, file, line or curve. Equal spacing alone does not earn full FORM credit if the intended shape is broken. Start FORM at **50% nearby-performer spacing / 50% shape alignment**, configurable for later tuning. This is an internal FORM split and does not change the confirmed 50/50 overall DOT/FORM default.

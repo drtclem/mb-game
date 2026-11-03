@@ -62,6 +62,8 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **FORM components confirmed:** judge both nearby-performer spacing and alignment with the intended line/curve (including ranks and files). Equal spacing alone cannot earn full FORM credit when the shape is broken.
 
-**Next question, one at a time:** should spacing and shape alignment each contribute 50% of FORM initially? Recommend an equal, configurable starting split; this is separate from the overall 50/50 DOT/FORM balance.
+**FORM split confirmed:** start at 50% nearby-performer spacing and 50% shape alignment, configurable for later tuning. This is separate from the overall 50/50 DOT/FORM balance.
+
+**Next question, one at a time:** should neighboring AI mistakes be predictable within a difficulty level (same show and seed), or vary on every attempt? Recommend repeatable practice attempts, with an explicit option for fresh variation, so learning and score comparisons are fair. This choice is not yet approved.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.
