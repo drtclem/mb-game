@@ -116,6 +116,8 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **Drum-major visibility confirmed:** remain visible and conducting throughout the show, including the count-in. Camera presentation must preserve visibility.
 
-**Next question, one at a time:** should the drum major appear in a small persistent screen inset, so they remain visible even when the field camera moves? Recommend this for reliable visibility; final artwork remains for later.
+**Drum-major placement confirmed:** persistent top-right inset, clearly visible independently of field-camera movement. Final character art and conducting animation remain for later.
+
+**Next question, one at a time:** should the drum major keep conducting during holds, so players can follow the counts until the next move? Recommend yes; holding means no steps, not a stopped musical clock.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.
