@@ -54,6 +54,8 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **DOT/FORM balance confirmed:** start at 50/50, configurable for future tuning and possible level-specific overrides. No alternate level weights selected yet.
 
-**Next question, one at a time:** should timing and step-size mistakes reduce the overall score separately, in addition to their effects on DOT and FORM? Recommend a separate technique deduction so a player cannot erase poor marching merely by arriving in the right place. Exact weights remain undecided.
+**Technique scoring confirmed:** every intended step toward a dot has an ideal size, timing and direction. Any deviation directly reduces the score, beyond its DOT/FORM consequences. Track all three in analytics; arrival does not erase earlier mistakes. Compare recovery against the written ideal. Exact penalty curves and weights remain undecided.
+
+**Next question, one at a time:** when imperfect neighbors require a slight direction or step-size adjustment to preserve the form, should that still incur a technique deduction against the written route, or should a correct form-preserving adjustment count as good technique? This baseline must be decided before specifying direction and step-size penalties.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.

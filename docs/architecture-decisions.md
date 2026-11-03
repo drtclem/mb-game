@@ -275,3 +275,7 @@ Multiplayer, iPhone tilt and full shape-aware FORM judging remain unimplemented.
 ### Scoring balance update (Taylor, Nov 3)
 
 DOT accuracy and FORM integrity start at **50/50**. This is a tunable default, not a permanent universal balance. Keep the weights configurable so Taylor can revise them later and levels can override them when explicitly designed. No level-specific weights are chosen yet. Timing, step-size and hold-fault scoring still require separate decisions.
+
+### Ideal step technique (Taylor, Nov 3)
+
+Each route to a written dot defines an ideal step size, timing and direction for each intended step. Deviations in any of these directly reduce the score, in addition to their resulting DOT accuracy and FORM integrity effects. Arriving at the correct dot does not erase technique mistakes along the route. Compare recovery steps against the original written ideal, not a recalculated catch-up ideal that would excuse the missed counts. The 50/50 DOT/FORM default remains; the technique deduction formula, tolerance curves and direction baseline during form-preserving adjustments still need to be settled. Record timing, step-size and direction deviations for play analytics.
