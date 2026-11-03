@@ -355,3 +355,7 @@ Display a brief **HOLD** or **MOVE** cue when the corresponding phase starts. Do
 ### Pause behavior (Taylor, Nov 3)
 
 Allow pausing in single-player. Multiplayer does not pause the shared show for an individual player; music, conducting and other performers continue. Preserve the confirmed disconnect/AI-takeover rules. Before solo play resumes, provide a tempo-restoring count-in while performers remain still, then continue the show from its paused position. Count-in duration and handling of mid-step pauses remain implementation details to resolve without skipping show time.
+
+### Show progression (Taylor, Nov 3)
+
+Players earn scores to unlock additional shows; do not make every show available from the start. Initial show availability, unlock thresholds and whether multiplayer access follows the host or each participant remain undecided.

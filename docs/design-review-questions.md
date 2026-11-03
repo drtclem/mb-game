@@ -128,6 +128,8 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **Solo resume confirmed:** provide a tempo-restoring count-in with performers still, then continue from the paused position.
 
-**Next question, one at a time:** should players choose any available show immediately, or unlock shows by earning scores? Recommend all available initially so playtesting can cover every show; progression can come later.
+**Show progression confirmed:** earning scores unlocks more shows. Initial availability and thresholds remain open.
+
+**Next question, one at a time:** should unlocks depend on a player’s best individual score on the preceding show, rather than accumulated points across repeated attempts? Recommend best score, so unlocking demonstrates improved performance.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.
