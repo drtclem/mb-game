@@ -124,6 +124,8 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **Direction cues deferred:** no FORWARD / BACKWARD cues for now. Keep the confirmed HOLD / MOVE cues.
 
-**Next question, one at a time:** should single-player allow pausing, while multiplayer keeps the show running for everyone? Recommend yes; multiplayer disconnect and reconnection rules already preserve the running show.
+**Pause confirmed:** solo players can pause; multiplayer continues for everyone.
+
+**Next question, one at a time:** when resuming solo play, should a short count-in restore the tempo before the show continues from its paused position? Recommend yes, with no performer travel during that count-in.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.
