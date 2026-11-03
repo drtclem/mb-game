@@ -259,3 +259,13 @@ Start generating show 1 and show 2 tracks early (in parallel with steps 1–2), 
 ## November 3 character art checkpoint
 
 Taylor approved an all-white uniform with a silver sash and clean shoulders (no epaulettes), and requested half the cast be women. The concept and original generated woman character pipeline are recorded in `docs/art/character-pipeline.md`. The earlier separate woman/man/instrument assets were rejected for hand deformation. Taylor authorized combined character-and-horn sculpts with fixed upper bodies, then requested rollout into the game. The playable cast now uses six complete woman sculpts and six complete man sculpts, sharing geometry/textures by gender with independent original leg-only rigs. No wrist IK or imported animation is applied to these models. `/uniform.html` previews both performers and their count-driven lower-body motion. This is a partial step-2 character study, not completion of the full step-2 style, drum-major or FORM-scoring work.
+
+## November 3 gameplay design review
+
+Taylor requested a one-question-at-a-time review after the marcher checkpoint.
+The latest requested multiplayer target is **2–4 human players**, expanding the
+earlier two-player-only scope. Final player-slot, fairness and interaction details
+will be recorded through `docs/design-review-questions.md` before implementation.
+Reconfirm input cadence, phone equivalence, DOT/FORM weighting and detailed
+analytics through that review; do not infer changes from this visual checkpoint.
+Multiplayer, iPhone tilt and full shape-aware FORM judging remain unimplemented.

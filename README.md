@@ -57,3 +57,7 @@ Asset provenance and remaining work: `docs/art/character-pipeline.md`.
 GitLab CI runs type/unused-code checks, tests, production build and dependency
 audit on branch and merge-request pipelines, retaining `dist/` for review.
 No hosting deployment is configured by this checkpoint.
+
+## Gameplay design review
+
+The question queue is `docs/design-review-questions.md`. Discuss one question at a time before changing the input/scoring contract.
