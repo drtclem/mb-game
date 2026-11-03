@@ -72,6 +72,8 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **Multiplayer scoring confirmed:** players compete through individual scores and analytics while jointly trying to make the band good. Show individual scores/rankings and a shared band score.
 
-**Next question, one at a time:** should the shared band score stay separate from individual rankings, or contribute to each player’s individual total? Recommend keeping it separate so individual comparisons remain clear while the band result rewards the joint performance.
+**Band score separation confirmed:** the shared band score stays separate from individual totals and rankings. No shared-band bonus or multiplier applies to individual results; this supersedes the prototype contribution.
+
+**Next question, one at a time:** should multiplayer support a mix of desktop keyboard players and iPhone tap/tilt players in the same session? Recommend yes, each on their own device.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.
