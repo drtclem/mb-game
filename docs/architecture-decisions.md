@@ -291,3 +291,7 @@ FORM integrity judges both spacing between nearby performers and alignment with 
 ### AI variation on retries (Taylor, Nov 3)
 
 Neighboring AI performers make different mistakes on every new attempt, including retries of the same show. Do not reuse a fixed practice pattern by default. Taylor confirmed that easier levels use smaller, less frequent AI mistakes, while harder levels use larger, more frequent mistakes. Keep variation within the selected difficulty; numerical ranges remain to be tuned through playtesting. A replay of an existing attempt should preserve that attempt’s recorded variation rather than inventing new mistakes.
+
+### Multiplayer group update (Taylor, Nov 3)
+
+Support **2–4 human players**, each controlling one performer, all next to each other in the same group within the same band/form. This supersedes the earlier exactly-two-player scope. Keep individual scores and a shared band result. Human performers occupy neighboring slots rather than separate lanes or independent ghost performances; their actual positions participate in form judging. Exact slot assignment and handling of formations that change neighbor relationships remain to be decided.
