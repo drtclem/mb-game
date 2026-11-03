@@ -44,6 +44,8 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **Recovery deadline and hold boundary confirmed:** recovery aims for the current set's original dot arrival count using the remaining counts, capped at 4-to-5. If that is insufficient before a hold, the marcher stays at the actual reached position throughout the hold, regardless of dot/form error. No automatic catch-up movement during holds; judge the actual position.
 
-**Next question, one at a time:** when movement resumes after an off-dot hold, should the marcher head directly from their actual position toward the new set's dot, using that new set's count budget and the same recovery cap? Then resolve early/late taps, foot alternation after a miss, and whether step-size deviation receives a direct penalty in addition to DOT/FORM/timing consequences.
+**All new-set boundaries confirmed:** immediately aim from the actual position toward the new set's dot, including after a hold or a missed prior dot. Use the new count budget and the same 4-to-5 cap. Direction retargets at the boundary; valid rhythm taps still produce the physical steps.
+
+**Next question, one at a time:** should valid early/late taps visibly move the feet early/late with the player's input, or should step animation remain on the music count while timing errors affect score only? Then resolve foot alternation after a miss and whether step-size deviation receives a direct penalty in addition to DOT/FORM/timing consequences.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.
