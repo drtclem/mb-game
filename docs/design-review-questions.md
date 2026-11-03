@@ -152,6 +152,8 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **Personal bests confirmed:** separate records for each show and difficulty, saved locally.
 
-**Next question, one at a time:** should a completed multiplayer individual score also count for personal bests and show unlocks, just like a solo score? Recommend yes; incomplete/disconnected results remain ineligible.
+**Multiplayer progression confirmed:** completed individual multiplayer scores qualify for personal bests and unlocks, like solo scores. Incomplete results do not qualify.
+
+**Next question, one at a time:** are there other visual/design changes Taylor wants to prioritize before implementation? The core control, scoring, multiplayer and progression decisions are sufficiently defined for a first implementation; remaining numerical tuning can be tested in play.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.

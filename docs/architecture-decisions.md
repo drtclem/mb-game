@@ -395,3 +395,7 @@ A qualifying individual score on any difficulty can unlock additional shows for 
 ### Personal-best categories (Taylor, Nov 3)
 
 Track personal bests separately for each show and difficulty. Keep these browser-local under the confirmed save model.
+
+### Multiplayer progression eligibility (Taylor, Nov 3)
+
+Completed multiplayer individual scores count toward personal bests and show unlocks, just like solo individual scores. Incomplete results, including a disconnected player’s result even after reconnection, do not qualify. Shared band scores remain separate and do not determine individual unlocks.
