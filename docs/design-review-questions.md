@@ -146,6 +146,8 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **Difficulty choices confirmed:** Easy, Medium and Hard. AI error size/frequency scales as already agreed; exact settings await tuning.
 
-**Next question, one at a time:** should each show keep its original tempo across all difficulties? Recommend yes initially, with difficulty changing neighboring AI mistakes rather than speeding up the music.
+**Tempo provisionally confirmed:** same show tempo across all difficulties for now; difficulty-dependent tempo variation is deferred for later.
+
+**Next question, one at a time:** should show-unlock target scores be achievable on any difficulty, or require a particular difficulty? Recommend any difficulty initially; retain the difficulty label with personal bests so results remain understandable.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.

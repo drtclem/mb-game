@@ -383,3 +383,7 @@ The host chooses the show and difficulty for the whole room. Display that select
 ### Initial difficulty choices (Taylor, Nov 3)
 
 Offer **Easy, Medium and Hard** as the initial difficulty presets. The confirmed AI mistake size/frequency increases with difficulty. Exact numerical settings and any other difficulty-dependent changes remain to be tuned or explicitly decided; do not assume changes to show tempo or scoring weights.
+
+### Difficulty and tempo (Taylor, Nov 3)
+
+For now, each show keeps the same musical tempo across Easy, Medium and Hard. Difficulty-dependent tempo variation is deferred for later, not permanently ruled out.
