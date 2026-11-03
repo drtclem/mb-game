@@ -170,24 +170,53 @@ export function rigCombinedSurface(
       hold: boolean,
       backward: boolean,
       dx = 0,
-      dz = backward ? 0.65 : -0.65,
+      dz = backward ? 1 : -1,
     ) {
       const orientation = group.getWorldQuaternion(new THREE.Quaternion()),
         front = new THREE.Vector3(0, 0, -1).applyQuaternion(orientation);
       const direction = new THREE.Vector3(dx, 0, dz).normalize(),
-        stride = Math.min(0.65, Math.hypot(dx, dz));
+        stride = Math.hypot(dx, dz) / height;
       for (const leg of legs) {
         leg.hip.quaternion.identity();
         leg.knee.quaternion.identity();
         leg.ankle.quaternion.identity();
       }
+      const targets = legs.map((leg, i) => {
+        const pose = footPose(count, i, hold, backward);
+        const target = leg.foot
+          .clone()
+          .addScaledVector(direction, -pose.travel * stride);
+        // A heel contact has a shorter lever from the ankle than a toe contact.
+        target.y +=
+          pose.lift +
+          Math.sin(Math.abs(pose.roll)) * (pose.roll < 0 ? 0.2 : 0.08);
+        return { pose, target };
+      });
+      // Lower the pelvis only as far as needed to keep ordinary strides reachable.
+      // Foot targets stay on the field; the rigid upper body never deforms.
+      const drop = Math.max(
+        -0.12,
+        Math.min(
+          0,
+          ...legs.map((leg, i) => {
+            const target = targets[i].target;
+            const horizontal =
+              (target.x - leg.hip.position.x) ** 2 +
+              (target.z - leg.hip.position.z) ** 2;
+            const reach = leg.l1 + leg.l2 - 1e-4;
+            return (
+              target.y +
+              Math.sqrt(Math.max(0, reach * reach - horizontal)) -
+              leg.hip.position.y
+            );
+          }),
+        ),
+      );
+      group.position.y = drop * height;
       group.updateMatrixWorld(true);
       legs.forEach((leg, i) => {
-        const pose = footPose(count, i, hold, backward),
-          target = leg.foot
-            .clone()
-            .addScaledVector(direction, -pose.travel * stride);
-        target.y += pose.lift + Math.sin(Math.abs(pose.roll)) * 0.2;
+        const { pose, target } = targets[i];
+        target.y -= drop;
         group.localToWorld(target);
         const solved = twoBoneTargets(
           world(leg.hip),

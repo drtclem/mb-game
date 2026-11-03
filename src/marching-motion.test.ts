@@ -34,4 +34,17 @@ describe("marcher animation", () => {
       footPose(2.5, 0, false, false),
     );
   });
+  it("rolls continuously from toe-off through heel contact without an ankle snap", () => {
+    for (const contact of [0, 1, 2, 3]) {
+      const before = footPose(contact - 1e-6, 0, false, false);
+      const after = footPose(contact + 1e-6, 0, false, false);
+      expect(Math.abs(after.roll - before.roll)).toBeLessThan(1e-5);
+    }
+    expect(footPose(0, 0, false, false).roll).toBeLessThan(0);
+    expect(footPose(1, 0, false, false).roll).toBeGreaterThan(0);
+  });
+  it("keeps swing clearance low for a gliding roll step", () => {
+    for (let count = 0; count <= 2; count += 0.025)
+      expect(footPose(count, 0, false, false).lift).toBeLessThanOrEqual(0.05);
+  });
 });

@@ -13,7 +13,9 @@ export const roster = [
   { name: "Leo", gender: "man", skin: 0xb27a58, height: 1.0 },
 ] as const;
 
-/** One count in swing, one in support. side 0 is left; count 0 starts count 1. */
+/** One count in swing, one in support. side 0 is left; count 0 starts count 1.
+ * Forward: low clearance, toe-off behind and toe-up heel contact ahead.
+ */
 export function footPose(
   count: number,
   side: number,
@@ -25,11 +27,11 @@ export function footPose(
   const swing = phase < 1;
   return {
     travel: swing ? 0.5 * Math.cos(Math.PI * phase) : phase - 1.5,
-    lift: swing ? Math.sin(Math.PI * phase) * 0.13 : 0,
+    lift: swing ? Math.sin(Math.PI * phase) * 0.04 : 0,
     roll: backward
       ? -0.22
       : swing
-        ? 0.16 * Math.cos(Math.PI * phase)
+        ? -0.23 * Math.cos(Math.PI * phase)
         : 0.23 * Math.cos(Math.PI * (phase - 1)),
   };
 }

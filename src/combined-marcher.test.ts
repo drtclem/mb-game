@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { rigCombinedSurface } from "./combined-marcher";
 import { legWeights } from "./combined-skin";
 
-function actor() {
+function actor(height = 1) {
   const geometry = new THREE.BufferGeometry();
   const points = [0, 2.9, -0.6, 0.3, 0.17, 0];
   geometry.setAttribute(
@@ -25,10 +25,13 @@ function actor() {
     "skinWeight",
     new THREE.Float32BufferAttribute(weights, 4),
   );
-  const result = rigCombinedSurface({
-    body: { geometry, material: new THREE.MeshStandardMaterial() },
-    feet: [new THREE.Vector3(0.3, 0.17, 0), new THREE.Vector3(-0.3, 0.17, 0)],
-  });
+  const result = rigCombinedSurface(
+    {
+      body: { geometry, material: new THREE.MeshStandardMaterial() },
+      feet: [new THREE.Vector3(0.3, 0.17, 0), new THREE.Vector3(-0.3, 0.17, 0)],
+    },
+    height,
+  );
   const mesh = result.group.children[0] as THREE.SkinnedMesh;
   const at = (i: number) =>
     mesh.applyBoneTransform(
@@ -65,4 +68,18 @@ it("plants holds at every count and keeps translated actors independent", () => 
   expect(a.at(0).distanceTo(new THREE.Vector3(0, 2.9, -0.6))).toBeLessThan(
     1e-6,
   );
+});
+
+it("keeps a support foot planted while the actor travels a full written step per count", () => {
+  for (const height of [0.96, 1, 1.05]) {
+    const a = actor(height);
+    a.group.position.z = -1.2;
+    a.animate(1.2, false, false, 0, -1);
+    const before = a.at(1).applyMatrix4(a.group.matrixWorld);
+    a.group.position.z = -1.6;
+    a.animate(1.6, false, false, 0, -1);
+    const after = a.at(1).applyMatrix4(a.group.matrixWorld);
+    expect(after.z).toBeCloseTo(before.z, 5);
+    expect(after.x).toBeCloseTo(before.x, 5);
+  }
 });

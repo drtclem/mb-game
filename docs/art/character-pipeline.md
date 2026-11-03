@@ -123,3 +123,27 @@ The lower-poly man and higher-detail woman share costume/lighting; they are two
 base sculpts, not twelve unique faces. Phone performance, exact thumb/valve detail,
 field/stadium polish and the drum major remain further review work. This visual
 checkpoint does not implement multiplayer, phone controls or new scoring rules.
+
+## Marching form refinement — November 3
+
+Taylor selected https://www.youtube.com/watch?v=_RKfyF29eTs as the movement
+reference and explicitly withdrew the briefly supplied 2007 full-show clip.
+The preferred clip's ordinary brass steps around 0:20–0:20.5 show low clearance,
+a leading heel/toe-up position, extended legs and an upright torso. The later
+choreographed lunge is a separate motion, not the basic drill step being tuned.
+No video/audio or corps arrangement is included in game assets or uploaded to a generator.
+
+The procedural swing clearance is reduced from 0.13 to 0.04 game units. Forward
+ankle roll now runs from toe-off to heel contact with matching boundary angles,
+removing the previous ~0.39-radian contact snap. Counter-travel follows the full
+written step distance rather than a 0.65-unit cap, adjusted for actor height so
+a taller model does not slide farther. Heel/toe pivot compensation uses separate
+lever lengths. A bounded visual pelvis adjustment keeps ordinary stride targets
+reachable; hands and horn remain one rigid upper body. The studio defaults to
+one standard step per count for comparison. Holds remain planted.
+
+Tests cover ankle continuity, low swing clearance, planted support feet while
+traveling one written step per count at different actor heights, independent
+rigs, deterministic poses and rigid hand/horn vertices. This remains procedural
+motion; larger diagonal steps and changes between movement styles can need
+further visual tuning.
