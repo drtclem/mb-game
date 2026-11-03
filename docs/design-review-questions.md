@@ -40,6 +40,8 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **Miss/recovery behavior confirmed:** a missed moving count produces no step. On resuming valid taps, the marcher takes larger steps to recover; this affects the score. Step size is required in analytics, comparing written and actual movement and identifying recovery steps. Exact scoring penalties have not been selected.
 
-**Next question, one at a time:** should recovery have a maximum step size, so too many missed counts can leave the marcher late? After that, resolve the recovery deadline, valid early/late taps, foot alternation after a miss, and whether step-size deviation has a direct penalty in addition to DOT/FORM/timing consequences.
+**Recovery limit confirmed:** 4-to-5 = 45 inches per step = 2 stored 8-to-5 units per moving count. Regular 8-to-5 = 22.5 inches, so recovery may use at most twice the regular step length. Distinguish drill-sheet notation from the prototype's separate show-checker `maxStep` field; this decision sets the player recovery limit, not a silent rewrite of existing drill.
+
+**Next question, one at a time:** should recovery aim to reach the current set's written dot on its original arrival count, recalculating the needed step size over the remaining counts up to the 4-to-5 cap? After that, resolve late arrival at a hold, valid early/late taps, foot alternation after a miss, and whether step-size deviation has a direct penalty in addition to DOT/FORM/timing consequences.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.
