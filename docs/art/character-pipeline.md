@@ -147,3 +147,18 @@ traveling one written step per count at different actor heights, independent
 rigs, deterministic poses and rigid hand/horn vertices. This remains procedural
 motion; larger diagonal steps and changes between movement styles can need
 further visual tuning.
+
+## Closer leg tracks — November 3
+
+Taylor requested less bowing and closer legs, supplying
+https://www.youtube.com/watch?v=fKMAh-s6nRg as an additional visual reference.
+The compact attention stance around 2:00 supports narrowing the model's original
+wide standing pose. Foot centers now track at 45% of their original lateral
+offset, while forward/backward counter-travel remains unchanged. The knee bend
+reference is biased gently toward the center beneath the hips. The upper-body
+sculpt and gameplay coordinates are unchanged.
+
+The front-view browser check covers both generated performers. Regression checks
+cover narrow, non-crossing ankle tracks and bounded knee width during forward,
+backward and hold poses; existing planted-foot and height-variation tests remain
+passing. This refinement uses the existing assets and no additional credits.

@@ -172,8 +172,7 @@ export function rigCombinedSurface(
       dx = 0,
       dz = backward ? 1 : -1,
     ) {
-      const orientation = group.getWorldQuaternion(new THREE.Quaternion()),
-        front = new THREE.Vector3(0, 0, -1).applyQuaternion(orientation);
+      const orientation = group.getWorldQuaternion(new THREE.Quaternion());
       const direction = new THREE.Vector3(dx, 0, dz).normalize(),
         stride = Math.hypot(dx, dz) / height;
       for (const leg of legs) {
@@ -183,9 +182,10 @@ export function rigCombinedSurface(
       }
       const targets = legs.map((leg, i) => {
         const pose = footPose(count, i, hold, backward);
-        const target = leg.foot
-          .clone()
-          .addScaledVector(direction, -pose.travel * stride);
+        const target = leg.foot.clone();
+        // Track beneath the body rather than preserving the modeling pose's wide stance.
+        target.x *= 0.45;
+        target.addScaledVector(direction, -pose.travel * stride);
         // A heel contact has a shorter lever from the ankle than a toe contact.
         target.y +=
           pose.lift +
@@ -223,7 +223,9 @@ export function rigCombinedSurface(
           target,
           leg.l1 * height,
           leg.l2 * height,
-          front,
+          new THREE.Vector3(-leg.hip.position.x * 0.4, 0, -1)
+            .normalize()
+            .applyQuaternion(orientation),
         );
         aim(leg.hip, leg.knee, solved.knee);
         aim(leg.knee, leg.ankle, solved.end);

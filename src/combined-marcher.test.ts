@@ -83,3 +83,29 @@ it("keeps a support foot planted while the actor travels a full written step per
     expect(after.x).toBeCloseTo(before.x, 5);
   }
 });
+
+it("keeps forward/backward leg tracks close without crossing or bowing the knees outward", () => {
+  const a = actor();
+  for (const backward of [false, true])
+    for (const hold of [false, true])
+      for (const count of [0, 0.25, 0.5, 0.75, 1, 1.5, 1.99]) {
+        a.animate(count, hold, backward);
+        const left = a.group
+          .getObjectByName("LeftAnkle")!
+          .getWorldPosition(new THREE.Vector3());
+        const right = a.group
+          .getObjectByName("RightAnkle")!
+          .getWorldPosition(new THREE.Vector3());
+        expect(left.x - right.x).toBeLessThan(0.35);
+        expect(left.x - right.x).toBeGreaterThan(0.15);
+        for (const side of ["Left", "Right"]) {
+          const hip = a.group
+            .getObjectByName(`${side}Hip`)!
+            .getWorldPosition(new THREE.Vector3());
+          const knee = a.group
+            .getObjectByName(`${side}Knee`)!
+            .getWorldPosition(new THREE.Vector3());
+          expect(Math.abs(knee.x)).toBeLessThanOrEqual(Math.abs(hip.x) + 0.025);
+        }
+      }
+});
