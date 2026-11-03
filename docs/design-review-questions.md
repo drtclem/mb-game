@@ -70,6 +70,8 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **Multiplayer grouping confirmed:** 2–4 human players each control one performer, all next to each other in the same group/band/form, with individual scores and a shared band result. This supersedes the old two-player-only scope.
 
-**Next question, one at a time:** should multiplayer primarily be cooperative (shared band success, with individual feedback), competitive (rank the players), or both (shared band result plus individual rankings)?
+**Multiplayer scoring confirmed:** players compete through individual scores and analytics while jointly trying to make the band good. Show individual scores/rankings and a shared band score.
+
+**Next question, one at a time:** should the shared band score stay separate from individual rankings, or contribute to each player’s individual total? Recommend keeping it separate so individual comparisons remain clear while the band result rewards the joint performance.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.

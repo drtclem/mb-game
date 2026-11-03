@@ -295,3 +295,7 @@ Neighboring AI performers make different mistakes on every new attempt, includin
 ### Multiplayer group update (Taylor, Nov 3)
 
 Support **2–4 human players**, each controlling one performer, all next to each other in the same group within the same band/form. This supersedes the earlier exactly-two-player scope. Keep individual scores and a shared band result. Human performers occupy neighboring slots rather than separate lanes or independent ghost performances; their actual positions participate in form judging. Exact slot assignment and handling of formations that change neighbor relationships remain to be decided.
+
+### Multiplayer competition and shared result (Taylor, Nov 3)
+
+Players compete against each other through individual scores and analytics while performing together to make the band good. Present both individual scores/rankings and a shared band score. The shared result reflects the same joint performance, not a separate opposing-team mode. Whether the band score modifies individual rankings remains undecided.
