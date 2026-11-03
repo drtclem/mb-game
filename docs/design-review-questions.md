@@ -19,8 +19,8 @@ The earlier locked multiplayer scope says exactly two humans; Taylor's latest re
 
 ## Ordered question queue
 
-1. **Keyboard rhythm contract:** during a moving page, must the player press an arrow on every count, or only when a steering correction is needed? Existing docs specify automatic steps and correction-only nudges. Taylor's latest wording could mean a more continuous rhythm challenge. Resolve this before changing input or timing scores.
-2. **Phone equivalent:** given answer 1, does holding a tilt apply steering on successive counts, or should a deliberate tilt gesture initiate each correction? Decide how timing and the neutral/dead-zone state remain fair against keyboard play.
+1. **Confirmed — rhythm and direction:** Taylor chose Space on every moving count plus left/right arrows for direction. Rhythm inputs must synchronize with character steps. This supersedes correction-only rhythm judging.
+2. **Confirmed mobile mapping; response details open:** Taylor chose screen taps on every moving count plus phone tilt for direction. Next resolve the consequence of a missed/late rhythm input. Then settle how held arrows/tilt apply steering and cross hold boundaries, keeping keyboard and mobile fair.
 3. **DOT versus FORM:** when an imperfect band makes both impossible to maximize, favor DOT, favor FORM, or start at equal weight? Choose an initial numeric mix and a concrete off-dot/clean-form example for playtesting.
 4. **What FORM rewards most:** how much should being centered between immediate left/right neighbors matter relative to front/back spacing and alignment to the fitted line/arc/block? The fitter must exclude the judged player, bound outliers and blend through transitions; those safeguards are already agreed.
 5. **Dot precision:** what physical error deserves Perfect/Good/poor at arrival, and should there be any full-credit radius? Existing 6/12-inch examples are provisional. Keep the visible target small without confusing its display size with the scoring curve.
@@ -36,4 +36,8 @@ The earlier locked multiplayer scope says exactly two humans; Taylor's latest re
 
 ## Discussion status
 
-Not started. Finish the current marcher integration checkpoint first, then ask question 1 only. Each subsequent question can be refined or skipped based on earlier answers. Taylor's latest message ends with “make sure”; allow them to add the unfinished requirement when ready.
+Control mapping confirmed November 3: Space + arrows on laptop; screen taps + tilt on mobile. No count taps on holds, as already requested. The current build still has the old input contract; implementation follows the response/scoring decisions.
+
+**Next question, one at a time:** when a player misses or badly mistimes a count tap, should the marcher physically miss/shorten that step and lose position, or keep traveling at the written pace while losing timing points? The music continues in either case. Do not select the physical consequence without Taylor's answer.
+
+Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.
