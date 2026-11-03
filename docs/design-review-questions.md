@@ -90,6 +90,8 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **Steering behavior provisionally confirmed:** held arrows or current tilt set the next step’s direction; the rhythm tap triggers travel. Steering alone does not move the marcher. Try this in playtesting and revise if needed.
 
-**Next question, one at a time:** with no arrow held or the phone at its calibrated neutral angle, should the marcher step toward the current written dot, with steering providing a limited adjustment to that route? Recommend yes, consistent with guided movement rather than free roaming.
+**Neutral steering revised:** taps with no arrow held or neutral tilt produce tiny alternating steps in place (mark time), with essentially no net travel. No automatic dot-directed travel at neutral. Travel now requires steering plus taps. Small leg motion, not high knees. This is a recorded design change, not implemented yet.
+
+**Next question, one at a time:** with only left/right steering, what input means travel straight toward the dot? One option is adding an up arrow (and forward phone tilt) for straight travel, leaving left/right for adjustments. Another is having either left/right input initiate dot-directed travel with a side bias. Clarify before implementation.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.

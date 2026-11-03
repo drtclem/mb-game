@@ -315,3 +315,7 @@ Design iPhone gameplay for **landscape orientation**, with screen taps for rhyth
 ### Steering sampled for each step (Taylor, Nov 3)
 
 For initial playtesting, held left/right arrows or current phone tilt set the direction of the next physical step. A rhythm tap triggers that step; steering alone causes no travel between steps or during a correctly observed hold. Apply this to accidental hold taps as well, subject to the confirmed small displacement bound around hold-start position. Treat this as a tunable starting behavior, not a permanent control decision. Exact steering range and sensitivity remain undecided.
+
+### Neutral steering marks time (Taylor, Nov 3)
+
+During a moving set, rhythm taps with no arrow held (or phone tilt at calibrated neutral) produce tiny alternating steps in place: mark time with essentially no net travel. Do not automatically advance toward the dot at neutral. This revises the earlier automatic-travel assumption; travel requires steering input plus rhythm taps. Keep the leg motion small rather than a high-knee mark time. Missed travel leaves the marcher behind and recovery remains subject to the confirmed cap. Hold taps remain unwanted bounded steps with penalties, not valid mark time. The mapping of non-neutral left/right steering to dot-directed travel still needs clarification before implementation.
