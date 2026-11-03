@@ -358,4 +358,4 @@ Allow pausing in single-player. Multiplayer does not pause the shared show for a
 
 ### Show progression (Taylor, Nov 3)
 
-Players earn scores to unlock additional shows; do not make every show available from the start. Initial show availability, unlock thresholds and whether multiplayer access follows the host or each participant remain undecided.
+Players earn scores to unlock additional shows; do not make every show available from the start. Unlocks require reaching a target individual score in one completed performance, not accumulating points across attempts or using the shared band score. Initial show availability, numerical thresholds and whether multiplayer access follows the host or each participant remain undecided.

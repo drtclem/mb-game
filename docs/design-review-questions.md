@@ -130,6 +130,8 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **Show progression confirmed:** earning scores unlocks more shows. Initial availability and thresholds remain open.
 
-**Next question, one at a time:** should unlocks depend on a player’s best individual score on the preceding show, rather than accumulated points across repeated attempts? Recommend best score, so unlocking demonstrates improved performance.
+**Unlock basis confirmed:** reach a target individual score in one completed performance; no accumulated-attempt points or shared-band-score unlock basis. Numerical thresholds remain open.
+
+**Next question, one at a time:** in multiplayer, can everyone play a show if the host has unlocked it, even if guests have not? Recommend yes for playing together; guests’ permanent unlocks still require their own qualifying individual scores.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.
