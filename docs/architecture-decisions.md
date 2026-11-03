@@ -350,4 +350,4 @@ Begin each show with an eight-beat ascending count-in: **“5… 6… 5, 6, 7, 8
 
 ### Hold and move transition cues (Taylor, Nov 3)
 
-Display a brief **HOLD** or **MOVE** cue when the corresponding phase starts. These are action instructions, not live numerical performance feedback. The drum major and music clock continue through both phases.
+Display a brief **HOLD** or **MOVE** cue when the corresponding phase starts. Do not add FORWARD / BACKWARD direction-change cues for now; Taylor deferred them. HOLD / MOVE are action instructions, not live numerical performance feedback. The drum major and music clock continue through both phases.
