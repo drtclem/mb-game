@@ -66,6 +66,8 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **AI retry variation confirmed:** neighboring AI performers make different mistakes on every new attempt, including retries. Severity stays within the selected difficulty; exact ranges remain open.
 
-**Next question, one at a time:** should easier levels use smaller and less frequent neighboring AI mistakes, with harder levels using larger and more frequent mistakes? Recommend yes; numerical ranges can be tuned through playtesting.
+**AI difficulty confirmed:** easier levels use smaller, less frequent neighboring mistakes; harder levels use larger, more frequent mistakes. Numerical ranges await playtesting.
+
+**Next question, one at a time:** for 2–4 human players, should everyone march together in the same band/form, each controlling one performer? Recommend yes, with individual scores and a shared band result. Competitive versus cooperative emphasis remains to be decided.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.

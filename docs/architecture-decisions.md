@@ -290,4 +290,4 @@ FORM integrity judges both spacing between nearby performers and alignment with 
 
 ### AI variation on retries (Taylor, Nov 3)
 
-Neighboring AI performers make different mistakes on every new attempt, including retries of the same show. Do not reuse a fixed practice pattern by default. Keep error severity within the selected difficulty; exact difficulty ranges remain to be decided. A replay of an existing attempt should preserve that attempt’s recorded variation rather than inventing new mistakes.
+Neighboring AI performers make different mistakes on every new attempt, including retries of the same show. Do not reuse a fixed practice pattern by default. Taylor confirmed that easier levels use smaller, less frequent AI mistakes, while harder levels use larger, more frequent mistakes. Keep variation within the selected difficulty; numerical ranges remain to be tuned through playtesting. A replay of an existing attempt should preserve that attempt’s recorded variation rather than inventing new mistakes.
