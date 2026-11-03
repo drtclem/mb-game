@@ -150,6 +150,8 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **Unlock difficulty confirmed:** a qualifying individual score on any difficulty counts toward show unlocks for now. Record difficulty with results and personal bests.
 
-**Next question, one at a time:** should personal bests be tracked separately for each show and difficulty? Recommend yes, so Easy and Hard performances are not treated as directly interchangeable records.
+**Personal bests confirmed:** separate records for each show and difficulty, saved locally.
+
+**Next question, one at a time:** should a completed multiplayer individual score also count for personal bests and show unlocks, just like a solo score? Recommend yes; incomplete/disconnected results remain ineligible.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.

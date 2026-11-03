@@ -391,3 +391,7 @@ For now, each show keeps the same musical tempo across Easy, Medium and Hard. Di
 ### Difficulty eligibility for unlocks (Taylor, Nov 3)
 
 A qualifying individual score on any difficulty can unlock additional shows for now; no specific difficulty is required. Retain the difficulty with recorded results and personal bests. Numerical unlock thresholds remain to be tuned.
+
+### Personal-best categories (Taylor, Nov 3)
+
+Track personal bests separately for each show and difficulty. Keep these browser-local under the confirmed save model.
