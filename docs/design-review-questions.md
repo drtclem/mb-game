@@ -142,6 +142,8 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **Ready gate confirmed:** everyone confirms Ready before the host can start the multiplayer count-in.
 
-**Next question, one at a time:** should the host choose the show and difficulty for the whole multiplayer room? Recommend yes, with the selection visible to everyone before they confirm Ready.
+**Host selection confirmed:** host chooses the room’s show and difficulty, visible to everyone before confirming Ready.
+
+**Next question, one at a time:** should the initial difficulty choices be Easy, Medium and Hard? Recommend three clear presets; exact AI error ranges, steering assistance and score thresholds can be tuned through playtesting.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.

@@ -375,3 +375,7 @@ Defer player model selection to a future feature covering gender, instrument and
 ### Multiplayer ready gate (Taylor, Nov 3)
 
 Every participating player must confirm Ready before the host can start the multiplayer count-in. Ensure control and audio setup is complete before accepting readiness.
+
+### Multiplayer show selection (Taylor, Nov 3)
+
+The host chooses the show and difficulty for the whole room. Display that selection to all players before they confirm Ready. Changing the selection requires renewed readiness so the count-in cannot start under a different selection than players accepted.
