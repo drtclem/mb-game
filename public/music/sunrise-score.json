@@ -1,0 +1,2188 @@
+{
+  "title": "Sunrise \u2014 Strauss Fanfare Study",
+  "draft": true,
+  "totalCounts": 112,
+  "tempoChanges": [
+    {
+      "count": 0,
+      "bpm": 84
+    },
+    {
+      "count": 32,
+      "bpm": 96
+    },
+    {
+      "count": 64,
+      "bpm": 84
+    },
+    {
+      "count": 96,
+      "bpm": 72
+    }
+  ],
+  "beats": [
+    0.0,
+    0.7142857142857143,
+    1.4285714285714286,
+    2.142857142857143,
+    2.857142857142857,
+    3.5714285714285716,
+    4.285714285714286,
+    5.0,
+    5.714285714285714,
+    6.428571428571429,
+    7.142857142857143,
+    7.857142857142857,
+    8.571428571428571,
+    9.285714285714286,
+    10.0,
+    10.714285714285714,
+    11.428571428571429,
+    12.142857142857142,
+    12.857142857142858,
+    13.571428571428571,
+    14.285714285714286,
+    15.0,
+    15.714285714285714,
+    16.428571428571427,
+    17.142857142857142,
+    17.857142857142858,
+    18.571428571428573,
+    19.285714285714285,
+    20.0,
+    20.714285714285715,
+    21.428571428571427,
+    22.142857142857142,
+    22.857142857142858,
+    23.482142857142858,
+    24.107142857142858,
+    24.732142857142858,
+    25.357142857142858,
+    25.982142857142858,
+    26.607142857142858,
+    27.232142857142858,
+    27.857142857142858,
+    28.482142857142858,
+    29.107142857142858,
+    29.732142857142858,
+    30.357142857142858,
+    30.982142857142858,
+    31.607142857142858,
+    32.23214285714286,
+    32.85714285714286,
+    33.48214285714286,
+    34.10714285714286,
+    34.73214285714286,
+    35.35714285714286,
+    35.98214285714286,
+    36.60714285714286,
+    37.23214285714286,
+    37.85714285714286,
+    38.48214285714286,
+    39.10714285714286,
+    39.73214285714286,
+    40.35714285714286,
+    40.98214285714286,
+    41.60714285714286,
+    42.23214285714286,
+    42.85714285714286,
+    43.57142857142857,
+    44.285714285714285,
+    45.0,
+    45.714285714285715,
+    46.42857142857143,
+    47.142857142857146,
+    47.85714285714286,
+    48.57142857142857,
+    49.285714285714285,
+    50.0,
+    50.714285714285715,
+    51.42857142857143,
+    52.142857142857146,
+    52.85714285714286,
+    53.57142857142857,
+    54.285714285714285,
+    55.0,
+    55.714285714285715,
+    56.42857142857143,
+    57.142857142857146,
+    57.85714285714286,
+    58.57142857142857,
+    59.285714285714285,
+    60.0,
+    60.714285714285715,
+    61.42857142857143,
+    62.14285714285714,
+    62.85714285714286,
+    63.57142857142857,
+    64.28571428571428,
+    65.0,
+    65.71428571428572,
+    66.54761904761905,
+    67.38095238095238,
+    68.21428571428572,
+    69.04761904761905,
+    69.88095238095238,
+    70.71428571428572,
+    71.54761904761905,
+    72.38095238095238,
+    73.21428571428572,
+    74.04761904761905,
+    74.88095238095238,
+    75.71428571428572,
+    76.54761904761905,
+    77.38095238095238,
+    78.21428571428572,
+    79.04761904761905
+  ],
+  "sections": [
+    {
+      "start": 0,
+      "end": 8,
+      "name": "First light",
+      "action": "HOLD"
+    },
+    {
+      "start": 8,
+      "end": 24,
+      "name": "First call",
+      "action": "MOVE"
+    },
+    {
+      "start": 24,
+      "end": 32,
+      "name": "First impact",
+      "action": "HOLD"
+    },
+    {
+      "start": 32,
+      "end": 48,
+      "name": "Answering call",
+      "action": "MOVE"
+    },
+    {
+      "start": 48,
+      "end": 56,
+      "name": "Second impact",
+      "action": "HOLD"
+    },
+    {
+      "start": 56,
+      "end": 72,
+      "name": "Brass ascent",
+      "action": "MOVE"
+    },
+    {
+      "start": 72,
+      "end": 80,
+      "name": "Full ensemble",
+      "action": "HOLD"
+    },
+    {
+      "start": 80,
+      "end": 96,
+      "name": "Final approach",
+      "action": "MOVE"
+    },
+    {
+      "start": 96,
+      "end": 112,
+      "name": "Sunrise arrival",
+      "action": "HOLD"
+    }
+  ],
+  "notes": [
+    {
+      "count": 0,
+      "duration": 24,
+      "midi": 24,
+      "voice": "low",
+      "level": 0.24,
+      "pan": 0
+    },
+    {
+      "count": 0,
+      "duration": 24,
+      "midi": 36,
+      "voice": "low",
+      "level": 0.14,
+      "pan": -0.25
+    },
+    {
+      "count": 8,
+      "duration": 4,
+      "midi": 60,
+      "voice": "brass",
+      "level": 0.11818181818181818,
+      "pan": -0.55
+    },
+    {
+      "count": 8,
+      "duration": 4,
+      "midi": 60,
+      "voice": "brass",
+      "level": 0.11818181818181818,
+      "pan": 0.05
+    },
+    {
+      "count": 8,
+      "duration": 4,
+      "midi": 60,
+      "voice": "brass",
+      "level": 0.11818181818181818,
+      "pan": 0.55
+    },
+    {
+      "count": 12,
+      "duration": 4,
+      "midi": 67,
+      "voice": "brass",
+      "level": 0.11818181818181818,
+      "pan": -0.55
+    },
+    {
+      "count": 12,
+      "duration": 4,
+      "midi": 67,
+      "voice": "brass",
+      "level": 0.11818181818181818,
+      "pan": 0.05
+    },
+    {
+      "count": 12,
+      "duration": 4,
+      "midi": 67,
+      "voice": "brass",
+      "level": 0.11818181818181818,
+      "pan": 0.55
+    },
+    {
+      "count": 16,
+      "duration": 6,
+      "midi": 72,
+      "voice": "brass",
+      "level": 0.11818181818181818,
+      "pan": -0.55
+    },
+    {
+      "count": 16,
+      "duration": 6,
+      "midi": 72,
+      "voice": "brass",
+      "level": 0.11818181818181818,
+      "pan": 0.05
+    },
+    {
+      "count": 16,
+      "duration": 6,
+      "midi": 72,
+      "voice": "brass",
+      "level": 0.11818181818181818,
+      "pan": 0.55
+    },
+    {
+      "count": 20.0,
+      "duration": 0.45,
+      "midi": 36,
+      "voice": "timpani",
+      "level": 0.3,
+      "pan": 0
+    },
+    {
+      "count": 20.5,
+      "duration": 0.45,
+      "midi": 43,
+      "voice": "timpani",
+      "level": 0.3,
+      "pan": 0
+    },
+    {
+      "count": 21.0,
+      "duration": 0.45,
+      "midi": 36,
+      "voice": "timpani",
+      "level": 0.3,
+      "pan": 0
+    },
+    {
+      "count": 21.5,
+      "duration": 0.45,
+      "midi": 43,
+      "voice": "timpani",
+      "level": 0.3,
+      "pan": 0
+    },
+    {
+      "count": 22,
+      "duration": 2,
+      "midi": 36,
+      "voice": "brass",
+      "level": 0.08844368668415917,
+      "pan": -0.45
+    },
+    {
+      "count": 22,
+      "duration": 2,
+      "midi": 48,
+      "voice": "brass",
+      "level": 0.08844368668415917,
+      "pan": -0.30000000000000004
+    },
+    {
+      "count": 22,
+      "duration": 2,
+      "midi": 55,
+      "voice": "brass",
+      "level": 0.08844368668415917,
+      "pan": -0.15000000000000002
+    },
+    {
+      "count": 22,
+      "duration": 2,
+      "midi": 60,
+      "voice": "brass",
+      "level": 0.08844368668415917,
+      "pan": 0.0
+    },
+    {
+      "count": 22,
+      "duration": 2,
+      "midi": 64,
+      "voice": "brass",
+      "level": 0.08844368668415917,
+      "pan": 0.14999999999999997
+    },
+    {
+      "count": 22,
+      "duration": 2,
+      "midi": 67,
+      "voice": "brass",
+      "level": 0.08844368668415917,
+      "pan": 0.30000000000000004
+    },
+    {
+      "count": 22,
+      "duration": 2,
+      "midi": 72,
+      "voice": "brass",
+      "level": 0.08844368668415917,
+      "pan": 0.45
+    },
+    {
+      "count": 22.0,
+      "duration": 0.45,
+      "midi": 36,
+      "voice": "timpani",
+      "level": 0.3,
+      "pan": 0
+    },
+    {
+      "count": 22.5,
+      "duration": 0.45,
+      "midi": 43,
+      "voice": "timpani",
+      "level": 0.3,
+      "pan": 0
+    },
+    {
+      "count": 23.0,
+      "duration": 0.45,
+      "midi": 36,
+      "voice": "timpani",
+      "level": 0.3,
+      "pan": 0
+    },
+    {
+      "count": 23.5,
+      "duration": 0.45,
+      "midi": 43,
+      "voice": "timpani",
+      "level": 0.3,
+      "pan": 0
+    },
+    {
+      "count": 24,
+      "duration": 4,
+      "midi": 36,
+      "voice": "brass",
+      "level": 0.17386365758424452,
+      "pan": -0.45
+    },
+    {
+      "count": 24,
+      "duration": 4,
+      "midi": 48,
+      "voice": "brass",
+      "level": 0.17386365758424452,
+      "pan": -0.30000000000000004
+    },
+    {
+      "count": 24,
+      "duration": 4,
+      "midi": 55,
+      "voice": "brass",
+      "level": 0.17386365758424452,
+      "pan": -0.15000000000000002
+    },
+    {
+      "count": 24,
+      "duration": 4,
+      "midi": 60,
+      "voice": "brass",
+      "level": 0.17386365758424452,
+      "pan": 0.0
+    },
+    {
+      "count": 24,
+      "duration": 4,
+      "midi": 63,
+      "voice": "brass",
+      "level": 0.17386365758424452,
+      "pan": 0.14999999999999997
+    },
+    {
+      "count": 24,
+      "duration": 4,
+      "midi": 67,
+      "voice": "brass",
+      "level": 0.17386365758424452,
+      "pan": 0.30000000000000004
+    },
+    {
+      "count": 24,
+      "duration": 4,
+      "midi": 72,
+      "voice": "brass",
+      "level": 0.17386365758424452,
+      "pan": 0.45
+    },
+    {
+      "count": 24,
+      "duration": 3,
+      "midi": 60,
+      "voice": "cymbal",
+      "level": 0.17,
+      "pan": 0.2
+    },
+    {
+      "count": 28,
+      "duration": 3.5,
+      "midi": 36,
+      "voice": "brass",
+      "level": 0.1889822365046136,
+      "pan": -0.45
+    },
+    {
+      "count": 28,
+      "duration": 3.5,
+      "midi": 48,
+      "voice": "brass",
+      "level": 0.1889822365046136,
+      "pan": -0.30000000000000004
+    },
+    {
+      "count": 28,
+      "duration": 3.5,
+      "midi": 55,
+      "voice": "brass",
+      "level": 0.1889822365046136,
+      "pan": -0.15000000000000002
+    },
+    {
+      "count": 28,
+      "duration": 3.5,
+      "midi": 60,
+      "voice": "brass",
+      "level": 0.1889822365046136,
+      "pan": 0.0
+    },
+    {
+      "count": 28,
+      "duration": 3.5,
+      "midi": 64,
+      "voice": "brass",
+      "level": 0.1889822365046136,
+      "pan": 0.14999999999999997
+    },
+    {
+      "count": 28,
+      "duration": 3.5,
+      "midi": 67,
+      "voice": "brass",
+      "level": 0.1889822365046136,
+      "pan": 0.30000000000000004
+    },
+    {
+      "count": 28,
+      "duration": 3.5,
+      "midi": 72,
+      "voice": "brass",
+      "level": 0.1889822365046136,
+      "pan": 0.45
+    },
+    {
+      "count": 28,
+      "duration": 3,
+      "midi": 60,
+      "voice": "cymbal",
+      "level": 0.17,
+      "pan": 0.2
+    },
+    {
+      "count": 32,
+      "duration": 16,
+      "midi": 24,
+      "voice": "low",
+      "level": 0.24,
+      "pan": 0
+    },
+    {
+      "count": 32,
+      "duration": 16,
+      "midi": 36,
+      "voice": "low",
+      "level": 0.14,
+      "pan": -0.25
+    },
+    {
+      "count": 32,
+      "duration": 4,
+      "midi": 60,
+      "voice": "brass",
+      "level": 0.15454545454545454,
+      "pan": -0.55
+    },
+    {
+      "count": 32,
+      "duration": 4,
+      "midi": 60,
+      "voice": "brass",
+      "level": 0.15454545454545454,
+      "pan": 0.05
+    },
+    {
+      "count": 32,
+      "duration": 4,
+      "midi": 60,
+      "voice": "brass",
+      "level": 0.15454545454545454,
+      "pan": 0.55
+    },
+    {
+      "count": 32,
+      "duration": 0.35,
+      "midi": 36,
+      "voice": "bass",
+      "level": 0.15,
+      "pan": 0
+    },
+    {
+      "count": 33,
+      "duration": 0.35,
+      "midi": 36,
+      "voice": "bass",
+      "level": 0.15,
+      "pan": 0
+    },
+    {
+      "count": 33,
+      "duration": 0.3,
+      "midi": 60,
+      "voice": "snare",
+      "level": 0.13,
+      "pan": 0.25
+    },
+    {
+      "count": 34,
+      "duration": 0.35,
+      "midi": 36,
+      "voice": "bass",
+      "level": 0.15,
+      "pan": 0
+    },
+    {
+      "count": 35,
+      "duration": 0.35,
+      "midi": 36,
+      "voice": "bass",
+      "level": 0.15,
+      "pan": 0
+    },
+    {
+      "count": 35,
+      "duration": 0.3,
+      "midi": 60,
+      "voice": "snare",
+      "level": 0.13,
+      "pan": 0.25
+    },
+    {
+      "count": 35.5,
+      "duration": 0.2,
+      "midi": 60,
+      "voice": "snare",
+      "level": 0.09,
+      "pan": 0.25
+    },
+    {
+      "count": 35.75,
+      "duration": 0.2,
+      "midi": 60,
+      "voice": "snare",
+      "level": 0.09,
+      "pan": 0.25
+    },
+    {
+      "count": 36,
+      "duration": 4,
+      "midi": 67,
+      "voice": "brass",
+      "level": 0.15454545454545454,
+      "pan": -0.55
+    },
+    {
+      "count": 36,
+      "duration": 4,
+      "midi": 67,
+      "voice": "brass",
+      "level": 0.15454545454545454,
+      "pan": 0.05
+    },
+    {
+      "count": 36,
+      "duration": 4,
+      "midi": 67,
+      "voice": "brass",
+      "level": 0.15454545454545454,
+      "pan": 0.55
+    },
+    {
+      "count": 36,
+      "duration": 0.35,
+      "midi": 36,
+      "voice": "bass",
+      "level": 0.15,
+      "pan": 0
+    },
+    {
+      "count": 37,
+      "duration": 0.35,
+      "midi": 36,
+      "voice": "bass",
+      "level": 0.15,
+      "pan": 0
+    },
+    {
+      "count": 37,
+      "duration": 0.3,
+      "midi": 60,
+      "voice": "snare",
+      "level": 0.13,
+      "pan": 0.25
+    },
+    {
+      "count": 38,
+      "duration": 0.35,
+      "midi": 36,
+      "voice": "bass",
+      "level": 0.15,
+      "pan": 0
+    },
+    {
+      "count": 39,
+      "duration": 0.35,
+      "midi": 36,
+      "voice": "bass",
+      "level": 0.15,
+      "pan": 0
+    },
+    {
+      "count": 39,
+      "duration": 0.3,
+      "midi": 60,
+      "voice": "snare",
+      "level": 0.13,
+      "pan": 0.25
+    },
+    {
+      "count": 39.5,
+      "duration": 0.2,
+      "midi": 60,
+      "voice": "snare",
+      "level": 0.09,
+      "pan": 0.25
+    },
+    {
+      "count": 39.75,
+      "duration": 0.2,
+      "midi": 60,
+      "voice": "snare",
+      "level": 0.09,
+      "pan": 0.25
+    },
+    {
+      "count": 40,
+      "duration": 6,
+      "midi": 72,
+      "voice": "brass",
+      "level": 0.15454545454545454,
+      "pan": -0.55
+    },
+    {
+      "count": 40,
+      "duration": 6,
+      "midi": 72,
+      "voice": "brass",
+      "level": 0.15454545454545454,
+      "pan": 0.05
+    },
+    {
+      "count": 40,
+      "duration": 6,
+      "midi": 72,
+      "voice": "brass",
+      "level": 0.15454545454545454,
+      "pan": 0.55
+    },
+    {
+      "count": 40,
+      "duration": 0.35,
+      "midi": 36,
+      "voice": "bass",
+      "level": 0.15,
+      "pan": 0
+    },
+    {
+      "count": 41,
+      "duration": 0.35,
+      "midi": 36,
+      "voice": "bass",
+      "level": 0.15,
+      "pan": 0
+    },
+    {
+      "count": 41,
+      "duration": 0.3,
+      "midi": 60,
+      "voice": "snare",
+      "level": 0.13,
+      "pan": 0.25
+    },
+    {
+      "count": 42,
+      "duration": 0.35,
+      "midi": 36,
+      "voice": "bass",
+      "level": 0.15,
+      "pan": 0
+    },
+    {
+      "count": 43,
+      "duration": 0.35,
+      "midi": 36,
+      "voice": "bass",
+      "level": 0.15,
+      "pan": 0
+    },
+    {
+      "count": 43,
+      "duration": 0.3,
+      "midi": 60,
+      "voice": "snare",
+      "level": 0.13,
+      "pan": 0.25
+    },
+    {
+      "count": 43.5,
+      "duration": 0.2,
+      "midi": 60,
+      "voice": "snare",
+      "level": 0.09,
+      "pan": 0.25
+    },
+    {
+      "count": 43.75,
+      "duration": 0.2,
+      "midi": 60,
+      "voice": "snare",
+      "level": 0.09,
+      "pan": 0.25
+    },
+    {
+      "count": 44.0,
+      "duration": 0.45,
+      "midi": 36,
+      "voice": "timpani",
+      "level": 0.3,
+      "pan": 0
+    },
+    {
+      "count": 44.5,
+      "duration": 0.45,
+      "midi": 43,
+      "voice": "timpani",
+      "level": 0.3,
+      "pan": 0
+    },
+    {
+      "count": 45.0,
+      "duration": 0.45,
+      "midi": 36,
+      "voice": "timpani",
+      "level": 0.3,
+      "pan": 0
+    },
+    {
+      "count": 45.5,
+      "duration": 0.45,
+      "midi": 43,
+      "voice": "timpani",
+      "level": 0.3,
+      "pan": 0
+    },
+    {
+      "count": 46,
+      "duration": 2,
+      "midi": 36,
+      "voice": "brass",
+      "level": 0.11565712874082354,
+      "pan": -0.45
+    },
+    {
+      "count": 46,
+      "duration": 2,
+      "midi": 48,
+      "voice": "brass",
+      "level": 0.11565712874082354,
+      "pan": -0.30000000000000004
+    },
+    {
+      "count": 46,
+      "duration": 2,
+      "midi": 55,
+      "voice": "brass",
+      "level": 0.11565712874082354,
+      "pan": -0.15000000000000002
+    },
+    {
+      "count": 46,
+      "duration": 2,
+      "midi": 60,
+      "voice": "brass",
+      "level": 0.11565712874082354,
+      "pan": 0.0
+    },
+    {
+      "count": 46,
+      "duration": 2,
+      "midi": 64,
+      "voice": "brass",
+      "level": 0.11565712874082354,
+      "pan": 0.14999999999999997
+    },
+    {
+      "count": 46,
+      "duration": 2,
+      "midi": 67,
+      "voice": "brass",
+      "level": 0.11565712874082354,
+      "pan": 0.30000000000000004
+    },
+    {
+      "count": 46,
+      "duration": 2,
+      "midi": 72,
+      "voice": "brass",
+      "level": 0.11565712874082354,
+      "pan": 0.45
+    },
+    {
+      "count": 46.0,
+      "duration": 0.45,
+      "midi": 36,
+      "voice": "timpani",
+      "level": 0.3,
+      "pan": 0
+    },
+    {
+      "count": 46.5,
+      "duration": 0.45,
+      "midi": 43,
+      "voice": "timpani",
+      "level": 0.3,
+      "pan": 0
+    },
+    {
+      "count": 47.0,
+      "duration": 0.45,
+      "midi": 36,
+      "voice": "timpani",
+      "level": 0.3,
+      "pan": 0
+    },
+    {
+      "count": 47.5,
+      "duration": 0.45,
+      "midi": 43,
+      "voice": "timpani",
+      "level": 0.3,
+      "pan": 0
+    },
+    {
+      "count": 48,
+      "duration": 4,
+      "midi": 36,
+      "voice": "brass",
+      "level": 0.19654152596479815,
+      "pan": -0.45
+    },
+    {
+      "count": 48,
+      "duration": 4,
+      "midi": 43,
+      "voice": "brass",
+      "level": 0.19654152596479815,
+      "pan": -0.30000000000000004
+    },
+    {
+      "count": 48,
+      "duration": 4,
+      "midi": 48,
+      "voice": "brass",
+      "level": 0.19654152596479815,
+      "pan": -0.15000000000000002
+    },
+    {
+      "count": 48,
+      "duration": 4,
+      "midi": 55,
+      "voice": "brass",
+      "level": 0.19654152596479815,
+      "pan": 0.0
+    },
+    {
+      "count": 48,
+      "duration": 4,
+      "midi": 63,
+      "voice": "brass",
+      "level": 0.19654152596479815,
+      "pan": 0.14999999999999997
+    },
+    {
+      "count": 48,
+      "duration": 4,
+      "midi": 67,
+      "voice": "brass",
+      "level": 0.19654152596479815,
+      "pan": 0.30000000000000004
+    },
+    {
+      "count": 48,
+      "duration": 4,
+      "midi": 72,
+      "voice": "brass",
+      "level": 0.19654152596479815,
+      "pan": 0.45
+    },
+    {
+      "count": 48,
+      "duration": 3,
+      "midi": 60,
+      "voice": "cymbal",
+      "level": 0.17,
+      "pan": 0.2
+    },
+    {
+      "count": 52,
+      "duration": 3.5,
+      "midi": 36,
+      "voice": "brass",
+      "level": 0.21166010488516726,
+      "pan": -0.45
+    },
+    {
+      "count": 52,
+      "duration": 3.5,
+      "midi": 48,
+      "voice": "brass",
+      "level": 0.21166010488516726,
+      "pan": -0.30000000000000004
+    },
+    {
+      "count": 52,
+      "duration": 3.5,
+      "midi": 55,
+      "voice": "brass",
+      "level": 0.21166010488516726,
+      "pan": -0.15000000000000002
+    },
+    {
+      "count": 52,
+      "duration": 3.5,
+      "midi": 60,
+      "voice": "brass",
+      "level": 0.21166010488516726,
+      "pan": 0.0
+    },
+    {
+      "count": 52,
+      "duration": 3.5,
+      "midi": 64,
+      "voice": "brass",
+      "level": 0.21166010488516726,
+      "pan": 0.14999999999999997
+    },
+    {
+      "count": 52,
+      "duration": 3.5,
+      "midi": 67,
+      "voice": "brass",
+      "level": 0.21166010488516726,
+      "pan": 0.30000000000000004
+    },
+    {
+      "count": 52,
+      "duration": 3.5,
+      "midi": 76,
+      "voice": "brass",
+      "level": 0.21166010488516726,
+      "pan": 0.45
+    },
+    {
+      "count": 52,
+      "duration": 3,
+      "midi": 60,
+      "voice": "cymbal",
+      "level": 0.17,
+      "pan": 0.2
+    },
+    {
+      "count": 56,
+      "duration": 16,
+      "midi": 24,
+      "voice": "low",
+      "level": 0.24,
+      "pan": 0
+    },
+    {
+      "count": 56,
+      "duration": 16,
+      "midi": 36,
+      "voice": "low",
+      "level": 0.14,
+      "pan": -0.25
+    },
+    {
+      "count": 56,
+      "duration": 4,
+      "midi": 60,
+      "voice": "brass",
+      "level": 0.1909090909090909,
+      "pan": -0.55
+    },
+    {
+      "count": 56,
+      "duration": 4,
+      "midi": 60,
+      "voice": "brass",
+      "level": 0.1909090909090909,
+      "pan": 0.05
+    },
+    {
+      "count": 56,
+      "duration": 4,
+      "midi": 60,
+      "voice": "brass",
+      "level": 0.1909090909090909,
+      "pan": 0.55
+    },
+    {
+      "count": 56,
+      "duration": 0.35,
+      "midi": 36,
+      "voice": "bass",
+      "level": 0.15,
+      "pan": 0
+    },
+    {
+      "count": 57,
+      "duration": 0.35,
+      "midi": 36,
+      "voice": "bass",
+      "level": 0.15,
+      "pan": 0
+    },
+    {
+      "count": 57,
+      "duration": 0.3,
+      "midi": 60,
+      "voice": "snare",
+      "level": 0.13,
+      "pan": 0.25
+    },
+    {
+      "count": 58,
+      "duration": 0.35,
+      "midi": 36,
+      "voice": "bass",
+      "level": 0.15,
+      "pan": 0
+    },
+    {
+      "count": 59,
+      "duration": 0.35,
+      "midi": 36,
+      "voice": "bass",
+      "level": 0.15,
+      "pan": 0
+    },
+    {
+      "count": 59,
+      "duration": 0.3,
+      "midi": 60,
+      "voice": "snare",
+      "level": 0.13,
+      "pan": 0.25
+    },
+    {
+      "count": 59.5,
+      "duration": 0.2,
+      "midi": 60,
+      "voice": "snare",
+      "level": 0.09,
+      "pan": 0.25
+    },
+    {
+      "count": 59.75,
+      "duration": 0.2,
+      "midi": 60,
+      "voice": "snare",
+      "level": 0.09,
+      "pan": 0.25
+    },
+    {
+      "count": 60,
+      "duration": 4,
+      "midi": 67,
+      "voice": "brass",
+      "level": 0.1909090909090909,
+      "pan": -0.55
+    },
+    {
+      "count": 60,
+      "duration": 4,
+      "midi": 67,
+      "voice": "brass",
+      "level": 0.1909090909090909,
+      "pan": 0.05
+    },
+    {
+      "count": 60,
+      "duration": 4,
+      "midi": 67,
+      "voice": "brass",
+      "level": 0.1909090909090909,
+      "pan": 0.55
+    },
+    {
+      "count": 60,
+      "duration": 0.35,
+      "midi": 36,
+      "voice": "bass",
+      "level": 0.15,
+      "pan": 0
+    },
+    {
+      "count": 61,
+      "duration": 0.35,
+      "midi": 36,
+      "voice": "bass",
+      "level": 0.15,
+      "pan": 0
+    },
+    {
+      "count": 61,
+      "duration": 0.3,
+      "midi": 60,
+      "voice": "snare",
+      "level": 0.13,
+      "pan": 0.25
+    },
+    {
+      "count": 62,
+      "duration": 0.35,
+      "midi": 36,
+      "voice": "bass",
+      "level": 0.15,
+      "pan": 0
+    },
+    {
+      "count": 63,
+      "duration": 0.35,
+      "midi": 36,
+      "voice": "bass",
+      "level": 0.15,
+      "pan": 0
+    },
+    {
+      "count": 63,
+      "duration": 0.3,
+      "midi": 60,
+      "voice": "snare",
+      "level": 0.13,
+      "pan": 0.25
+    },
+    {
+      "count": 63.5,
+      "duration": 0.2,
+      "midi": 60,
+      "voice": "snare",
+      "level": 0.09,
+      "pan": 0.25
+    },
+    {
+      "count": 63.75,
+      "duration": 0.2,
+      "midi": 60,
+      "voice": "snare",
+      "level": 0.09,
+      "pan": 0.25
+    },
+    {
+      "count": 64,
+      "duration": 6,
+      "midi": 72,
+      "voice": "brass",
+      "level": 0.1909090909090909,
+      "pan": -0.55
+    },
+    {
+      "count": 64,
+      "duration": 6,
+      "midi": 72,
+      "voice": "brass",
+      "level": 0.1909090909090909,
+      "pan": 0.05
+    },
+    {
+      "count": 64,
+      "duration": 6,
+      "midi": 72,
+      "voice": "brass",
+      "level": 0.1909090909090909,
+      "pan": 0.55
+    },
+    {
+      "count": 64,
+      "duration": 0.35,
+      "midi": 36,
+      "voice": "bass",
+      "level": 0.15,
+      "pan": 0
+    },
+    {
+      "count": 65,
+      "duration": 0.35,
+      "midi": 36,
+      "voice": "bass",
+      "level": 0.15,
+      "pan": 0
+    },
+    {
+      "count": 65,
+      "duration": 0.3,
+      "midi": 60,
+      "voice": "snare",
+      "level": 0.13,
+      "pan": 0.25
+    },
+    {
+      "count": 66,
+      "duration": 0.35,
+      "midi": 36,
+      "voice": "bass",
+      "level": 0.15,
+      "pan": 0
+    },
+    {
+      "count": 67,
+      "duration": 0.35,
+      "midi": 36,
+      "voice": "bass",
+      "level": 0.15,
+      "pan": 0
+    },
+    {
+      "count": 67,
+      "duration": 0.3,
+      "midi": 60,
+      "voice": "snare",
+      "level": 0.13,
+      "pan": 0.25
+    },
+    {
+      "count": 67.5,
+      "duration": 0.2,
+      "midi": 60,
+      "voice": "snare",
+      "level": 0.09,
+      "pan": 0.25
+    },
+    {
+      "count": 67.75,
+      "duration": 0.2,
+      "midi": 60,
+      "voice": "snare",
+      "level": 0.09,
+      "pan": 0.25
+    },
+    {
+      "count": 68.0,
+      "duration": 0.45,
+      "midi": 36,
+      "voice": "timpani",
+      "level": 0.3,
+      "pan": 0
+    },
+    {
+      "count": 68.5,
+      "duration": 0.45,
+      "midi": 43,
+      "voice": "timpani",
+      "level": 0.3,
+      "pan": 0
+    },
+    {
+      "count": 69.0,
+      "duration": 0.45,
+      "midi": 36,
+      "voice": "timpani",
+      "level": 0.3,
+      "pan": 0
+    },
+    {
+      "count": 69.5,
+      "duration": 0.45,
+      "midi": 43,
+      "voice": "timpani",
+      "level": 0.3,
+      "pan": 0
+    },
+    {
+      "count": 70,
+      "duration": 2,
+      "midi": 36,
+      "voice": "brass",
+      "level": 0.14287057079748788,
+      "pan": -0.45
+    },
+    {
+      "count": 70,
+      "duration": 2,
+      "midi": 48,
+      "voice": "brass",
+      "level": 0.14287057079748788,
+      "pan": -0.30000000000000004
+    },
+    {
+      "count": 70,
+      "duration": 2,
+      "midi": 55,
+      "voice": "brass",
+      "level": 0.14287057079748788,
+      "pan": -0.15000000000000002
+    },
+    {
+      "count": 70,
+      "duration": 2,
+      "midi": 60,
+      "voice": "brass",
+      "level": 0.14287057079748788,
+      "pan": 0.0
+    },
+    {
+      "count": 70,
+      "duration": 2,
+      "midi": 64,
+      "voice": "brass",
+      "level": 0.14287057079748788,
+      "pan": 0.14999999999999997
+    },
+    {
+      "count": 70,
+      "duration": 2,
+      "midi": 67,
+      "voice": "brass",
+      "level": 0.14287057079748788,
+      "pan": 0.30000000000000004
+    },
+    {
+      "count": 70,
+      "duration": 2,
+      "midi": 72,
+      "voice": "brass",
+      "level": 0.14287057079748788,
+      "pan": 0.45
+    },
+    {
+      "count": 70.0,
+      "duration": 0.45,
+      "midi": 36,
+      "voice": "timpani",
+      "level": 0.3,
+      "pan": 0
+    },
+    {
+      "count": 70.5,
+      "duration": 0.45,
+      "midi": 43,
+      "voice": "timpani",
+      "level": 0.3,
+      "pan": 0
+    },
+    {
+      "count": 71.0,
+      "duration": 0.45,
+      "midi": 36,
+      "voice": "timpani",
+      "level": 0.3,
+      "pan": 0
+    },
+    {
+      "count": 71.5,
+      "duration": 0.45,
+      "midi": 43,
+      "voice": "timpani",
+      "level": 0.3,
+      "pan": 0
+    },
+    {
+      "count": 72,
+      "duration": 7.5,
+      "midi": 36,
+      "voice": "brass",
+      "level": 0.21333333333333335,
+      "pan": -0.45
+    },
+    {
+      "count": 72,
+      "duration": 7.5,
+      "midi": 43,
+      "voice": "brass",
+      "level": 0.21333333333333335,
+      "pan": -0.3375
+    },
+    {
+      "count": 72,
+      "duration": 7.5,
+      "midi": 48,
+      "voice": "brass",
+      "level": 0.21333333333333335,
+      "pan": -0.225
+    },
+    {
+      "count": 72,
+      "duration": 7.5,
+      "midi": 55,
+      "voice": "brass",
+      "level": 0.21333333333333335,
+      "pan": -0.1125
+    },
+    {
+      "count": 72,
+      "duration": 7.5,
+      "midi": 60,
+      "voice": "brass",
+      "level": 0.21333333333333335,
+      "pan": 0.0
+    },
+    {
+      "count": 72,
+      "duration": 7.5,
+      "midi": 64,
+      "voice": "brass",
+      "level": 0.21333333333333335,
+      "pan": 0.1125
+    },
+    {
+      "count": 72,
+      "duration": 7.5,
+      "midi": 67,
+      "voice": "brass",
+      "level": 0.21333333333333335,
+      "pan": 0.225
+    },
+    {
+      "count": 72,
+      "duration": 7.5,
+      "midi": 72,
+      "voice": "brass",
+      "level": 0.21333333333333335,
+      "pan": 0.3375
+    },
+    {
+      "count": 72,
+      "duration": 7.5,
+      "midi": 76,
+      "voice": "brass",
+      "level": 0.21333333333333335,
+      "pan": 0.45
+    },
+    {
+      "count": 72,
+      "duration": 3,
+      "midi": 60,
+      "voice": "cymbal",
+      "level": 0.17,
+      "pan": 0.2
+    },
+    {
+      "count": 80,
+      "duration": 16,
+      "midi": 24,
+      "voice": "low",
+      "level": 0.24,
+      "pan": 0
+    },
+    {
+      "count": 80,
+      "duration": 16,
+      "midi": 36,
+      "voice": "low",
+      "level": 0.14,
+      "pan": -0.25
+    },
+    {
+      "count": 80,
+      "duration": 1.75,
+      "midi": 60,
+      "voice": "brass",
+      "level": 0.26,
+      "pan": -0.4
+    },
+    {
+      "count": 80,
+      "duration": 1.75,
+      "midi": 48,
+      "voice": "brass",
+      "level": 0.19,
+      "pan": 0.4
+    },
+    {
+      "count": 80,
+      "duration": 0.35,
+      "midi": 36,
+      "voice": "bass",
+      "level": 0.15,
+      "pan": 0
+    },
+    {
+      "count": 81,
+      "duration": 0.35,
+      "midi": 36,
+      "voice": "bass",
+      "level": 0.15,
+      "pan": 0
+    },
+    {
+      "count": 81,
+      "duration": 0.3,
+      "midi": 60,
+      "voice": "snare",
+      "level": 0.13,
+      "pan": 0.25
+    },
+    {
+      "count": 82,
+      "duration": 1.75,
+      "midi": 62,
+      "voice": "brass",
+      "level": 0.26,
+      "pan": -0.4
+    },
+    {
+      "count": 82,
+      "duration": 1.75,
+      "midi": 50,
+      "voice": "brass",
+      "level": 0.19,
+      "pan": 0.4
+    },
+    {
+      "count": 82,
+      "duration": 0.35,
+      "midi": 36,
+      "voice": "bass",
+      "level": 0.15,
+      "pan": 0
+    },
+    {
+      "count": 83,
+      "duration": 0.35,
+      "midi": 36,
+      "voice": "bass",
+      "level": 0.15,
+      "pan": 0
+    },
+    {
+      "count": 83,
+      "duration": 0.3,
+      "midi": 60,
+      "voice": "snare",
+      "level": 0.13,
+      "pan": 0.25
+    },
+    {
+      "count": 83.5,
+      "duration": 0.2,
+      "midi": 60,
+      "voice": "snare",
+      "level": 0.09,
+      "pan": 0.25
+    },
+    {
+      "count": 83.75,
+      "duration": 0.2,
+      "midi": 60,
+      "voice": "snare",
+      "level": 0.09,
+      "pan": 0.25
+    },
+    {
+      "count": 84,
+      "duration": 1.75,
+      "midi": 64,
+      "voice": "brass",
+      "level": 0.26,
+      "pan": -0.4
+    },
+    {
+      "count": 84,
+      "duration": 1.75,
+      "midi": 52,
+      "voice": "brass",
+      "level": 0.19,
+      "pan": 0.4
+    },
+    {
+      "count": 84,
+      "duration": 0.35,
+      "midi": 36,
+      "voice": "bass",
+      "level": 0.15,
+      "pan": 0
+    },
+    {
+      "count": 85,
+      "duration": 0.35,
+      "midi": 36,
+      "voice": "bass",
+      "level": 0.15,
+      "pan": 0
+    },
+    {
+      "count": 85,
+      "duration": 0.3,
+      "midi": 60,
+      "voice": "snare",
+      "level": 0.13,
+      "pan": 0.25
+    },
+    {
+      "count": 86,
+      "duration": 1.75,
+      "midi": 67,
+      "voice": "brass",
+      "level": 0.26,
+      "pan": -0.4
+    },
+    {
+      "count": 86,
+      "duration": 1.75,
+      "midi": 55,
+      "voice": "brass",
+      "level": 0.19,
+      "pan": 0.4
+    },
+    {
+      "count": 86,
+      "duration": 0.35,
+      "midi": 36,
+      "voice": "bass",
+      "level": 0.15,
+      "pan": 0
+    },
+    {
+      "count": 87,
+      "duration": 0.35,
+      "midi": 36,
+      "voice": "bass",
+      "level": 0.15,
+      "pan": 0
+    },
+    {
+      "count": 87,
+      "duration": 0.3,
+      "midi": 60,
+      "voice": "snare",
+      "level": 0.13,
+      "pan": 0.25
+    },
+    {
+      "count": 87.5,
+      "duration": 0.2,
+      "midi": 60,
+      "voice": "snare",
+      "level": 0.09,
+      "pan": 0.25
+    },
+    {
+      "count": 87.75,
+      "duration": 0.2,
+      "midi": 60,
+      "voice": "snare",
+      "level": 0.09,
+      "pan": 0.25
+    },
+    {
+      "count": 88,
+      "duration": 1.75,
+      "midi": 64,
+      "voice": "brass",
+      "level": 0.26,
+      "pan": -0.4
+    },
+    {
+      "count": 88,
+      "duration": 1.75,
+      "midi": 52,
+      "voice": "brass",
+      "level": 0.19,
+      "pan": 0.4
+    },
+    {
+      "count": 88,
+      "duration": 0.35,
+      "midi": 36,
+      "voice": "bass",
+      "level": 0.15,
+      "pan": 0
+    },
+    {
+      "count": 89,
+      "duration": 0.35,
+      "midi": 36,
+      "voice": "bass",
+      "level": 0.15,
+      "pan": 0
+    },
+    {
+      "count": 89,
+      "duration": 0.3,
+      "midi": 60,
+      "voice": "snare",
+      "level": 0.13,
+      "pan": 0.25
+    },
+    {
+      "count": 90,
+      "duration": 1.75,
+      "midi": 67,
+      "voice": "brass",
+      "level": 0.26,
+      "pan": -0.4
+    },
+    {
+      "count": 90,
+      "duration": 1.75,
+      "midi": 55,
+      "voice": "brass",
+      "level": 0.19,
+      "pan": 0.4
+    },
+    {
+      "count": 90,
+      "duration": 0.35,
+      "midi": 36,
+      "voice": "bass",
+      "level": 0.15,
+      "pan": 0
+    },
+    {
+      "count": 91,
+      "duration": 0.35,
+      "midi": 36,
+      "voice": "bass",
+      "level": 0.15,
+      "pan": 0
+    },
+    {
+      "count": 91,
+      "duration": 0.3,
+      "midi": 60,
+      "voice": "snare",
+      "level": 0.13,
+      "pan": 0.25
+    },
+    {
+      "count": 91.5,
+      "duration": 0.2,
+      "midi": 60,
+      "voice": "snare",
+      "level": 0.09,
+      "pan": 0.25
+    },
+    {
+      "count": 91.75,
+      "duration": 0.2,
+      "midi": 60,
+      "voice": "snare",
+      "level": 0.09,
+      "pan": 0.25
+    },
+    {
+      "count": 92,
+      "duration": 1.75,
+      "midi": 72,
+      "voice": "brass",
+      "level": 0.26,
+      "pan": -0.4
+    },
+    {
+      "count": 92,
+      "duration": 1.75,
+      "midi": 60,
+      "voice": "brass",
+      "level": 0.19,
+      "pan": 0.4
+    },
+    {
+      "count": 92.0,
+      "duration": 0.45,
+      "midi": 36,
+      "voice": "timpani",
+      "level": 0.3,
+      "pan": 0
+    },
+    {
+      "count": 92,
+      "duration": 0.35,
+      "midi": 36,
+      "voice": "bass",
+      "level": 0.15,
+      "pan": 0
+    },
+    {
+      "count": 92.5,
+      "duration": 0.45,
+      "midi": 43,
+      "voice": "timpani",
+      "level": 0.3,
+      "pan": 0
+    },
+    {
+      "count": 93.0,
+      "duration": 0.45,
+      "midi": 36,
+      "voice": "timpani",
+      "level": 0.3,
+      "pan": 0
+    },
+    {
+      "count": 93,
+      "duration": 0.35,
+      "midi": 36,
+      "voice": "bass",
+      "level": 0.15,
+      "pan": 0
+    },
+    {
+      "count": 93,
+      "duration": 0.3,
+      "midi": 60,
+      "voice": "snare",
+      "level": 0.13,
+      "pan": 0.25
+    },
+    {
+      "count": 93.5,
+      "duration": 0.45,
+      "midi": 43,
+      "voice": "timpani",
+      "level": 0.3,
+      "pan": 0
+    },
+    {
+      "count": 94,
+      "duration": 1.75,
+      "midi": 74,
+      "voice": "brass",
+      "level": 0.26,
+      "pan": -0.4
+    },
+    {
+      "count": 94,
+      "duration": 1.75,
+      "midi": 62,
+      "voice": "brass",
+      "level": 0.19,
+      "pan": 0.4
+    },
+    {
+      "count": 94.0,
+      "duration": 0.45,
+      "midi": 36,
+      "voice": "timpani",
+      "level": 0.3,
+      "pan": 0
+    },
+    {
+      "count": 94,
+      "duration": 0.35,
+      "midi": 36,
+      "voice": "bass",
+      "level": 0.15,
+      "pan": 0
+    },
+    {
+      "count": 94.5,
+      "duration": 0.45,
+      "midi": 43,
+      "voice": "timpani",
+      "level": 0.3,
+      "pan": 0
+    },
+    {
+      "count": 95.0,
+      "duration": 0.45,
+      "midi": 36,
+      "voice": "timpani",
+      "level": 0.3,
+      "pan": 0
+    },
+    {
+      "count": 95,
+      "duration": 0.35,
+      "midi": 36,
+      "voice": "bass",
+      "level": 0.15,
+      "pan": 0
+    },
+    {
+      "count": 95,
+      "duration": 0.3,
+      "midi": 60,
+      "voice": "snare",
+      "level": 0.13,
+      "pan": 0.25
+    },
+    {
+      "count": 95.5,
+      "duration": 0.45,
+      "midi": 43,
+      "voice": "timpani",
+      "level": 0.3,
+      "pan": 0
+    },
+    {
+      "count": 95.5,
+      "duration": 0.2,
+      "midi": 60,
+      "voice": "snare",
+      "level": 0.09,
+      "pan": 0.25
+    },
+    {
+      "count": 95.75,
+      "duration": 0.2,
+      "midi": 60,
+      "voice": "snare",
+      "level": 0.09,
+      "pan": 0.25
+    },
+    {
+      "count": 96,
+      "duration": 16,
+      "midi": 24,
+      "voice": "low",
+      "level": 0.24,
+      "pan": 0
+    },
+    {
+      "count": 96,
+      "duration": 16,
+      "midi": 36,
+      "voice": "low",
+      "level": 0.14,
+      "pan": -0.25
+    },
+    {
+      "count": 96,
+      "duration": 8,
+      "midi": 36,
+      "voice": "brass",
+      "level": 0.22,
+      "pan": -0.45
+    },
+    {
+      "count": 96,
+      "duration": 8,
+      "midi": 43,
+      "voice": "brass",
+      "level": 0.22,
+      "pan": -0.3375
+    },
+    {
+      "count": 96,
+      "duration": 8,
+      "midi": 48,
+      "voice": "brass",
+      "level": 0.22,
+      "pan": -0.225
+    },
+    {
+      "count": 96,
+      "duration": 8,
+      "midi": 55,
+      "voice": "brass",
+      "level": 0.22,
+      "pan": -0.1125
+    },
+    {
+      "count": 96,
+      "duration": 8,
+      "midi": 60,
+      "voice": "brass",
+      "level": 0.22,
+      "pan": 0.0
+    },
+    {
+      "count": 96,
+      "duration": 8,
+      "midi": 64,
+      "voice": "brass",
+      "level": 0.22,
+      "pan": 0.1125
+    },
+    {
+      "count": 96,
+      "duration": 8,
+      "midi": 67,
+      "voice": "brass",
+      "level": 0.22,
+      "pan": 0.225
+    },
+    {
+      "count": 96,
+      "duration": 8,
+      "midi": 72,
+      "voice": "brass",
+      "level": 0.22,
+      "pan": 0.3375
+    },
+    {
+      "count": 96,
+      "duration": 8,
+      "midi": 76,
+      "voice": "brass",
+      "level": 0.22,
+      "pan": 0.45
+    },
+    {
+      "count": 96,
+      "duration": 3,
+      "midi": 60,
+      "voice": "cymbal",
+      "level": 0.17,
+      "pan": 0.2
+    },
+    {
+      "count": 104,
+      "duration": 8,
+      "midi": 24,
+      "voice": "brass",
+      "level": 0.2466576574931336,
+      "pan": -0.45
+    },
+    {
+      "count": 104,
+      "duration": 8,
+      "midi": 36,
+      "voice": "brass",
+      "level": 0.2466576574931336,
+      "pan": -0.35000000000000003
+    },
+    {
+      "count": 104,
+      "duration": 8,
+      "midi": 48,
+      "voice": "brass",
+      "level": 0.2466576574931336,
+      "pan": -0.25
+    },
+    {
+      "count": 104,
+      "duration": 8,
+      "midi": 55,
+      "voice": "brass",
+      "level": 0.2466576574931336,
+      "pan": -0.15000000000000002
+    },
+    {
+      "count": 104,
+      "duration": 8,
+      "midi": 60,
+      "voice": "brass",
+      "level": 0.2466576574931336,
+      "pan": -0.050000000000000024
+    },
+    {
+      "count": 104,
+      "duration": 8,
+      "midi": 64,
+      "voice": "brass",
+      "level": 0.2466576574931336,
+      "pan": 0.050000000000000024
+    },
+    {
+      "count": 104,
+      "duration": 8,
+      "midi": 67,
+      "voice": "brass",
+      "level": 0.2466576574931336,
+      "pan": 0.14999999999999997
+    },
+    {
+      "count": 104,
+      "duration": 8,
+      "midi": 72,
+      "voice": "brass",
+      "level": 0.2466576574931336,
+      "pan": 0.25
+    },
+    {
+      "count": 104,
+      "duration": 8,
+      "midi": 76,
+      "voice": "brass",
+      "level": 0.2466576574931336,
+      "pan": 0.35
+    },
+    {
+      "count": 104,
+      "duration": 8,
+      "midi": 79,
+      "voice": "brass",
+      "level": 0.2466576574931336,
+      "pan": 0.45
+    },
+    {
+      "count": 104,
+      "duration": 3,
+      "midi": 60,
+      "voice": "cymbal",
+      "level": 0.17,
+      "pan": 0.2
+    }
+  ]
+}

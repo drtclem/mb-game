@@ -1,0 +1,128 @@
+"""Render our original Strauss-inspired game arrangement. No samples required.
+Run with Python 3 + numpy. Score units are musical counts, not seconds.
+"""
+import json
+from pathlib import Path
+import wave
+import numpy as np
+
+ROOT = Path(__file__).resolve().parents[1]
+RATE = 32000
+TEMPOS = [(0, 84), (32, 96), (64, 84), (96, 72)]
+TOTAL = 112
+SECTIONS = [
+    (0, 8, 'First light', 'HOLD'), (8, 24, 'First call', 'MOVE'),
+    (24, 32, 'First impact', 'HOLD'), (32, 48, 'Answering call', 'MOVE'),
+    (48, 56, 'Second impact', 'HOLD'), (56, 72, 'Brass ascent', 'MOVE'),
+    (72, 80, 'Full ensemble', 'HOLD'), (80, 96, 'Final approach', 'MOVE'),
+    (96, 112, 'Sunrise arrival', 'HOLD'),
+]
+
+def seconds(count):
+    return sum(max(0, min(count, TEMPOS[i+1][0] if i+1 < len(TEMPOS) else TOTAL) - start) * 60 / bpm
+               for i, (start, bpm) in enumerate(TEMPOS))
+
+def score():
+    notes = []
+    def add(at, length, pitch, voice, level, pan=0):
+        notes.append(dict(count=at, duration=length, midi=pitch, voice=voice, level=level, pan=pan))
+    def chord(at, length, pitches, level):
+        for i, pitch in enumerate(pitches):
+            add(at, length, pitch, 'brass', level / len(pitches)**.5, (i/(len(pitches)-1)-.5)*.9)
+    # Low foundation and three increasingly broad C-G-C calls.
+    for at, length in [(0, 24), (32, 16), (56, 16), (80, 16), (96, 16)]:
+        add(at, length, 24, 'low', .24)
+        add(at, length, 36, 'low', .14, -.25)
+    for at, level in [(8, .26), (32, .34), (56, .42)]:
+        for pitch, delta, length in [(60, 0, 4), (67, 4, 4), (72, 8, 6)]:
+            for cents_pan in [-.55, .05, .55]:
+                add(at+delta, length, pitch, 'brass', level/2.2, cents_pan)
+        chord(at+14, 2, [36, 48, 55, 60, 64, 67, 72], level*.9)
+    # Original connective writing and a minor-to-major impact response.
+    chord(24, 4, [36, 48, 55, 60, 63, 67, 72], .46)
+    chord(28, 3.5, [36, 48, 55, 60, 64, 67, 72], .5)
+    chord(48, 4, [36, 43, 48, 55, 63, 67, 72], .52)
+    chord(52, 3.5, [36, 48, 55, 60, 64, 67, 76], .56)
+    chord(72, 7.5, [36, 43, 48, 55, 60, 64, 67, 72, 76], .64)
+    for i, pitch in enumerate([60, 62, 64, 67, 64, 67, 72, 74]):
+        add(80+i*2, 1.75, pitch, 'brass', .26, -.4)
+        add(80+i*2, 1.75, pitch-12, 'brass', .19, .4)
+    chord(96, 8, [36, 43, 48, 55, 60, 64, 67, 72, 76], .66)
+    chord(104, 8, [24, 36, 48, 55, 60, 64, 67, 72, 76, 79], .78)
+    # Pitched timpani, battery interludes and impact cymbals: all synthesized.
+    for start, end in [(20, 24), (44, 48), (68, 72), (92, 96)]:
+        for beat in np.arange(start, end, .5):
+            add(float(beat), .45, 36 if int(beat*2)%2==0 else 43, 'timpani', .3)
+    for start, end in [(32, 44), (56, 68), (80, 96)]:
+        for beat in range(start, end):
+            add(beat, .35, 36, 'bass', .15)
+            if beat%2: add(beat, .3, 60, 'snare', .13, .25)
+            if beat%4==3:
+                for frac in [.5, .75]: add(beat+frac, .2, 60, 'snare', .09, .25)
+    for at in [24, 28, 48, 52, 72, 96, 104]: add(at, 3, 60, 'cymbal', .17, .2)
+    return sorted(notes, key=lambda n: n['count'])
+
+def render(notes):
+    rng = np.random.default_rng(2001)
+    length = int((seconds(TOTAL)+3)*RATE)
+    dry = np.zeros((length, 2), dtype=np.float64)
+    for n in notes:
+        duration = seconds(n['count']+n['duration']) - seconds(n['count'])
+        tail = .45 if n['voice'] in ['brass','low'] else .8
+        t = np.arange(int((duration+tail)*RATE))/RATE
+        freq = 440*2**((n['midi']-69)/12)
+        voice = n['voice']
+        if voice in ['brass','low']:
+            attack = .07 if voice=='brass' else .3
+            env = (1-np.exp(-t/attack))*np.exp(-np.maximum(0,t-duration)/.16)
+            # Brass bloom, slight beating and delayed vibrato; band-limited harmonics.
+            phase = 2*np.pi*freq*t + .009*np.sin(2*np.pi*5.1*t)*np.minimum(t,1)
+            tone = np.zeros(len(t))
+            for h in range(1, min(20, int(RATE/2/freq))):
+                bloom = 1-np.exp(-t/(.045+h*.005))
+                tone += np.sin(h*phase + .001*h*np.sin(2*np.pi*.7*t)) * bloom / h**1.35
+            tone += .17*np.sin(2*np.pi*freq*1.0018*t)
+            signal = tone*env*.55
+        elif voice=='timpani':
+            signal = (np.sin(2*np.pi*freq*t)+.35*np.sin(2*np.pi*freq*1.52*t))*np.exp(-t/ .38)
+            signal *= np.minimum(t/.004,1)
+        elif voice=='bass':
+            signal = np.sin(2*np.pi*(48*t+3*(1-np.exp(-t*25))))*np.exp(-t*13)
+        else:
+            noise = rng.uniform(-1,1,len(t))
+            bright = noise-np.roll(noise,1)
+            if voice=='snare':
+                signal = (.55*bright + .35*np.sin(2*np.pi*185*t))*np.exp(-t*24)
+            else:
+                signal = bright*np.exp(-t*2.3)*(1-np.exp(-t*150))*.45
+        signal *= n['level']
+        start = round(seconds(n['count'])*RATE)
+        end = min(length, start+len(signal))
+        pan = n['pan']
+        dry[start:end,0] += signal[:end-start]*np.sqrt((1-pan)/2)
+        dry[start:end,1] += signal[:end-start]*np.sqrt((1+pan)/2)
+    # Original short stadium reflections, no impulse-response assets.
+    mix = dry.copy()
+    for delay, gain in [(.071,.13),(.113,.11),(.181,.08),(.293,.055),(.431,.035)]:
+        shift = round(delay*RATE)
+        mix[shift:] += dry[:-shift,::-1]*gain
+    mix = np.tanh(mix*1.3)
+    mix *= .89/max(np.max(np.abs(mix)), 1e-9)
+    mix[-RATE:] *= np.linspace(1,0,RATE)[:,None]
+    return mix
+
+if __name__ == '__main__':
+    notes = score()
+    manifest = dict(title='Sunrise — Strauss Fanfare Study', draft=True, totalCounts=TOTAL,
+                    tempoChanges=[dict(count=c,bpm=b) for c,b in TEMPOS],
+                    beats=[seconds(c) for c in range(TOTAL+1)],
+                    sections=[dict(start=a,end=b,name=name,action=act) for a,b,name,act in SECTIONS],
+                    notes=notes)
+    folder = ROOT/'public/music'
+    folder.mkdir(exist_ok=True)
+    (folder/'sunrise-score.json').write_text(json.dumps(manifest, indent=2)+'\n')
+    audio = render(notes)
+    with wave.open(str(folder/'sunrise-demo.wav'),'wb') as out:
+        out.setnchannels(2); out.setsampwidth(2); out.setframerate(RATE)
+        out.writeframes((audio*32767).astype('<i2').tobytes())
+    print(f'Rendered {len(notes)} events; {seconds(TOTAL):.3f}s score + 3s tail; peak {np.max(np.abs(audio)):.3f}')

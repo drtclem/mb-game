@@ -399,3 +399,7 @@ Track personal bests separately for each show and difficulty. Keep these browser
 ### Multiplayer progression eligibility (Taylor, Nov 3)
 
 Completed multiplayer individual scores count toward personal bests and show unlocks, just like solo individual scores. Incomplete results, including a disconnected player’s result even after reconnection, do not qualify. Shared band scores remain separate and do not determine individual unlocks.
+
+### First music arrangement draft (Taylor, Nov 3)
+
+Taylor selected the opening of Strauss’s *Also sprach Zarathustra* as the first music study, with flexible tempo and natural drill holds. Build our own arrangement and generated audio from the public-domain composition. The first reviewable synthesized draft and its tempo/hold map are documented in `docs/music/sunrise-arrangement.md`. It is 112 counts, with an independent listening page; do not overlay it on the old 80-count rehearsal. This is an original code-rendered arrangement demo in the existing music pipeline, not a final production take or completed gameplay integration.
