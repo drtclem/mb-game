@@ -42,6 +42,8 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **Recovery limit confirmed:** 4-to-5 = 45 inches per step = 2 stored 8-to-5 units per moving count. Regular 8-to-5 = 22.5 inches, so recovery may use at most twice the regular step length. Distinguish drill-sheet notation from the prototype's separate show-checker `maxStep` field; this decision sets the player recovery limit, not a silent rewrite of existing drill.
 
-**Next question, one at a time:** should recovery aim to reach the current set's written dot on its original arrival count, recalculating the needed step size over the remaining counts up to the 4-to-5 cap? After that, resolve late arrival at a hold, valid early/late taps, foot alternation after a miss, and whether step-size deviation has a direct penalty in addition to DOT/FORM/timing consequences.
+**Recovery deadline and hold boundary confirmed:** recovery aims for the current set's original dot arrival count using the remaining counts, capped at 4-to-5. If that is insufficient before a hold, the marcher stays at the actual reached position throughout the hold, regardless of dot/form error. No automatic catch-up movement during holds; judge the actual position.
+
+**Next question, one at a time:** when movement resumes after an off-dot hold, should the marcher head directly from their actual position toward the new set's dot, using that new set's count budget and the same recovery cap? Then resolve early/late taps, foot alternation after a miss, and whether step-size deviation receives a direct penalty in addition to DOT/FORM/timing consequences.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.
