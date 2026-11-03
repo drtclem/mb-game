@@ -41,3 +41,16 @@ Tests cover tempo conversion and changing beat maps/meters, timing windows, cali
 This is the step **1** steering playtest, not the Game Week finished product. No multiplayer, phone input, hazards, recorded/generated repertoire, crowd or voices yet. The simple procedural uniforms and field are the slice's presentation; the detailed style pass remains step 2. FORM estimates the local live form from four neighboring performers' displacement, rather than full line/arc/block regression. Calibration estimates phase within one beat; it cannot identify whole-beat device delays.
 
 **Step 1:** reduced dot pull, seeded spatial marching tendency, stronger coherent band drift and bounded on-beat steering make correction useful. Holds plant all marchers. Visual scoring splits DOT/FORM equally; timing modifies it rather than awarding idle bonus points. A 24-seed reference-controller comparison checks active steering beats idle; this is not a substitute for a human playtest. Full shape-aware FORM scoring and the visible podium drum major are documented follow-ups, not included visuals in this checkpoint. No Locked architecture decision was changed.
+
+## Detailed character review (November 3)
+
+Open `/uniform.html` on the local dev server for the first original textured,
+rigged woman marcher. Drag to orbit; use Front / Side / Back / Face detail to
+inspect the white uniform. Forward/backward leg motion is a first original
+count-driven rig study. This review checkpoint is not yet rolled out to the
+playable band's twelve marchers, and the detailed instrument is still pending.
+Asset provenance and remaining work: `docs/art/character-pipeline.md`.
+
+GitLab CI runs type/unused-code checks, tests, production build and dependency
+audit on branch and merge-request pipelines, retaining `dist/` for review.
+No hosting deployment is configured by this checkpoint.

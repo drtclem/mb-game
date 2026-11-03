@@ -255,3 +255,7 @@ Start generating show 1 and show 2 tracks early (in parallel with steps 1–2), 
 ### 17. Source control
 - The active repo is **GitLab**, `https://labs.gauntletai.com/taylorclements/mb-game` (confirmed Nov 2). Push completed playable checkpoints there; no GitHub migration is assumed. Planning docs live in the repo's `docs/` folder next to the code; `AGENTS.md` at the root holds the rules for AI coding agents.
 - Free playtest builds can come from GitHub Pages or Cloudflare Pages.
+
+## November 3 character art checkpoint
+
+Taylor approved an all-white uniform with a silver sash and clean shoulders (no epaulettes), and requested half the cast be women. The concept and original generated woman character pipeline are recorded in `docs/art/character-pipeline.md`. The detailed textured model is available for review in `/uniform.html`; rollout to the playable band and full marching/instrument work are pending. This is a partial step-2 character study, not completion of the full step-2 style, drum-major or FORM-scoring work.
