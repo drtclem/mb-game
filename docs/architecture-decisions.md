@@ -311,3 +311,7 @@ If a human player disconnects mid-show, AI takes over their performer and the re
 ### iPhone orientation (Taylor, Nov 3)
 
 Design iPhone gameplay for **landscape orientation**, with screen taps for rhythm and phone tilt for steering. Tilt is the only mobile steering control; Taylor declined an on-screen steering alternative. Provide exactly one dedicated on-screen button for rhythm tapping; each tap triggers the next automatically alternating foot, matching Space on keyboard. Tilt calibration and the experience when motion input is unavailable remain to be specified; do not silently add touch steering. There are no separate left-foot/right-foot controls. The rhythm button layout remains to be designed.
+
+### Steering sampled for each step (Taylor, Nov 3)
+
+For initial playtesting, held left/right arrows or current phone tilt set the direction of the next physical step. A rhythm tap triggers that step; steering alone causes no travel between steps or during a correctly observed hold. Apply this to accidental hold taps as well, subject to the confirmed small displacement bound around hold-start position. Treat this as a tunable starting behavior, not a permanent control decision. Exact steering range and sensitivity remain undecided.
