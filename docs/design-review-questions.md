@@ -100,6 +100,8 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **Wrong-direction consequences confirmed:** wrong-direction input physically steps the wrong way on each tap and costs points. Correcting it may require larger recovery steps, capped at 4-to-5 (45 inches / 2 stored units per step). Missing the dot when too few counts remain is intended; no cap override or arrival assistance.
 
-**Next question, one at a time:** should players see live feedback for timing, step size and dot/form errors during the show, or save detailed feedback for the results screen? Recommend brief live cues with detailed analytics afterward.
+**Live feedback provisionally confirmed:** no live numerical performance feedback. Try brief plain-language coaching warnings (for example, get closer to the dot), with numerical scores and detailed analytics afterward. Revisit after playtesting; warning triggers/frequency remain open.
+
+**Next question, one at a time:** should the results screen let players inspect each set to see where they lost points, alongside overall DOT, FORM, timing, step-size and direction summaries? Recommend yes, so they can identify specific mistakes rather than just receive a final score.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.
