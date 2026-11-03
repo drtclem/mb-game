@@ -354,4 +354,4 @@ Display a brief **HOLD** or **MOVE** cue when the corresponding phase starts. Do
 
 ### Pause behavior (Taylor, Nov 3)
 
-Allow pausing in single-player. Multiplayer does not pause the shared show for an individual player; music, conducting and other performers continue. Preserve the confirmed disconnect/AI-takeover rules. Solo resume behavior remains to be specified.
+Allow pausing in single-player. Multiplayer does not pause the shared show for an individual player; music, conducting and other performers continue. Preserve the confirmed disconnect/AI-takeover rules. Before solo play resumes, provide a tempo-restoring count-in while performers remain still, then continue the show from its paused position. Count-in duration and handling of mid-step pauses remain implementation details to resolve without skipping show time.
