@@ -94,6 +94,8 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **Travel controls confirmed:** Up arrow / forward phone tilt enables travel toward the current dot; left/right arrows / sideways tilt adjust direction. Space / the single mobile rhythm button triggers each step. Neutral plus taps marks time with tiny steps. Steering alone causes no travel.
 
-**Next question, one at a time:** should the player keep Up held (or the phone tilted forward) while adding left/right adjustments to travel? Recommend yes; without the forward travel input, rhythm taps mark time rather than moving sideways.
+**Forward input requirement confirmed:** keep Up held / forward tilt engaged while adding left/right adjustments. Without forward input, taps mark time; left/right alone does not produce sideways travel.
+
+**Next question, one at a time:** during play, should the main camera follow just behind the controlled marcher, keeping nearby performers and the next dot visible? Recommend this as the default, with an overhead view available separately.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.
