@@ -122,3 +122,36 @@ describe("arrow-only gameplay", () => {
     expect(r.position(16)).toEqual(show.goal(8)[5]);
   });
 });
+
+describe("small persistent steering corrections", () => {
+  it("keeps a small right adjustment on subsequent straight steps, then allows an opposite correction", () => {
+    const r = new PerformanceRun(show, "Easy", 5, 1);
+    r.tap(show.tempo.seconds(8), { forward: 1, side: 1 });
+    const first = r.steps.at(-1)!;
+    expect(first.to.x - first.from.x).toBeGreaterThan(0);
+    expect(first.to.x - first.from.x).toBeLessThan(0.2);
+    r.tap(show.tempo.seconds(9), { forward: 1, side: 0 });
+    const second = r.steps.at(-1)!;
+    expect(second.to.x).toBeGreaterThan(second.from.x);
+    r.tap(show.tempo.seconds(10), { forward: 1, side: -1 });
+    expect(r.steeringBias).toBeCloseTo(0);
+    expect(r.steps.at(-1)!.to.x).toBeLessThan(r.steps.at(-1)!.from.x);
+  });
+  it("bounds accumulated corrections and starts a new set with fresh guidance", () => {
+    const r = new PerformanceRun(show, "Easy", 5, 1);
+    for (let c = 8; c < 16; c++)
+      r.tap(show.tempo.seconds(c), { forward: 1, side: 1 });
+    expect(Math.abs(r.steeringBias)).toBeLessThan(0.46);
+    r.tap(show.tempo.seconds(16), { forward: 1, side: 0 });
+    expect(r.steeringBias).toBe(0);
+    expect(r.steps.every((s) => s.size <= 2.00001)).toBe(true);
+  });
+});
+
+it("keeps phone tilt proportional rather than accumulating it every beat", () => {
+  const r = new PerformanceRun(show, "Easy", 5, 1);
+  r.tap(show.tempo.seconds(8), { forward: 1, side: 0.5 }, 0, "tilt");
+  const first = r.steeringBias;
+  r.tap(show.tempo.seconds(9), { forward: 1, side: 0.5 }, 0, "tilt");
+  expect(r.steeringBias).toBe(first);
+});

@@ -122,6 +122,8 @@ export class PerformanceRun {
   faults = 0;
   sampled = 0;
   incomplete = false;
+  steeringBias = 0;
+  private steeringPage = -1;
   remote = new Map<number, Dot>();
   constructor(
     readonly show: GameShow,
@@ -195,7 +197,12 @@ export class PerformanceRun {
       });
     }
   }
-  tap(seconds: number, input: Steering, timingOffset = 0) {
+  tap(
+    seconds: number,
+    input: Steering,
+    timingOffset = 0,
+    steeringMode: "nudge" | "tilt" = "nudge",
+  ) {
     const count = this.show.tempo.count(seconds);
     if (count < 0 || count >= 112) return;
     this.advance(count);
@@ -222,8 +229,21 @@ export class PerformanceRun {
     }
     dx /= len;
     dy /= len;
+    if (page !== this.steeringPage) {
+      this.steeringBias = 0;
+      this.steeringPage = page;
+    }
+    if (!hold)
+      this.steeringBias =
+        steeringMode === "tilt"
+          ? side * tuning.steerRadians
+          : clamp(
+              this.steeringBias + side * tuning.steerNudge,
+              -tuning.steerRadians,
+              tuning.steerRadians,
+            );
     const sign = forward * correct,
-      angle = side * tuning.steerRadians;
+      angle = this.steeringBias;
     const vx =
         dx * Math.cos(angle) * sign +
         Math.abs(dy) * Math.sin(angle) * Math.abs(forward),
@@ -307,6 +327,23 @@ export class PerformanceRun {
       hold,
       backward: forward < 0,
     });
+  }
+  heading(count: number) {
+    if (this.show.hold(count)) return { x: 0, y: 0 };
+    const from = this.position(count),
+      goal = this.show.goal(count)[this.player];
+    let x = goal.x - from.x,
+      y = goal.y - from.y;
+    if (Math.hypot(x, y) < 0.001) return { x: 0, y: 0 };
+    const length = Math.hypot(x, y);
+    x /= length;
+    y /= length;
+    const angle =
+      this.show.page(count) === this.steeringPage ? this.steeringBias : 0;
+    return {
+      x: x * Math.cos(angle) + Math.abs(y) * Math.sin(angle),
+      y: y * Math.cos(angle) - Math.sign(y || -1) * x * Math.sin(angle),
+    };
   }
   results(): Result {
     const intended = (page: number) => (this.show.hold(page * 8) ? 0 : 8);

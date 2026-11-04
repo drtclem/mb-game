@@ -16,6 +16,7 @@ import { readProgress, recordResult } from "./progress";
 import { conduct } from "./drum-major";
 import { stepAnimation } from "./step-animation";
 import { countDisplay, moveDisplay } from "./count-display";
+import { nextMovePreview } from "./next-move";
 import { loadCombinedMarcher } from "./combined-marcher";
 import { roster } from "./marching-motion";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
@@ -62,7 +63,7 @@ const controls = new Controls(),
     { result: Result; incomplete: boolean; band: number }
   >();
 const app = document.querySelector<HTMLDivElement>("#app")!;
-app.innerHTML = `<main><header><a class="brand" href="/">ON THE DOT<span>THE FIELD IS LISTENING</span></a><span class="edition">BRASS / RHYTHM / FORM</span><button id="sound">Sound on</button></header><section id="stage"><div id="scene"></div><div id="labels"></div><div id="hud" hidden><div id="motion-state" role="status"></div><section id="move-card" aria-label="Current and next move"><div id="page"></div><div class="move-row"><span class="move-label">NOW</span><div><strong id="current-move"></strong><small id="current-detail"></small></div><b id="counts-left"></b></div><div id="set-progress" aria-label="Progress through eight counts">${Array.from({ length: 8 }, () => "<i></i>").join("")}</div><div class="move-row next"><span class="move-label">NEXT</span><div><strong id="next-move"></strong><small id="next-detail"></small></div></div></section><section id="count-panel" aria-label="Musical count"><div class="count-caption"><span id="count-label"></span><b id="count-position"></b></div><div id="beat">${Array.from({ length: 4 }, (_, i) => `<span class="pulse-block ${i === 0 ? "downbeat" : ""}">${i + 1}</span>`).join("")}</div></section><div id="feedback" role="status"></div><canvas id="map" width="310" height="170" aria-label="Field overview"></canvas><canvas id="conductor" width="160" height="205" aria-label="Drum major conducting the musical count"></canvas><button id="view">Overhead</button><button id="pause">Pause</button><button id="recenter" hidden>Recenter tilt</button><button id="rhythm" hidden aria-label="Tap once for each step">STEP<span>tap the count</span></button></div><div id="overlay"></div><div id="notice" role="status"></div><div id="rotate">Turn your phone sideways to take the field.</div></section><footer><span>↑ ↓ ← → · PRESS AN ARROW ON EACH COUNT</span><span>4-TO-5 MAX · EVERY TAP COUNTS</span></footer></main>`;
+app.innerHTML = `<main><header><a class="brand" href="/">ON THE DOT<span>THE FIELD IS LISTENING</span></a><span class="edition">BRASS / RHYTHM / FORM</span><button id="sound">Sound on</button></header><section id="stage"><div id="scene"></div><div id="labels"></div><div id="hud" hidden><div id="motion-state" role="status"></div><section id="move-card" aria-label="Current and next move"><div id="page"></div><div class="move-row"><span class="move-label">NOW</span><div><strong id="current-move"></strong><small id="current-detail"></small></div><b id="counts-left"></b></div><div id="set-progress" aria-label="Progress through eight counts">${Array.from({ length: 8 }, () => "<i></i>").join("")}</div><div class="move-row next"><span class="move-label">NEXT</span><div><strong id="next-move"></strong><small id="next-detail"></small></div></div></section><section id="count-panel" aria-label="Musical count"><div class="count-caption"><span id="count-label"></span><b id="count-position"></b></div><div id="beat">${Array.from({ length: 4 }, (_, i) => `<span class="pulse-block ${i === 0 ? "downbeat" : ""}">${i + 1}</span>`).join("")}</div></section><aside id="move-preview" hidden role="status"><span id="preview-arrow" aria-hidden="true">↑</span><div><strong id="preview-count"></strong><small id="preview-name"></small></div></aside><div id="feedback" role="status"></div><canvas id="map" width="310" height="170" aria-label="Field overview"></canvas><canvas id="conductor" width="160" height="205" aria-label="Drum major conducting the musical count"></canvas><button id="view">Overhead</button><button id="pause">Pause</button><button id="recenter" hidden>Recenter tilt</button><button id="rhythm" hidden aria-label="Tap once for each step">STEP<span>tap the count</span></button></div><div id="overlay"></div><div id="notice" role="status"></div><div id="rotate">Turn your phone sideways to take the field.</div></section><footer><span>↑ ↓ ← → · PRESS AN ARROW ON EACH COUNT</span><span>4-TO-5 MAX · EVERY TAP COUNTS</span></footer></main>`;
 const overlay = $("overlay"),
   hud = $("hud");
 const scene = new THREE.Scene();
@@ -170,6 +171,32 @@ const ring = new THREE.Mesh(
 ring.rotation.x = -Math.PI / 2;
 ring.position.y = 0.1;
 scene.add(ring);
+const upcomingRing = new THREE.Mesh(
+  new THREE.RingGeometry(0.18, 0.25, 40),
+  new THREE.MeshBasicMaterial({ color: 0x68dce5, side: THREE.DoubleSide }),
+);
+upcomingRing.rotation.x = -Math.PI / 2;
+upcomingRing.visible = false;
+scene.add(upcomingRing);
+const headingArrow = new THREE.ArrowHelper(
+  new THREE.Vector3(0, 0, -1),
+  new THREE.Vector3(),
+  1.8,
+  0xefc17a,
+  0.55,
+  0.32,
+);
+const previewArrow = new THREE.ArrowHelper(
+  new THREE.Vector3(0, 0, -1),
+  new THREE.Vector3(),
+  3,
+  0x68dce5,
+  0.7,
+  0.4,
+);
+headingArrow.visible = false;
+previewArrow.visible = false;
+scene.add(headingArrow, previewArrow);
 const playerMarker = new THREE.Mesh(
   new THREE.RingGeometry(0.42, 0.52, 32),
   new THREE.MeshBasicMaterial({ color: 0xffd17c, side: THREE.DoubleSide }),
@@ -382,7 +409,7 @@ function rhythm(override?: Steering) {
   )
     return;
   const input = override ?? controls.value;
-  run.tap(playback.seconds, input, calibration);
+  run.tap(playback.seconds, input, calibration, override ? "nudge" : "tilt");
   if (selected.hold(selected.tempo.count(playback.seconds))) {
     warningAt = performance.now() / 1000;
     warningUntil = performance.now() + 2000;
@@ -718,6 +745,10 @@ function frame() {
   }
   let count = 0,
     positions = selected.drill.initial;
+  upcomingRing.visible = false;
+  headingArrow.visible = false;
+  previewArrow.visible = false;
+  $("move-preview").hidden = true;
   if (mode === "run" && run && playback) {
     count = Math.min(112, selected.tempo.count(playback.seconds));
     if (count >= 0 && !playback.paused && !playback.countingIn)
@@ -842,15 +873,55 @@ function frame() {
       });
       bandSamples.push(visual.reduce((a, b) => a + b, 0) / visual.length);
     }
+    const preview = !playback.countingIn
+      ? nextMovePreview(selected, count, playerId)
+      : null;
+    if (preview) {
+      upcomingRing.visible = true;
+      upcomingRing.position.set(preview.dot.x, 0.13, preview.dot.y);
+      upcomingRing.scale.setScalar(1 + 0.12 * Math.sin(count * Math.PI * 2));
+      $("move-preview").hidden = false;
+      $("preview-count").textContent = `MOVE IN ${preview.countdown}`;
+      $("preview-name").textContent = preview.name;
+      const direction = new THREE.Vector3(
+        preview.dot.x - positions[playerId].x,
+        0,
+        preview.dot.y - positions[playerId].y,
+      );
+      const length = direction.length();
+      if (length > 0.05) {
+        previewArrow.visible = true;
+        previewArrow.position.set(
+          positions[playerId].x,
+          0.18,
+          positions[playerId].y,
+        );
+        previewArrow.setDirection(direction.normalize());
+        previewArrow.setLength(
+          Math.min(3, length),
+          Math.min(0.7, length * 0.3),
+          Math.min(0.4, length * 0.2),
+        );
+      }
+    } else if (!playback.countingIn && !selected.hold(count)) {
+      const direction = run.heading(count);
+      if (Math.hypot(direction.x, direction.y) > 0.01) {
+        headingArrow.visible = true;
+        headingArrow.position.set(
+          positions[playerId].x,
+          0.16,
+          positions[playerId].y,
+        );
+        headingArrow.setDirection(
+          new THREE.Vector3(direction.x, 0, direction.y),
+        );
+      }
+    }
     ring.position.set(goal.x, 0.1, goal.y);
     drawMap(positions, goal);
     conduct(
       $("conductor") as HTMLCanvasElement,
-      playback.countingIn && !playback.rejoining
-        ? selected.tempo.count(
-            playback.context.currentTime - playback.countoffAt,
-          )
-        : count,
+      playback.countingIn ? Math.max(0, playback.countoffProgress) : count,
     );
     if (count >= 112) finish();
   }
@@ -901,6 +972,23 @@ function frame() {
   camera.lookAt(player.x, 1, overhead ? player.y : player.y - 8);
   renderer.render(scene, camera);
   drawNames(positions);
+  if (upcomingRing.visible) {
+    const to = new THREE.Vector3(
+      upcomingRing.position.x,
+      0.2,
+      upcomingRing.position.z,
+    ).project(camera);
+    const from = new THREE.Vector3(player.x, 0.2, player.y).project(camera);
+    const angle =
+      (Math.atan2(
+        -(to.y - from.y) * $("stage").clientHeight,
+        (to.x - from.x) * $("stage").clientWidth,
+      ) *
+        180) /
+        Math.PI +
+      90;
+    $("preview-arrow").style.transform = `rotate(${angle}deg)`;
+  }
 }
 menu();
 frame();

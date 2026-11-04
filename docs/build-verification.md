@@ -34,3 +34,7 @@ Taylor replaced held arrows plus Space with one distinct arrow press per step. H
 ## Count structure HUD — November 4
 
 Decoded the supplied 2.33-second metronome reference locally using a temporary software decoder. Added four active beat blocks, two-part eight-count phrasing, and current/next move cards. Browser verification captured the final-four count-in (5/6/7/8), opening hold preview, and subsequent moving set. A temporary 844×390 viewport check showed the HUD fitting in landscape; the override was reset. Browser error logs were empty. Type checks, 75 unit tests and production build pass. Physical iPhone testing remains separate.
+
+## Steering and conducting synchronization — November 4
+
+Added persistent bounded keyboard nudges, proportional tilt, a three-count upcoming moving-dot cue, and a conventional 4/4 conducting pattern driven by the shared count. Regression coverage verifies nudges/reset/cap, preview boundaries and hold skipping, and conductor beat agreement through both shows' tempo changes and count-in. Type checks, 82 unit tests and production build pass. Live browser inspection showed MOVE IN 3 during the opening hold, the cyan dot/arrow, and conductor BEAT 2 matching the active second beat block. Hold input still displayed Not yet. Browser error logs were empty. Physical-device verification remains outstanding.

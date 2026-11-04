@@ -118,7 +118,7 @@ export class Playback {
     this.rejoining = true;
     this.frozen = 0;
     this.origin = this.context.currentTime - elapsed;
-    this.countoffAnchor = Math.ceil(show.tempo.count(elapsed)) + 1;
+    this.countoffAnchor = Math.floor(show.tempo.count(elapsed) / 4) * 4 + 4;
     this.countoffAt = this.origin + show.tempo.seconds(this.countoffAnchor);
     const arrival = this.countoffAnchor + 8;
     this.resumeUntil = this.origin + show.tempo.seconds(arrival);

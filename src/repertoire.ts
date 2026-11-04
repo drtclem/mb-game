@@ -6,6 +6,7 @@ export const tuning = {
   maxStep: 2,
   holdRadius: 0.35,
   steerRadians: Math.PI / 7,
+  steerNudge: Math.PI / 30,
   unlock: 65,
   dotWeight: 0.5,
   spacingWeight: 0.5,

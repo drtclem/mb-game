@@ -1,3 +1,24 @@
+/** Front view of a conventional mirrored 4/4 pattern: down, in, out, up. */
+export function conductingPose(count: number) {
+  const phase = ((count % 4) + 4) % 4,
+    beat = Math.floor(phase),
+    t = phase - beat;
+  const points = [
+    [60, 133],
+    [73, 103],
+    [25, 103],
+    [58, 55],
+    [60, 133],
+  ];
+  const a = points[beat],
+    b = points[beat + 1],
+    ease = t * t * (3 - 2 * t);
+  return {
+    beat,
+    x: a[0] + (b[0] - a[0]) * ease,
+    y: a[1] + (b[1] - a[1]) * ease - 6 * Math.sin(Math.PI * t),
+  };
+}
 export function conduct(canvas: HTMLCanvasElement, count: number) {
   const c = canvas.getContext("2d")!,
     w = canvas.width,
@@ -44,21 +65,7 @@ export function conduct(canvas: HTMLCanvasElement, count: number) {
   c.beginPath();
   c.ellipse(80, 29, 6, 15, -0.2, 0, Math.PI * 2);
   c.fill();
-  const phase = ((count % 4) + 4) % 4,
-    index = Math.floor(phase),
-    t = phase - index;
-  const points = [
-      [55, 133],
-      [30, 103],
-      [48, 79],
-      [56, 55],
-      [55, 133],
-    ],
-    a = points[index],
-    b = points[index + 1],
-    ease = t * t * (3 - 2 * t),
-    x = a[0] + (b[0] - a[0]) * ease,
-    y = a[1] + (b[1] - a[1]) * ease;
+  const { x, y, beat } = conductingPose(count);
   line(64, 85, 45, 102, 9, "#f7f5ee");
   line(45, 102, x, y, 8, "#f7f5ee");
   line(96, 85, 114, 102, 9, "#f7f5ee");
@@ -72,5 +79,5 @@ export function conduct(canvas: HTMLCanvasElement, count: number) {
   c.fillStyle = "#ebc487";
   c.font = "9px monospace";
   c.textAlign = "center";
-  c.fillText("DRUM MAJOR", 80, 194);
+  c.fillText(`4/4 · BEAT ${beat + 1}`, 80, 194);
 }

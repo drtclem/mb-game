@@ -881,3 +881,55 @@ td small {
     padding: 8px 10px;
   }
 }
+#move-preview {
+  position: absolute;
+  left: 50%;
+  bottom: 155px;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  max-width: 290px;
+  padding: 12px 18px;
+  background: #0b2933f2;
+  border: 1px solid #68dce5;
+  border-radius: 6px;
+  color: #baf6fa;
+  pointer-events: none;
+  box-shadow: 0 6px 25px #07182455;
+}
+#preview-arrow {
+  display: block;
+  font-size: 40px;
+  line-height: 1;
+  color: #68dce5;
+  transform-origin: center;
+}
+#move-preview strong {
+  font: 700 17px monospace;
+  letter-spacing: 0.08em;
+  color: #c6fbff;
+  white-space: nowrap;
+}
+#move-preview small {
+  margin: 4px 0 0;
+  font: 11px Arial;
+  color: #a5cbd0;
+}
+@media (max-height: 600px) {
+  #move-preview {
+    bottom: 108px;
+    padding: 8px 12px;
+    gap: 10px;
+    max-width: 220px;
+  }
+  #preview-arrow {
+    font-size: 29px;
+  }
+  #move-preview strong {
+    font-size: 13px;
+  }
+  #move-preview small {
+    font-size: 10px;
+  }
+}

@@ -431,3 +431,11 @@ At a written hold, close both feet into the attention stance without changing th
 ### Beat-block count display and move preview (Taylor, Nov 4)
 
 Use the supplied short metronome screen recording as a visual reference: four numbered beat blocks, a distinct downbeat and an active green pulse. Keep this bottom-left. The eight-beat count-in remains “5… 6… 5, 6, 7, 8”, displayed as two four-beat groups. During the show, display 1–4 beat blocks plus the count within the full eight-count set and first/second-four labels. Top-left shows the current move/hold, counts left, set progress and next move/hold. The reference was inspected from decoded local video frames; no third-party assets or recording audio are incorporated. All displays derive from the existing audio clock; music tempo and judging are unchanged.
+
+### Steering, advance dot cue and conducting synchronization (Taylor, Nov 4)
+
+Keyboard Left/Right now add smaller persistent 6° nudges, bounded by the existing π/7 correction limit. Up/Down retain the adjustment; each new set resets it. Phone tilt remains proportional rather than accumulating per tap. A short gold heading arrow shows the guided travel direction. Actual input-driven movement, scoring, holds and the 4-to-5 cap remain unchanged.
+
+During the final three counts before the next moving set, show a cyan upcoming-dot marker, directional arrow and 3–2–1 countdown. Skip intervening hold destinations; never activate the future destination early. Replace the preview with the active target when its set begins.
+
+The persistent top-right drum-major sketch uses a regular mirrored 4/4 down–in–out–up pattern. Its beat positions and visible beat label use the same audio-derived count as the beat blocks, including the eight-count count-in. Multiplayer rejoin count-ins begin on a bar boundary to preserve the conducting phase.
