@@ -2,6 +2,7 @@
 Run with Python 3 + numpy. Score units are musical counts, not seconds.
 """
 import json
+import sys
 from pathlib import Path
 import wave
 import numpy as np
@@ -116,7 +117,17 @@ def render(notes):
     return mix
 
 if __name__ == '__main__':
+    reprise = '--reprise' in sys.argv
+    if reprise:
+        TEMPOS = [(0, 96), (32, 108), (64, 96), (96, 84)]
     notes = score()
+    if reprise:
+        for note in notes:
+            note['midi'] += 2
+            if note['voice'] != 'tuba':
+                note['duration'] *= .85
+        # A separate brighter reprise, not the same audio played faster.
+    prefix = 'sunrise-reprise' if reprise else 'sunrise-demo'
     manifest = dict(title='Sunrise — Strauss Fanfare Study', draft=True, revision=2, instrumentation='brass only', totalCounts=TOTAL,
                     tempoChanges=[dict(count=c,bpm=b) for c,b in TEMPOS],
                     beats=[seconds(c) for c in range(TOTAL+1)],
@@ -124,9 +135,9 @@ if __name__ == '__main__':
                     notes=notes)
     folder = ROOT/'public/music'
     folder.mkdir(exist_ok=True)
-    (folder/'sunrise-score.json').write_text(json.dumps(manifest, indent=2)+'\n')
+    (folder/('sunrise-reprise-score.json' if reprise else 'sunrise-score.json')).write_text(json.dumps(manifest, indent=2)+'\n')
     audio = render(notes)
-    with wave.open(str(folder/'sunrise-demo.wav'),'wb') as out:
+    with wave.open(str(folder/(prefix+'.wav')),'wb') as out:
         out.setnchannels(2); out.setsampwidth(2); out.setframerate(RATE)
         out.writeframes((audio*32767).astype('<i2').tobytes())
     print(f'Rendered {len(notes)} events; {seconds(TOTAL):.3f}s score + 3s tail; peak {np.max(np.abs(audio)):.3f}')
