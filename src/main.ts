@@ -845,7 +845,11 @@ function frame() {
       remoteStep = member ? remote.get(member.id)?.step : undefined;
     const step = i === playerId ? run?.steps.at(-1) : remoteStep;
     if (mode === "run" && step && (i === playerId || member?.connected)) {
-      const pose = stepAnimation(step, selected.tempo.seconds(c));
+      const pose = stepAnimation(
+        step,
+        selected.tempo.seconds(c),
+        selected.hold(c),
+      );
       model.animate(pose.count, pose.hold, pose.backward, pose.dx, pose.dz);
     } else {
       const prev = page

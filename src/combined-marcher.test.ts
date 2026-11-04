@@ -131,3 +131,30 @@ it("keeps a completed tap visibly planted in its stride rather than erasing the 
   a.animate(later.count, later.hold, later.backward, later.dx, later.dz);
   expect(a.at(1).distanceTo(planted)).toBeLessThan(1e-7);
 });
+
+it("brings both feet level again at a hold after a completed stride", async () => {
+  const { stepAnimation } = await import("./step-animation");
+  const a = actor();
+  a.animate(1, false, false, 0, -1);
+  const pose = stepAnimation(
+    {
+      seconds: 0,
+      end: 0.6,
+      number: 0,
+      from: { x: 0, y: 0 },
+      to: { x: 0, y: -1 },
+      backward: false,
+    },
+    0.7,
+    true,
+  );
+  a.animate(pose.count, pose.hold, pose.backward, pose.dx, pose.dz);
+  const left = a.group
+    .getObjectByName("LeftAnkle")!
+    .getWorldPosition(new THREE.Vector3());
+  const right = a.group
+    .getObjectByName("RightAnkle")!
+    .getWorldPosition(new THREE.Vector3());
+  expect(left.z).toBeCloseTo(right.z, 6);
+  expect(left.y).toBeCloseTo(right.y, 6);
+});

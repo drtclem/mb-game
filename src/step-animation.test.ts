@@ -28,3 +28,15 @@ describe("tap-driven visible stride", () => {
     expect(stepAnimation({ ...step, to: step.from }, 10.3).dz).toBe(-0.05);
   });
 });
+
+describe("feet together during holds", () => {
+  it("closes the previous traveling stride when a hold begins", () => {
+    expect(stepAnimation(step, 11, true).hold).toBe(true);
+    expect(stepAnimation(step, 11, false).hold).toBe(false);
+  });
+  it("still animates a mistaken hold press, then returns feet together", () => {
+    const mistake = { ...step, hold: true, to: step.from };
+    expect(stepAnimation(mistake, 10.3, true).hold).toBe(false);
+    expect(stepAnimation(mistake, 10.6, true).hold).toBe(true);
+  });
+});

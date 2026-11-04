@@ -2,9 +2,13 @@ import type { Step } from "./performance";
 type VisibleStep = Pick<
   Step,
   "seconds" | "end" | "number" | "from" | "to" | "backward" | "synthetic"
->;
+> & { hold?: boolean };
 /** Finish the stride and plant at that pose; stopped feet must not snap to attention. */
-export function stepAnimation(step: VisibleStep, seconds: number) {
+export function stepAnimation(
+  step: VisibleStep,
+  seconds: number,
+  holding = false,
+) {
   const phase = Math.max(
     0,
     Math.min(
@@ -17,7 +21,7 @@ export function stepAnimation(step: VisibleStep, seconds: number) {
   const markTime = Math.hypot(dx, dz) < 0.001;
   return {
     count: step.number + phase,
-    hold: !!step.synthetic,
+    hold: !!step.synthetic || (holding && (!step.hold || phase >= 1)),
     backward: step.backward,
     dx: markTime ? 0 : dx,
     dz: markTime ? -0.05 : dz,

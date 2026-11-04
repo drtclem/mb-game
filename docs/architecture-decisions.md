@@ -423,3 +423,7 @@ The second show is an original reprise of the approved Strauss study, separately
 Taylor explicitly removed the Space rhythm control: each distinct Up/Down/Left/Right press supplies both rhythm and a step. Up/Down select forward/backward; Left/Right take a guided-route step with the corresponding lateral correction, using the written set’s forward/backward travel direction. No held-key combination or key auto-repeat is required. This supersedes the earlier held arrows plus Space contract. Mobile retains its single rhythm button and tilt steering.
 
 During a hold, a gameplay press must visibly animate a tiny step **in place**, with **zero net travel**, a **Not yet** message and a fault. Preserve the actual hold-entry location even if it is far off-dot. This supersedes the earlier .35-step wandering allowance. A completed stride now remains planted rather than snapping both legs back to attention; game start explicitly focuses the play field.
+
+### Feet together on holds (Taylor, Nov 4)
+
+At a written hold, close both feet into the attention stance without changing the performer's actual field position. A mistaken hold press still animates a small step in place with “Not yet” and a fault; after that action ends, return the feet together. During moving sets, completed strides remain planted as before.
