@@ -417,3 +417,9 @@ Tunable first-pass values: unlock at 65 individual points; hold radius .35 coord
 Rooms use a dependency-free Node HTTP/SSE signaling service and host-star WebRTC data channels. Host selection, Ready gates, 2–4 adjacent slots, shared start, AI on disconnect and incomplete results are implemented. Each device still judges locally. HTTPS hosting and configured TURN must be verified on actual separate networks before release. No external service was purchased or deployed. `README.md` has local and production setup, and explicit verification limits.
 
 The second show is an original reprise of the approved Strauss study, separately rendered in D with different articulation, tempo, diagonal drill and twilight field lighting. Show 1 remains the reviewed brass-only draft. Final music/drum-major art and later marcher customization remain deferred. Original judges/staff/crowd roadmap items have not been implemented in this checkpoint; the tap/recovery and form-preservation mechanics provide the current gameplay beyond steering.
+
+### Arrow-only controls and hold clarification (Taylor, Nov 4)
+
+Taylor explicitly removed the Space rhythm control: each distinct Up/Down/Left/Right press supplies both rhythm and a step. Up/Down select forward/backward; Left/Right take a guided-route step with the corresponding lateral correction, using the written set’s forward/backward travel direction. No held-key combination or key auto-repeat is required. This supersedes the earlier held arrows plus Space contract. Mobile retains its single rhythm button and tilt steering.
+
+During a hold, a gameplay press must visibly animate a tiny step **in place**, with **zero net travel**, a **Not yet** message and a fault. Preserve the actual hold-entry location even if it is far off-dot. This supersedes the earlier .35-step wandering allowance. A completed stride now remains planted rather than snapping both legs back to attention; game start explicitly focuses the play field.

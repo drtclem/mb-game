@@ -188,7 +188,7 @@ export function rigCombinedSurface(
         target.addScaledVector(direction, -pose.travel * stride);
         // A heel contact has a shorter lever from the ankle than a toe contact.
         target.y +=
-          pose.lift +
+          pose.lift * (stride < 0.1 ? 2.5 : 1) +
           Math.sin(Math.abs(pose.roll)) * (pose.roll < 0 ? 0.2 : 0.08);
         return { pose, target };
       });

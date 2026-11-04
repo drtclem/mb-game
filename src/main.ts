@@ -7,12 +7,14 @@ import {
   formMetrics,
   type Result,
   type Step,
+  type Steering,
 } from "./performance";
 import { Playback } from "./playback";
-import { Controls } from "./controls";
+import { Controls, arrowStep } from "./controls";
 import { RoomClient, type Packet } from "./multiplayer";
 import { readProgress, recordResult } from "./progress";
 import { conduct } from "./drum-major";
+import { stepAnimation } from "./step-animation";
 import { loadCombinedMarcher } from "./combined-marcher";
 import { roster } from "./marching-motion";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
@@ -59,7 +61,7 @@ const controls = new Controls(),
     { result: Result; incomplete: boolean; band: number }
   >();
 const app = document.querySelector<HTMLDivElement>("#app")!;
-app.innerHTML = `<main><header><a class="brand" href="/">ON THE DOT<span>THE FIELD IS LISTENING</span></a><span class="edition">BRASS / RHYTHM / FORM</span><button id="sound">Sound on</button></header><section id="stage"><div id="scene"></div><div id="labels"></div><div id="hud" hidden><div id="motion-state" role="status"></div><div id="page"></div><div id="beat"></div><div id="feedback" role="status"></div><canvas id="map" width="310" height="170" aria-label="Field overview"></canvas><canvas id="conductor" width="160" height="205" aria-label="Drum major conducting the musical count"></canvas><button id="view">Overhead</button><button id="pause">Pause</button><button id="recenter" hidden>Recenter tilt</button><button id="rhythm" hidden aria-label="Tap once for each step">STEP<span>tap the count</span></button></div><div id="overlay"></div><div id="notice" role="status"></div><div id="rotate">Turn your phone sideways to take the field.</div></section><footer><span>SPACE · STEP &nbsp; ↑ ↓ · TRAVEL &nbsp; ← → · ADJUST</span><span>4-TO-5 MAX · EVERY TAP COUNTS</span></footer></main>`;
+app.innerHTML = `<main><header><a class="brand" href="/">ON THE DOT<span>THE FIELD IS LISTENING</span></a><span class="edition">BRASS / RHYTHM / FORM</span><button id="sound">Sound on</button></header><section id="stage"><div id="scene"></div><div id="labels"></div><div id="hud" hidden><div id="motion-state" role="status"></div><div id="page"></div><div id="beat"></div><div id="feedback" role="status"></div><canvas id="map" width="310" height="170" aria-label="Field overview"></canvas><canvas id="conductor" width="160" height="205" aria-label="Drum major conducting the musical count"></canvas><button id="view">Overhead</button><button id="pause">Pause</button><button id="recenter" hidden>Recenter tilt</button><button id="rhythm" hidden aria-label="Tap once for each step">STEP<span>tap the count</span></button></div><div id="overlay"></div><div id="notice" role="status"></div><div id="rotate">Turn your phone sideways to take the field.</div></section><footer><span>↑ ↓ ← → · PRESS AN ARROW ON EACH COUNT</span><span>4-TO-5 MAX · EVERY TAP COUNTS</span></footer></main>`;
 const overlay = $("overlay"),
   hud = $("hud");
 const scene = new THREE.Scene();
@@ -263,7 +265,7 @@ function menu() {
   hud.hidden = true;
   overlay.hidden = false;
   getPlaybackIfExistsStop();
-  overlay.innerHTML = `<div class="intro"><p class="eyebrow">A MARCHING FIELD GAME</p><h1>Every step.<br>Every interval.</h1><p>Hold <strong>↑ while tapping Space</strong> on each count to march forward. Hold <strong>↓ while tapping Space</strong> to march backward; add <strong>← →</strong> to adjust. Tapping with no travel input marks time. During holds, let the band play—and keep your feet still.</p><small>The show starts with an eight-count HOLD after the count-in. Wait for MOVE before stepping.</small>${settings()}<small id="personal-best"></small><button class="primary" id="start">Take the field ↗</button><button id="tilt">Enable phone tilt</button><button id="calibrate">Calibrate timing</button><small id="asset-status"></small><details ${location.hash.startsWith("#room=") ? "open" : ""}><summary>March with friends · 2–4 players</summary><label>DISPLAY NAME<input id="name" maxlength="24" value="${esc(localStorage.getItem("mb-name") ?? "Marcher")}" autocomplete="nickname"></label><div class="room-entry"><button id="create">Create room</button><input id="code" aria-label="Room code" maxlength="6" placeholder="ROOM CODE" value="${esc(location.hash.replace("#room=", "").slice(0, 6))}"><button id="join">Join room</button></div><small>Compete on your own score. Make the band better together.</small></details><p class="review-links"><a href="/uniform.html">Uniform studio ↗</a> · <a href="/music.html">Music study ↗</a></p></div>`;
+  overlay.innerHTML = `<div class="intro"><p class="eyebrow">A MARCHING FIELD GAME</p><h1>Every step.<br>Every interval.</h1><p><strong>Press an arrow on every moving count.</strong> ↑ marches forward, ↓ marches backward, and ← → take a step with a direction adjustment toward your dot. No Space or key combinations. During holds, stop pressing; an early step stays in place and costs points.</p><small>The show starts with an eight-count HOLD after the count-in. Wait for MOVE before stepping.</small>${settings()}<small id="personal-best"></small><button class="primary" id="start">Take the field ↗</button><button id="tilt">Enable phone tilt</button><button id="calibrate">Calibrate timing</button><small id="asset-status"></small><details ${location.hash.startsWith("#room=") ? "open" : ""}><summary>March with friends · 2–4 players</summary><label>DISPLAY NAME<input id="name" maxlength="24" value="${esc(localStorage.getItem("mb-name") ?? "Marcher")}" autocomplete="nickname"></label><div class="room-entry"><button id="create">Create room</button><input id="code" aria-label="Room code" maxlength="6" placeholder="ROOM CODE" value="${esc(location.hash.replace("#room=", "").slice(0, 6))}"><button id="join">Join room</button></div><small>Compete on your own score. Make the band better together.</small></details><p class="review-links"><a href="/uniform.html">Uniform studio ↗</a> · <a href="/music.html">Music study ↗</a></p></div>`;
   bindSettings();
   updateBest();
   updateAssetStatus();
@@ -327,6 +329,9 @@ function begin(seed: number, delay = 0, restore = false) {
   overlay.hidden = true;
   hud.hidden = false;
   controls.keys.clear();
+  const stage = $("stage");
+  stage.tabIndex = 0;
+  stage.focus({ preventScroll: true });
   $("pause").hidden = !!room;
   $("rhythm").hidden = !matchMedia("(pointer:coarse)").matches;
   $("recenter").hidden = !controls.enabled;
@@ -360,7 +365,7 @@ function begin(seed: number, delay = 0, restore = false) {
     returningControl = true;
   }
 }
-function rhythm() {
+function rhythm(override?: Steering) {
   if (mode === "calibrate") {
     calTap();
     return;
@@ -375,18 +380,12 @@ function rhythm() {
     roomInterrupted
   )
     return;
-  const input = controls.value;
+  const input = override ?? controls.value;
   run.tap(playback.seconds, input, calibration);
-  if (
-    !selected.hold(selected.tempo.count(playback.seconds)) &&
-    Math.abs(input.forward) <= 0.1
-  ) {
+  if (selected.hold(selected.tempo.count(playback.seconds))) {
     warningAt = performance.now() / 1000;
-    warningUntil = performance.now() + 2500;
-    $("feedback").textContent =
-      controls.enabled && !controls.keys.size
-        ? "Mark time · tilt forward or back to travel"
-        : "Mark time · hold ↑ or ↓ while tapping Space";
+    warningUntil = performance.now() + 2000;
+    $("feedback").textContent = "Not yet";
   }
 }
 $("rhythm").addEventListener("pointerdown", (e) => {
@@ -419,7 +418,11 @@ window.addEventListener("keydown", (e) => {
   if ((e.target as HTMLElement).matches("input,select,textarea")) return;
   if ([" ", "Escape"].includes(e.key)) e.preventDefault();
   if (e.repeat) return;
-  if (e.key === " ") rhythm();
+  const action = arrowStep(
+    e,
+    selected.backward(playback ? selected.tempo.count(playback.seconds) : 0),
+  );
+  if (action) rhythm(action);
   if (e.key === "Escape") pause();
 });
 window.addEventListener("blur", () => {
@@ -434,7 +437,7 @@ async function calibrate() {
   calLastBeat = -1;
   calStart = p.context.currentTime + 0.5;
   for (let i = 0; i < 20; i++) p.click(calStart + (i * 60) / 84, i % 4 === 0);
-  overlay.innerHTML = `<div class="panel"><p class="eyebrow">DEVICE TIMING</p><h1>Find the pulse.</h1><p>Listen to four clicks, then tap with eight. Your timing adjustment stays on this device.</p><button class="primary" id="cal-tap">Tap · Space</button><p id="cal-status">Listen…</p><button id="cal-back">Back</button></div>`;
+  overlay.innerHTML = `<div class="panel"><p class="eyebrow">DEVICE TIMING</p><h1>Find the pulse.</h1><p>Listen to four clicks, then tap with eight. Your timing adjustment stays on this device.</p><button class="primary" id="cal-tap">Tap · any arrow</button><p id="cal-status">Listen…</p><button id="cal-back">Back</button></div>`;
   $("cal-tap").onclick = calTap;
   $("cal-back").onclick = menu;
 }
@@ -770,10 +773,9 @@ function frame() {
       !playback.paused &&
       !selected.hold(count);
     $("motion-state").hidden = !movingPhase;
-    $("motion-state").textContent =
-      Math.abs(controls.value.forward) > 0.1
-        ? "NEXT STEP: TRAVEL · TAP THE COUNT"
-        : "NEXT STEP: MARK TIME";
+    $("motion-state").textContent = controls.enabled
+      ? "TILT TO STEER · TAP STEP ON THE COUNT"
+      : "PRESS AN ARROW ON THE COUNT";
     $("page").textContent =
       `${selected.name.toUpperCase()} · SET ${page + 1} / 14 · ${selected.drill.pages[page].name}`;
     $("beat").textContent = returningControl
@@ -785,8 +787,14 @@ function frame() {
           : String(selected.tempo.counter(count));
     if (page !== lastPage && count >= 0 && !playback.countingIn) {
       lastPage = page;
-      warningUntil = performance.now() + 1800;
-      $("feedback").textContent = selected.hold(count) ? "HOLD" : "MOVE";
+      const keepNotYet =
+        selected.hold(count) &&
+        $("feedback").textContent === "Not yet" &&
+        performance.now() < warningUntil;
+      if (!keepNotYet) {
+        warningUntil = performance.now() + 1800;
+        $("feedback").textContent = selected.hold(count) ? "HOLD" : "MOVE";
+      }
     }
     if (performance.now() > warningUntil) $("feedback").textContent = "";
     if (
@@ -802,7 +810,7 @@ function frame() {
       performance.now() > warningUntil &&
       selected.hold(count)
     )
-      warning("Hold your feet");
+      warning("Not yet");
     if (Math.floor(count) > lastBandBeat) {
       lastBandBeat = Math.floor(count);
       const ideal = selected.target(count);
@@ -837,21 +845,8 @@ function frame() {
       remoteStep = member ? remote.get(member.id)?.step : undefined;
     const step = i === playerId ? run?.steps.at(-1) : remoteStep;
     if (mode === "run" && step && (i === playerId || member?.connected)) {
-      const nowSeconds = selected.tempo.seconds(c),
-        phase = Math.max(
-          0,
-          Math.min(1, (nowSeconds - step.seconds) / (step.end - step.seconds)),
-        );
-      const moving = phase < 1 && !playback?.paused && !playback?.countingIn;
-      const dx = step.to.x - step.from.x,
-        dz = step.to.y - step.from.y;
-      model.animate(
-        step.number + phase,
-        !moving,
-        step.backward,
-        Math.abs(dx) + Math.abs(dz) < 0.001 ? 0 : dx,
-        Math.abs(dx) + Math.abs(dz) < 0.001 ? -0.05 : dz,
-      );
+      const pose = stepAnimation(step, selected.tempo.seconds(c));
+      model.animate(pose.count, pose.hold, pose.backward, pose.dx, pose.dz);
     } else {
       const prev = page
           ? selected.drill.pages[page - 1].dots[i]

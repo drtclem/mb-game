@@ -76,3 +76,24 @@ export class Controls {
     this.recenter();
   }
 }
+
+/** An arrow press supplies both the rhythm action and its guided direction. */
+export function arrowStep(
+  event: { key: string; repeat?: boolean },
+  backward: boolean,
+): Steering | null {
+  if (event.repeat) return null;
+  const travel = backward ? -1 : 1;
+  switch (event.key) {
+    case "ArrowUp":
+      return { forward: 1, side: 0 };
+    case "ArrowDown":
+      return { forward: -1, side: 0 };
+    case "ArrowLeft":
+      return { forward: travel, side: -1 };
+    case "ArrowRight":
+      return { forward: travel, side: 1 };
+    default:
+      return null;
+  }
+}

@@ -109,3 +109,25 @@ it("keeps forward/backward leg tracks close without crossing or bowing the knees
         }
       }
 });
+
+it("keeps a completed tap visibly planted in its stride rather than erasing the leg motion", async () => {
+  const { stepAnimation } = await import("./step-animation");
+  const a = actor();
+  a.animate(0, true, false);
+  const attention = a.at(1);
+  const step = {
+    seconds: 0,
+    end: 0.6,
+    number: 0,
+    from: { x: 0, y: 0 },
+    to: { x: 0, y: -1 },
+    backward: false,
+  };
+  const pose = stepAnimation(step, 0.61);
+  a.animate(pose.count, pose.hold, pose.backward, pose.dx, pose.dz);
+  expect(a.at(1).distanceTo(attention)).toBeGreaterThan(0.2);
+  const planted = a.at(1),
+    later = stepAnimation(step, 10);
+  a.animate(later.count, later.hold, later.backward, later.dx, later.dz);
+  expect(a.at(1).distanceTo(planted)).toBeLessThan(1e-7);
+});

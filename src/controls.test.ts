@@ -56,3 +56,27 @@ describe("travel input", () => {
     expect(c.value).toEqual({ forward: 0, side: 0 });
   });
 });
+
+describe("arrows carry rhythm and direction together", () => {
+  it("maps single arrow presses without a Space or held-key combination", async () => {
+    const { arrowStep } = await import("./controls");
+    expect(arrowStep({ key: "ArrowUp" }, false)).toEqual({
+      forward: 1,
+      side: 0,
+    });
+    expect(arrowStep({ key: "ArrowDown" }, false)).toEqual({
+      forward: -1,
+      side: 0,
+    });
+    expect(arrowStep({ key: "ArrowLeft" }, false)).toEqual({
+      forward: 1,
+      side: -1,
+    });
+    expect(arrowStep({ key: "ArrowRight" }, true)).toEqual({
+      forward: -1,
+      side: 1,
+    });
+    expect(arrowStep({ key: " " }, false)).toBeNull();
+    expect(arrowStep({ key: "ArrowUp", repeat: true }, false)).toBeNull();
+  });
+});

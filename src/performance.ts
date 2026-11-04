@@ -122,7 +122,6 @@ export class PerformanceRun {
   faults = 0;
   sampled = 0;
   incomplete = false;
-  private anchors = new Map<number, Dot>();
   remote = new Map<number, Dot>();
   constructor(
     readonly show: GameShow,
@@ -194,8 +193,6 @@ export class PerformanceRun {
         shape: m.shape,
         discount: m.eligible * tuning.formDiscount,
       });
-      if (c % 8 === 0 && this.show.hold(c))
-        this.anchors.set(this.show.page(c), this.position(c));
     }
   }
   tap(seconds: number, input: Steering, timingOffset = 0) {
@@ -245,20 +242,7 @@ export class PerformanceRun {
     let to = { x: from.x + vx * size, y: from.y + vy * size };
     if (hold) {
       this.faults++;
-      const anchor = this.anchors.get(page) ?? { ...from };
-      this.anchors.set(page, anchor);
-      const direction =
-        Math.abs(forward) > 0.1
-          ? { x: vx, y: vy }
-          : { x: side * 0.5, y: this.steps.length % 2 ? 1 : -1 };
-      to = { x: from.x + direction.x * 0.12, y: from.y + direction.y * 0.12 };
-      const d = distance(to, anchor);
-      if (d > tuning.holdRadius) {
-        to = {
-          x: anchor.x + ((to.x - anchor.x) / d) * tuning.holdRadius,
-          y: anchor.y + ((to.y - anchor.y) / d) * tuning.holdRadius,
-        };
-      }
+      to = { ...from };
     }
     to = { x: clamp(to.x, -79, 79), y: clamp(to.y, 1, 84) };
     size = distance(from, to);

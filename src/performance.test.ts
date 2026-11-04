@@ -22,7 +22,7 @@ describe("tap-driven performance", () => {
     expect(r.steps).toHaveLength(3);
     for (const step of r.steps) expect(step.size).toBeLessThanOrEqual(2.000001);
   });
-  it("holds actual position, bounds mistaken hold steps and retargets the next set", () => {
+  it("holds actual position, marks mistaken hold steps in place and retargets the next set", () => {
     const r = new PerformanceRun(show, "Hard", 5, 4);
     const anchor = r.position(24);
     r.advance(24);
@@ -30,6 +30,8 @@ describe("tap-driven performance", () => {
     for (let i = 0; i < 24; i++)
       r.tap(show.tempo.seconds(24 + i * 0.1), { forward: 1, side: 1 });
     const p = r.position(28);
+    expect(p).toEqual(anchor);
+    expect(r.steps.every((step) => step.size === 0)).toBe(true);
     expect(Math.hypot(p.x - anchor.x, p.y - anchor.y)).toBeLessThanOrEqual(
       0.35001,
     );
@@ -108,5 +110,15 @@ describe("device calibration", () => {
     expect(r.steps[0].seconds).toBe(actual);
     expect(r.steps[0].timing).toBe(100);
     expect(r.position(8)).toEqual(show.drill.initial[5]);
+  });
+});
+
+describe("arrow-only gameplay", () => {
+  it("reaches the next dot from eight individual forward-arrow presses", async () => {
+    const { arrowStep } = await import("./controls");
+    const r = new PerformanceRun(show, "Easy", 5, 1);
+    for (let c = 8; c < 16; c++)
+      r.tap(show.tempo.seconds(c), arrowStep({ key: "ArrowUp" }, false)!);
+    expect(r.position(16)).toEqual(show.goal(8)[5]);
   });
 });

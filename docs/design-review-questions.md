@@ -1,5 +1,7 @@
 # Gameplay design review — November 3, 2026
 
+**Latest control revision (Nov 4):** arrow presses now supply both rhythm and direction; Space is removed from gameplay. Hold presses animate in place with zero travel and “Not yet”. These supersede the historical control/hold answers below; see the latest architecture checkpoint.
+
 Discuss these with Taylor **one question at a time**. This is a queue, not a batch questionnaire or a set of newly locked decisions. Record each answer here and update the architecture/spec and implementation tasks before building the corresponding change. Do not ask Taylor to repeat decisions already documented.
 
 ## Sources reviewed

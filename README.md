@@ -21,11 +21,10 @@ Vite proxies `/api` to the room service on port 8787. Use the URL Vite prints. S
 
 ## Play
 
-- Hold **Up** to travel toward a forward set’s dot; **Down** for backward sets.
-- Add **Left/Right** to adjust direction. The camera does not flip for backward sets.
-- Tap **Space** for every step. No tap means no step. With no Up/Down input, taps make tiny mark-time steps.
-- Extra and wrong-way taps visibly affect the marcher. Recovery tops out at **4-to-5 (45 inches)**. A missed dot is allowed; at the next set, target the new dot.
-- **HOLD:** no taps. Mistaken hold steps stay within .35 steps of the actual hold-start position.
+- **Press an arrow on each moving count.** Each distinct press triggers one step; no Space or combinations.
+- **Up / Down:** forward / backward travel. **Left / Right:** a step with a correction toward the current dot (the route remains guided). Key auto-repeat does not create extra steps.
+- The camera does not flip for backward sets. Wrong-direction and extra presses visibly affect the marcher; recovery still tops out at **4-to-5 (45 inches)**.
+- **HOLD:** stop pressing. An arrow press animates a small step in place, leaves the actual position unchanged, shows **Not yet**, and incurs a fault.
 - **Escape / Pause** pauses solo only. Resume has a fresh count-in. Multiplayer keeps running.
 - **Overhead** toggles the camera view. The drum-major sketch remains in a top-right inset, conducting through holds.
 
