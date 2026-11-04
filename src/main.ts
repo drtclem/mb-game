@@ -983,7 +983,31 @@ function frame() {
     const member = room?.room?.members.find((m) => m.slot === i),
       remoteStep = member ? remote.get(member.id)?.step : undefined;
     const step = i === playerId ? run?.steps.at(-1) : remoteStep;
-    if (preparation > 0) {
+    const arrivingAtHold =
+      mode === "run" &&
+      !selected.hold(c) &&
+      c % 8 >= 7 &&
+      (page === 13 || selected.hold((page + 1) * 8));
+    const controlled = i === playerId || !!member?.connected;
+    const finalTappedStep =
+      step &&
+      step.page === page &&
+      !step.hold &&
+      Math.round(selected.tempo.count(step.seconds)) === page * 8 + 7;
+    const plantedArrival = arrivingAtHold && (!controlled || finalTappedStep);
+    if (plantedArrival) {
+      const from = page
+        ? selected.drill.pages[page - 1].dots[i]
+        : selected.drill.initial[i];
+      const end = selected.drill.pages[page].dots[i];
+      const dx =
+        controlled && step ? step.to.x - step.from.x : (end.x - from.x) / 8;
+      const dz =
+        controlled && step ? step.to.y - step.from.y : (end.y - from.y) / 8;
+      const anchor = controlled && step ? step.to : run!.ai((page + 1) * 8, i);
+      model.group.position.set(anchor.x - dx * 0.5, 0, anchor.y - dz * 0.5);
+      model.animate(0, true, dz > 0, dx, dz, 0);
+    } else if (preparation > 0) {
       const from = selected.drill.pages[page].dots[i],
         next = selected.drill.pages[page + 1].dots[i];
       model.animate(
@@ -1046,13 +1070,10 @@ function frame() {
         closure,
       );
     }
-    if (mode === "run") {
-      const offset = haltBodyOffset(
-        c,
-        selected.hold(c),
-        c < 104 ? selected.hold((page + 1) * 8) : true,
-        closure,
-      );
+    if (mode === "run" && !plantedArrival) {
+      const offset = selected.hold(c)
+        ? haltBodyOffset(c, true, true, closure)
+        : 0;
       if (offset > 0) {
         const arrivalPage = selected.hold(c) ? page - 1 : page;
         if (arrivalPage >= 0) {

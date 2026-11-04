@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import { footPose } from "./marching-motion";
+import { footPose, haltFootPose } from "./marching-motion";
 import { twoBoneTargets } from "./skeletal-motion";
 import { legWeights } from "./combined-skin";
 
@@ -183,12 +183,10 @@ export function rigCombinedSurface(
         leg.ankle.quaternion.identity();
       }
       const targets = legs.map((leg, i) => {
-        const pose = footPose(count, i, hold && closure >= 1, backward);
-        if (hold && closure < 1) {
-          pose.travel *= 1 - closure;
-          pose.roll *= 1 - closure;
-          pose.lift = Math.sin(Math.PI * closure) * 0.025;
-        }
+        const pose =
+          hold && closure < 1
+            ? haltFootPose(i, closure)
+            : footPose(count, i, hold, backward);
         if (preparation > 0) {
           pose.travel = i === 0 ? -0.5 * preparation : 0;
           pose.lift = i === 0 ? 0.04 * Math.sin(Math.PI * preparation) : 0;

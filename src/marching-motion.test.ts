@@ -4,6 +4,7 @@ import {
   roster,
   stepOffPreparation,
   haltBodyOffset,
+  haltFootPose,
 } from "./marching-motion";
 
 describe("marcher animation", () => {
@@ -69,4 +70,19 @@ it("uses a foot-centered arrival only before a halt", () => {
   expect(haltBodyOffset(23.5, false, true, 1)).toBeCloseTo(0.25);
   expect(haltBodyOffset(24, true, true, 0)).toBe(0.5);
   expect(haltBodyOffset(25, true, true, 1)).toBe(0);
+});
+
+describe("single-foot halt closure", () => {
+  it("anchors the right foot through count one while only the left foot closes", () => {
+    for (const progress of [0, 0.25, 0.5, 0.75, 1]) {
+      const right = haltFootPose(1, progress),
+        left = haltFootPose(0, progress);
+      const body = -0.5 * (1 - progress);
+      expect(body - right.travel).toBeCloseTo(0);
+      expect(right.lift).toBe(0);
+      expect(right.roll).toBe(0);
+      expect(body - left.travel).toBeCloseTo(-(1 - progress));
+    }
+    expect(haltFootPose(0, 0.5).lift).toBeGreaterThan(0);
+  });
 });

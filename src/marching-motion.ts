@@ -67,3 +67,13 @@ export function haltBodyOffset(
   if (holding) return (1 - closure) * 0.5;
   return nextHolding ? Math.max(0, (count % 8) - 7) * 0.5 : 0;
 }
+
+/** Only the trailing left foot closes; the right foot is the planted anchor. */
+export function haltFootPose(side: number, closure: number) {
+  const remaining = 1 - Math.max(0, Math.min(1, closure));
+  return {
+    travel: (side === 0 ? 0.5 : -0.5) * remaining,
+    lift: side === 0 ? Math.sin(Math.PI * (1 - remaining)) * 0.025 : 0,
+    roll: 0,
+  };
+}

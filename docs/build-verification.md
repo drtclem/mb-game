@@ -50,3 +50,7 @@ Reproduced the reported problem in the actual performance engine: exact/30-ms-la
 ## Consecutive Space travel — November 4
 
 A second travel regression reproduced with two taps 200 ms apart: the first accepted one-unit step ended at y=39, but the next step began at y≈39.671, silently dropping ≈0.671 units. Separated accepted endpoints from visual interpolation origins. Tests verify conserved tap distance, no position discontinuity at a new tap, and sixteen alternating ±80 ms taps retaining standard step sizes and both arrival dots. Type check, 104 tests and build pass. A longer browser playtest sent sixteen Space presses with varying intervals across moving sets/transitions, observed visible travel, and had no console errors. This verifies keyboard operation; subjective audio/motion feel still requires user review or a recording with sound.
+
+## Extra halt step — November 4
+
+Found two visual causes: generic final-count swing continued until the hold boundary, and halt closure added lift to both feet. Replaced it with a planted final right-foot pose and a left-only closing pose. A regression test evaluates five closure phases and proves the right foot's world-space forward coordinate remains constant with zero lift/roll while the left closes. Type check, 105 unit tests and build pass. Live screenshots captured moving count 8/8, hold count 1/8 and hold count 2/8; the band transitions from the planted arrival to feet together without a new right-foot lift. Browser error logs were empty.

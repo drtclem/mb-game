@@ -465,3 +465,7 @@ Distance auditing confirmed Sunrise's first two moving sets each cover 8 standar
 ### Preserve accepted travel across overlapping tap animations (Nov 4 bug fix)
 
 A tap previously began at the partially animated position of the preceding step. If the next input arrived before that animation finished, its unfinished distance disappeared. Accepted steps now chain their logical endpoints; each step's optional visualFrom preserves smooth rendering from the current displayed position. The next tap cannot erase the previous accepted distance. Step size, judging, dot destinations, recovery limits and hold constraints keep their existing rules.
+
+### Anchored right-foot halt (Taylor, Nov 4)
+
+Before a hold, count eight displays the planted right-foot arrival rather than continuing the generic swing until hold count one. For an input-controlled marcher this requires its actual final-count tap and uses that accepted step's endpoint, never snapping a missed dot to the written target. AI marchers use their imperfect arrival endpoint. During hold count one only the trailing left foot lifts and closes; the right foot has zero lift/roll and remains fixed in field space while the body centers over it. Incorrect hold inputs retain their existing visible fault step.
