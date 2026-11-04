@@ -3,6 +3,12 @@ import { describe, expect, it } from 'vitest';
 import { TempoMap } from './tempo';
 const score = JSON.parse(readFileSync('public/music/sunrise-score.json', 'utf8'));
 describe('Sunrise arrangement contract', () => {
+  it('uses only the requested brass family, with upper and lower voices', () => {
+    const voices = new Set(score.notes.map((note: {voice: string}) => note.voice));
+    expect([...voices].every(voice => ['trumpet', 'mellophone', 'baritone', 'tuba'].includes(String(voice)))).toBe(true);
+    expect(voices.has('trumpet')).toBe(true);
+    expect(voices.has('tuba')).toBe(true);
+  });
   it('covers every count with a contiguous movement or hold section', () => {
     let end = 0;
     for (const section of score.sections) {

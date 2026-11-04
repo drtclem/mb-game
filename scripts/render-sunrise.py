@@ -25,7 +25,9 @@ def seconds(count):
 def score():
     notes = []
     def add(at, length, pitch, voice, level, pan=0):
-        notes.append(dict(count=at, duration=length, midi=pitch, voice=voice, level=level, pan=pan))
+        family = 'tuba' if pitch < 45 else 'baritone' if pitch < 60 else 'mellophone' if pitch < 67 else 'trumpet'
+        if voice == 'brass' and pitch >= 60: family = 'trumpet' if pitch >= 67 else 'mellophone'
+        notes.append(dict(count=at, duration=length, midi=pitch, voice=family, level=level, pan=pan))
     def chord(at, length, pitches, level):
         for i, pitch in enumerate(pitches):
             add(at, length, pitch, 'brass', level / len(pitches)**.5, (i/(len(pitches)-1)-.5)*.9)
@@ -49,17 +51,10 @@ def score():
         add(80+i*2, 1.75, pitch-12, 'brass', .19, .4)
     chord(96, 8, [36, 43, 48, 55, 60, 64, 67, 72, 76], .66)
     chord(104, 8, [24, 36, 48, 55, 60, 64, 67, 72, 76, 79], .78)
-    # Pitched timpani, battery interludes and impact cymbals: all synthesized.
-    for start, end in [(20, 24), (44, 48), (68, 72), (92, 96)]:
-        for beat in np.arange(start, end, .5):
-            add(float(beat), .45, 36 if int(beat*2)%2==0 else 43, 'timpani', .3)
-    for start, end in [(32, 44), (56, 68), (80, 96)]:
-        for beat in range(start, end):
-            add(beat, .35, 36, 'bass', .15)
-            if beat%2: add(beat, .3, 60, 'snare', .13, .25)
-            if beat%4==3:
-                for frac in [.5, .75]: add(beat+frac, .2, 60, 'snare', .09, .25)
-    for at in [24, 28, 48, 52, 72, 96, 104]: add(at, 3, 60, 'cymbal', .17, .2)
+    # Brass-only rhythmic answers replace the battery; no percussion assets.
+    for start in [20, 44, 68, 92]:
+        for delta, pitch in [(0, 48), (1, 55), (2, 60), (3, 55)]:
+            add(start+delta, .75, pitch, 'brass', .16, .25)
     return sorted(notes, key=lambda n: n['count'])
 
 def render(notes):
@@ -68,39 +63,48 @@ def render(notes):
     dry = np.zeros((length, 2), dtype=np.float64)
     for n in notes:
         duration = seconds(n['count']+n['duration']) - seconds(n['count'])
-        tail = .45 if n['voice'] in ['brass','low'] else .8
-        t = np.arange(int((duration+tail)*RATE))/RATE
+        t = np.arange(int((duration+.5)*RATE))/RATE
         freq = 440*2**((n['midi']-69)/12)
         voice = n['voice']
-        if voice in ['brass','low']:
-            attack = .07 if voice=='brass' else .3
-            env = (1-np.exp(-t/attack))*np.exp(-np.maximum(0,t-duration)/.16)
-            # Brass bloom, slight beating and delayed vibrato; band-limited harmonics.
-            phase = 2*np.pi*freq*t + .009*np.sin(2*np.pi*5.1*t)*np.minimum(t,1)
+        # Distinct bore/brightness profiles; no generic organ-like oscillator.
+        cutoff, slope, attack = {
+            'trumpet': (4400, .95, .018), 'mellophone': (2600, 1.15, .028),
+            'baritone': (1900, 1.2, .035), 'tuba': (1050, 1.4, .065),
+        }[voice]
+        # Several independent players per written note. Detuning, phase and
+        # tongue offsets are deterministic, without changing the count map.
+        for player in range(3):
+            detune = rng.uniform(-4,4)
+            player_freq = freq*2**(detune/1200)
+            onset = rng.uniform(0,.012)
+            local = np.maximum(0,t-onset)
+            air = .88 + .025*np.sin(2*np.pi*rng.uniform(.55,.9)*local + player)
+            swell = .8 + .2*np.minimum(local/max(duration,.1),1)
+            env = (1-np.exp(-local/attack))*np.exp(-np.maximum(0,local-duration)/.085)
+            env *= air*swell*(1+.14*np.exp(-local/.12))
+            # Stagger breathing on long tones so the section sustains naturally.
+            if duration > 5:
+                breath = 2.8 + player*1.4
+                env *= 1-.8*np.exp(-((local-breath)/.075)**2)
+            phase = 2*np.pi*player_freq*local + rng.uniform(0,2*np.pi)
+            phase += .012*np.sin(2*np.pi*.67*local+player)
             tone = np.zeros(len(t))
-            for h in range(1, min(20, int(RATE/2/freq))):
-                bloom = 1-np.exp(-t/(.045+h*.005))
-                tone += np.sin(h*phase + .001*h*np.sin(2*np.pi*.7*t)) * bloom / h**1.35
-            tone += .17*np.sin(2*np.pi*freq*1.0018*t)
-            signal = tone*env*.55
-        elif voice=='timpani':
-            signal = (np.sin(2*np.pi*freq*t)+.35*np.sin(2*np.pi*freq*1.52*t))*np.exp(-t/ .38)
-            signal *= np.minimum(t/.004,1)
-        elif voice=='bass':
-            signal = np.sin(2*np.pi*(48*t+3*(1-np.exp(-t*25))))*np.exp(-t*13)
-        else:
-            noise = rng.uniform(-1,1,len(t))
-            bright = noise-np.roll(noise,1)
-            if voice=='snare':
-                signal = (.55*bright + .35*np.sin(2*np.pi*185*t))*np.exp(-t*24)
-            else:
-                signal = bright*np.exp(-t*2.3)*(1-np.exp(-t*150))*.45
-        signal *= n['level']
-        start = round(seconds(n['count'])*RATE)
-        end = min(length, start+len(signal))
-        pan = n['pan']
-        dry[start:end,0] += signal[:end-start]*np.sqrt((1-pan)/2)
-        dry[start:end,1] += signal[:end-start]*np.sqrt((1+pan)/2)
+            harmonics = min(65, int((RATE*.46)/player_freq))
+            # Dynamic high harmonics bloom after the tongued attack. Lip/bell
+            # resonance gives more bite around 1–3 kHz than the former pad.
+            brightness = .38 + .62*(1-np.exp(-local/.055))
+            for h in range(1,harmonics+1):
+                hz = h*player_freq
+                bell = 1+.5*np.exp(-((hz-1500)/900)**2)
+                spectral = np.exp(-(hz/cutoff)**1.25)/h**slope * bell
+                bloom = brightness**(h/7)
+                tone += np.sin(h*phase)*spectral*bloom
+            signal = tone*env*n['level']*.36
+            start = round(seconds(n['count'])*RATE)
+            end = min(length,start+len(signal))
+            pan = np.clip(n['pan']+(player-1)*.11,-.95,.95)
+            dry[start:end,0] += signal[:end-start]*np.sqrt((1-pan)/2)
+            dry[start:end,1] += signal[:end-start]*np.sqrt((1+pan)/2)
     # Original short stadium reflections, no impulse-response assets.
     mix = dry.copy()
     for delay, gain in [(.071,.13),(.113,.11),(.181,.08),(.293,.055),(.431,.035)]:
@@ -113,7 +117,7 @@ def render(notes):
 
 if __name__ == '__main__':
     notes = score()
-    manifest = dict(title='Sunrise — Strauss Fanfare Study', draft=True, totalCounts=TOTAL,
+    manifest = dict(title='Sunrise — Strauss Fanfare Study', draft=True, revision=2, instrumentation='brass only', totalCounts=TOTAL,
                     tempoChanges=[dict(count=c,bpm=b) for c,b in TEMPOS],
                     beats=[seconds(c) for c in range(TOTAL+1)],
                     sections=[dict(start=a,end=b,name=name,action=act) for a,b,name,act in SECTIONS],

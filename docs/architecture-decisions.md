@@ -403,3 +403,7 @@ Completed multiplayer individual scores count toward personal bests and show unl
 ### First music arrangement draft (Taylor, Nov 3)
 
 Taylor selected the opening of Strauss’s *Also sprach Zarathustra* as the first music study, with flexible tempo and natural drill holds. Build our own arrangement and generated audio from the public-domain composition. The first reviewable synthesized draft and its tempo/hold map are documented in `docs/music/sunrise-arrangement.md`. It is 112 counts, with an independent listening page; do not overlay it on the old 80-count rehearsal. This is an original code-rendered arrangement demo in the existing music pipeline, not a final production take or completed gameplay integration.
+
+### Brass-only music revision (Taylor, Nov 3)
+
+Taylor requested a more drum-corps-like brass sound and brass-only instrumentation. Revision 2 removes percussion, adds instrument-specific synthesized ensemble profiles and preserves the draft count/tempo/hold map. A lifelike production performance remains a later audio-production step; no external generation or reference-recording upload is authorized by this implementation.

@@ -1,6 +1,8 @@
 {
   "title": "Sunrise \u2014 Strauss Fanfare Study",
   "draft": true,
+  "revision": 2,
+  "instrumentation": "brass only",
   "totalCounts": 112,
   "tempoChanges": [
     {
@@ -196,7 +198,7 @@
       "count": 0,
       "duration": 24,
       "midi": 24,
-      "voice": "low",
+      "voice": "tuba",
       "level": 0.24,
       "pan": 0
     },
@@ -204,7 +206,7 @@
       "count": 0,
       "duration": 24,
       "midi": 36,
-      "voice": "low",
+      "voice": "tuba",
       "level": 0.14,
       "pan": -0.25
     },
@@ -212,7 +214,7 @@
       "count": 8,
       "duration": 4,
       "midi": 60,
-      "voice": "brass",
+      "voice": "mellophone",
       "level": 0.11818181818181818,
       "pan": -0.55
     },
@@ -220,7 +222,7 @@
       "count": 8,
       "duration": 4,
       "midi": 60,
-      "voice": "brass",
+      "voice": "mellophone",
       "level": 0.11818181818181818,
       "pan": 0.05
     },
@@ -228,7 +230,7 @@
       "count": 8,
       "duration": 4,
       "midi": 60,
-      "voice": "brass",
+      "voice": "mellophone",
       "level": 0.11818181818181818,
       "pan": 0.55
     },
@@ -236,7 +238,7 @@
       "count": 12,
       "duration": 4,
       "midi": 67,
-      "voice": "brass",
+      "voice": "trumpet",
       "level": 0.11818181818181818,
       "pan": -0.55
     },
@@ -244,7 +246,7 @@
       "count": 12,
       "duration": 4,
       "midi": 67,
-      "voice": "brass",
+      "voice": "trumpet",
       "level": 0.11818181818181818,
       "pan": 0.05
     },
@@ -252,7 +254,7 @@
       "count": 12,
       "duration": 4,
       "midi": 67,
-      "voice": "brass",
+      "voice": "trumpet",
       "level": 0.11818181818181818,
       "pan": 0.55
     },
@@ -260,7 +262,7 @@
       "count": 16,
       "duration": 6,
       "midi": 72,
-      "voice": "brass",
+      "voice": "trumpet",
       "level": 0.11818181818181818,
       "pan": -0.55
     },
@@ -268,7 +270,7 @@
       "count": 16,
       "duration": 6,
       "midi": 72,
-      "voice": "brass",
+      "voice": "trumpet",
       "level": 0.11818181818181818,
       "pan": 0.05
     },
@@ -276,47 +278,31 @@
       "count": 16,
       "duration": 6,
       "midi": 72,
-      "voice": "brass",
+      "voice": "trumpet",
       "level": 0.11818181818181818,
       "pan": 0.55
     },
     {
-      "count": 20.0,
-      "duration": 0.45,
-      "midi": 36,
-      "voice": "timpani",
-      "level": 0.3,
-      "pan": 0
+      "count": 20,
+      "duration": 0.75,
+      "midi": 48,
+      "voice": "baritone",
+      "level": 0.16,
+      "pan": 0.25
     },
     {
-      "count": 20.5,
-      "duration": 0.45,
-      "midi": 43,
-      "voice": "timpani",
-      "level": 0.3,
-      "pan": 0
-    },
-    {
-      "count": 21.0,
-      "duration": 0.45,
-      "midi": 36,
-      "voice": "timpani",
-      "level": 0.3,
-      "pan": 0
-    },
-    {
-      "count": 21.5,
-      "duration": 0.45,
-      "midi": 43,
-      "voice": "timpani",
-      "level": 0.3,
-      "pan": 0
+      "count": 21,
+      "duration": 0.75,
+      "midi": 55,
+      "voice": "baritone",
+      "level": 0.16,
+      "pan": 0.25
     },
     {
       "count": 22,
       "duration": 2,
       "midi": 36,
-      "voice": "brass",
+      "voice": "tuba",
       "level": 0.08844368668415917,
       "pan": -0.45
     },
@@ -324,7 +310,7 @@
       "count": 22,
       "duration": 2,
       "midi": 48,
-      "voice": "brass",
+      "voice": "baritone",
       "level": 0.08844368668415917,
       "pan": -0.30000000000000004
     },
@@ -332,7 +318,7 @@
       "count": 22,
       "duration": 2,
       "midi": 55,
-      "voice": "brass",
+      "voice": "baritone",
       "level": 0.08844368668415917,
       "pan": -0.15000000000000002
     },
@@ -340,7 +326,7 @@
       "count": 22,
       "duration": 2,
       "midi": 60,
-      "voice": "brass",
+      "voice": "mellophone",
       "level": 0.08844368668415917,
       "pan": 0.0
     },
@@ -348,7 +334,7 @@
       "count": 22,
       "duration": 2,
       "midi": 64,
-      "voice": "brass",
+      "voice": "mellophone",
       "level": 0.08844368668415917,
       "pan": 0.14999999999999997
     },
@@ -356,7 +342,7 @@
       "count": 22,
       "duration": 2,
       "midi": 67,
-      "voice": "brass",
+      "voice": "trumpet",
       "level": 0.08844368668415917,
       "pan": 0.30000000000000004
     },
@@ -364,47 +350,31 @@
       "count": 22,
       "duration": 2,
       "midi": 72,
-      "voice": "brass",
+      "voice": "trumpet",
       "level": 0.08844368668415917,
       "pan": 0.45
     },
     {
-      "count": 22.0,
-      "duration": 0.45,
-      "midi": 36,
-      "voice": "timpani",
-      "level": 0.3,
-      "pan": 0
+      "count": 22,
+      "duration": 0.75,
+      "midi": 60,
+      "voice": "mellophone",
+      "level": 0.16,
+      "pan": 0.25
     },
     {
-      "count": 22.5,
-      "duration": 0.45,
-      "midi": 43,
-      "voice": "timpani",
-      "level": 0.3,
-      "pan": 0
-    },
-    {
-      "count": 23.0,
-      "duration": 0.45,
-      "midi": 36,
-      "voice": "timpani",
-      "level": 0.3,
-      "pan": 0
-    },
-    {
-      "count": 23.5,
-      "duration": 0.45,
-      "midi": 43,
-      "voice": "timpani",
-      "level": 0.3,
-      "pan": 0
+      "count": 23,
+      "duration": 0.75,
+      "midi": 55,
+      "voice": "baritone",
+      "level": 0.16,
+      "pan": 0.25
     },
     {
       "count": 24,
       "duration": 4,
       "midi": 36,
-      "voice": "brass",
+      "voice": "tuba",
       "level": 0.17386365758424452,
       "pan": -0.45
     },
@@ -412,7 +382,7 @@
       "count": 24,
       "duration": 4,
       "midi": 48,
-      "voice": "brass",
+      "voice": "baritone",
       "level": 0.17386365758424452,
       "pan": -0.30000000000000004
     },
@@ -420,7 +390,7 @@
       "count": 24,
       "duration": 4,
       "midi": 55,
-      "voice": "brass",
+      "voice": "baritone",
       "level": 0.17386365758424452,
       "pan": -0.15000000000000002
     },
@@ -428,7 +398,7 @@
       "count": 24,
       "duration": 4,
       "midi": 60,
-      "voice": "brass",
+      "voice": "mellophone",
       "level": 0.17386365758424452,
       "pan": 0.0
     },
@@ -436,7 +406,7 @@
       "count": 24,
       "duration": 4,
       "midi": 63,
-      "voice": "brass",
+      "voice": "mellophone",
       "level": 0.17386365758424452,
       "pan": 0.14999999999999997
     },
@@ -444,7 +414,7 @@
       "count": 24,
       "duration": 4,
       "midi": 67,
-      "voice": "brass",
+      "voice": "trumpet",
       "level": 0.17386365758424452,
       "pan": 0.30000000000000004
     },
@@ -452,23 +422,15 @@
       "count": 24,
       "duration": 4,
       "midi": 72,
-      "voice": "brass",
+      "voice": "trumpet",
       "level": 0.17386365758424452,
       "pan": 0.45
-    },
-    {
-      "count": 24,
-      "duration": 3,
-      "midi": 60,
-      "voice": "cymbal",
-      "level": 0.17,
-      "pan": 0.2
     },
     {
       "count": 28,
       "duration": 3.5,
       "midi": 36,
-      "voice": "brass",
+      "voice": "tuba",
       "level": 0.1889822365046136,
       "pan": -0.45
     },
@@ -476,7 +438,7 @@
       "count": 28,
       "duration": 3.5,
       "midi": 48,
-      "voice": "brass",
+      "voice": "baritone",
       "level": 0.1889822365046136,
       "pan": -0.30000000000000004
     },
@@ -484,7 +446,7 @@
       "count": 28,
       "duration": 3.5,
       "midi": 55,
-      "voice": "brass",
+      "voice": "baritone",
       "level": 0.1889822365046136,
       "pan": -0.15000000000000002
     },
@@ -492,7 +454,7 @@
       "count": 28,
       "duration": 3.5,
       "midi": 60,
-      "voice": "brass",
+      "voice": "mellophone",
       "level": 0.1889822365046136,
       "pan": 0.0
     },
@@ -500,7 +462,7 @@
       "count": 28,
       "duration": 3.5,
       "midi": 64,
-      "voice": "brass",
+      "voice": "mellophone",
       "level": 0.1889822365046136,
       "pan": 0.14999999999999997
     },
@@ -508,7 +470,7 @@
       "count": 28,
       "duration": 3.5,
       "midi": 67,
-      "voice": "brass",
+      "voice": "trumpet",
       "level": 0.1889822365046136,
       "pan": 0.30000000000000004
     },
@@ -516,23 +478,15 @@
       "count": 28,
       "duration": 3.5,
       "midi": 72,
-      "voice": "brass",
+      "voice": "trumpet",
       "level": 0.1889822365046136,
       "pan": 0.45
-    },
-    {
-      "count": 28,
-      "duration": 3,
-      "midi": 60,
-      "voice": "cymbal",
-      "level": 0.17,
-      "pan": 0.2
     },
     {
       "count": 32,
       "duration": 16,
       "midi": 24,
-      "voice": "low",
+      "voice": "tuba",
       "level": 0.24,
       "pan": 0
     },
@@ -540,7 +494,7 @@
       "count": 32,
       "duration": 16,
       "midi": 36,
-      "voice": "low",
+      "voice": "tuba",
       "level": 0.14,
       "pan": -0.25
     },
@@ -548,7 +502,7 @@
       "count": 32,
       "duration": 4,
       "midi": 60,
-      "voice": "brass",
+      "voice": "mellophone",
       "level": 0.15454545454545454,
       "pan": -0.55
     },
@@ -556,7 +510,7 @@
       "count": 32,
       "duration": 4,
       "midi": 60,
-      "voice": "brass",
+      "voice": "mellophone",
       "level": 0.15454545454545454,
       "pan": 0.05
     },
@@ -564,79 +518,15 @@
       "count": 32,
       "duration": 4,
       "midi": 60,
-      "voice": "brass",
+      "voice": "mellophone",
       "level": 0.15454545454545454,
       "pan": 0.55
-    },
-    {
-      "count": 32,
-      "duration": 0.35,
-      "midi": 36,
-      "voice": "bass",
-      "level": 0.15,
-      "pan": 0
-    },
-    {
-      "count": 33,
-      "duration": 0.35,
-      "midi": 36,
-      "voice": "bass",
-      "level": 0.15,
-      "pan": 0
-    },
-    {
-      "count": 33,
-      "duration": 0.3,
-      "midi": 60,
-      "voice": "snare",
-      "level": 0.13,
-      "pan": 0.25
-    },
-    {
-      "count": 34,
-      "duration": 0.35,
-      "midi": 36,
-      "voice": "bass",
-      "level": 0.15,
-      "pan": 0
-    },
-    {
-      "count": 35,
-      "duration": 0.35,
-      "midi": 36,
-      "voice": "bass",
-      "level": 0.15,
-      "pan": 0
-    },
-    {
-      "count": 35,
-      "duration": 0.3,
-      "midi": 60,
-      "voice": "snare",
-      "level": 0.13,
-      "pan": 0.25
-    },
-    {
-      "count": 35.5,
-      "duration": 0.2,
-      "midi": 60,
-      "voice": "snare",
-      "level": 0.09,
-      "pan": 0.25
-    },
-    {
-      "count": 35.75,
-      "duration": 0.2,
-      "midi": 60,
-      "voice": "snare",
-      "level": 0.09,
-      "pan": 0.25
     },
     {
       "count": 36,
       "duration": 4,
       "midi": 67,
-      "voice": "brass",
+      "voice": "trumpet",
       "level": 0.15454545454545454,
       "pan": -0.55
     },
@@ -644,7 +534,7 @@
       "count": 36,
       "duration": 4,
       "midi": 67,
-      "voice": "brass",
+      "voice": "trumpet",
       "level": 0.15454545454545454,
       "pan": 0.05
     },
@@ -652,79 +542,15 @@
       "count": 36,
       "duration": 4,
       "midi": 67,
-      "voice": "brass",
+      "voice": "trumpet",
       "level": 0.15454545454545454,
       "pan": 0.55
-    },
-    {
-      "count": 36,
-      "duration": 0.35,
-      "midi": 36,
-      "voice": "bass",
-      "level": 0.15,
-      "pan": 0
-    },
-    {
-      "count": 37,
-      "duration": 0.35,
-      "midi": 36,
-      "voice": "bass",
-      "level": 0.15,
-      "pan": 0
-    },
-    {
-      "count": 37,
-      "duration": 0.3,
-      "midi": 60,
-      "voice": "snare",
-      "level": 0.13,
-      "pan": 0.25
-    },
-    {
-      "count": 38,
-      "duration": 0.35,
-      "midi": 36,
-      "voice": "bass",
-      "level": 0.15,
-      "pan": 0
-    },
-    {
-      "count": 39,
-      "duration": 0.35,
-      "midi": 36,
-      "voice": "bass",
-      "level": 0.15,
-      "pan": 0
-    },
-    {
-      "count": 39,
-      "duration": 0.3,
-      "midi": 60,
-      "voice": "snare",
-      "level": 0.13,
-      "pan": 0.25
-    },
-    {
-      "count": 39.5,
-      "duration": 0.2,
-      "midi": 60,
-      "voice": "snare",
-      "level": 0.09,
-      "pan": 0.25
-    },
-    {
-      "count": 39.75,
-      "duration": 0.2,
-      "midi": 60,
-      "voice": "snare",
-      "level": 0.09,
-      "pan": 0.25
     },
     {
       "count": 40,
       "duration": 6,
       "midi": 72,
-      "voice": "brass",
+      "voice": "trumpet",
       "level": 0.15454545454545454,
       "pan": -0.55
     },
@@ -732,7 +558,7 @@
       "count": 40,
       "duration": 6,
       "midi": 72,
-      "voice": "brass",
+      "voice": "trumpet",
       "level": 0.15454545454545454,
       "pan": 0.05
     },
@@ -740,111 +566,31 @@
       "count": 40,
       "duration": 6,
       "midi": 72,
-      "voice": "brass",
+      "voice": "trumpet",
       "level": 0.15454545454545454,
       "pan": 0.55
     },
     {
-      "count": 40,
-      "duration": 0.35,
-      "midi": 36,
-      "voice": "bass",
-      "level": 0.15,
-      "pan": 0
-    },
-    {
-      "count": 41,
-      "duration": 0.35,
-      "midi": 36,
-      "voice": "bass",
-      "level": 0.15,
-      "pan": 0
-    },
-    {
-      "count": 41,
-      "duration": 0.3,
-      "midi": 60,
-      "voice": "snare",
-      "level": 0.13,
+      "count": 44,
+      "duration": 0.75,
+      "midi": 48,
+      "voice": "baritone",
+      "level": 0.16,
       "pan": 0.25
     },
     {
-      "count": 42,
-      "duration": 0.35,
-      "midi": 36,
-      "voice": "bass",
-      "level": 0.15,
-      "pan": 0
-    },
-    {
-      "count": 43,
-      "duration": 0.35,
-      "midi": 36,
-      "voice": "bass",
-      "level": 0.15,
-      "pan": 0
-    },
-    {
-      "count": 43,
-      "duration": 0.3,
-      "midi": 60,
-      "voice": "snare",
-      "level": 0.13,
+      "count": 45,
+      "duration": 0.75,
+      "midi": 55,
+      "voice": "baritone",
+      "level": 0.16,
       "pan": 0.25
-    },
-    {
-      "count": 43.5,
-      "duration": 0.2,
-      "midi": 60,
-      "voice": "snare",
-      "level": 0.09,
-      "pan": 0.25
-    },
-    {
-      "count": 43.75,
-      "duration": 0.2,
-      "midi": 60,
-      "voice": "snare",
-      "level": 0.09,
-      "pan": 0.25
-    },
-    {
-      "count": 44.0,
-      "duration": 0.45,
-      "midi": 36,
-      "voice": "timpani",
-      "level": 0.3,
-      "pan": 0
-    },
-    {
-      "count": 44.5,
-      "duration": 0.45,
-      "midi": 43,
-      "voice": "timpani",
-      "level": 0.3,
-      "pan": 0
-    },
-    {
-      "count": 45.0,
-      "duration": 0.45,
-      "midi": 36,
-      "voice": "timpani",
-      "level": 0.3,
-      "pan": 0
-    },
-    {
-      "count": 45.5,
-      "duration": 0.45,
-      "midi": 43,
-      "voice": "timpani",
-      "level": 0.3,
-      "pan": 0
     },
     {
       "count": 46,
       "duration": 2,
       "midi": 36,
-      "voice": "brass",
+      "voice": "tuba",
       "level": 0.11565712874082354,
       "pan": -0.45
     },
@@ -852,7 +598,7 @@
       "count": 46,
       "duration": 2,
       "midi": 48,
-      "voice": "brass",
+      "voice": "baritone",
       "level": 0.11565712874082354,
       "pan": -0.30000000000000004
     },
@@ -860,7 +606,7 @@
       "count": 46,
       "duration": 2,
       "midi": 55,
-      "voice": "brass",
+      "voice": "baritone",
       "level": 0.11565712874082354,
       "pan": -0.15000000000000002
     },
@@ -868,7 +614,7 @@
       "count": 46,
       "duration": 2,
       "midi": 60,
-      "voice": "brass",
+      "voice": "mellophone",
       "level": 0.11565712874082354,
       "pan": 0.0
     },
@@ -876,7 +622,7 @@
       "count": 46,
       "duration": 2,
       "midi": 64,
-      "voice": "brass",
+      "voice": "mellophone",
       "level": 0.11565712874082354,
       "pan": 0.14999999999999997
     },
@@ -884,7 +630,7 @@
       "count": 46,
       "duration": 2,
       "midi": 67,
-      "voice": "brass",
+      "voice": "trumpet",
       "level": 0.11565712874082354,
       "pan": 0.30000000000000004
     },
@@ -892,47 +638,31 @@
       "count": 46,
       "duration": 2,
       "midi": 72,
-      "voice": "brass",
+      "voice": "trumpet",
       "level": 0.11565712874082354,
       "pan": 0.45
     },
     {
-      "count": 46.0,
-      "duration": 0.45,
-      "midi": 36,
-      "voice": "timpani",
-      "level": 0.3,
-      "pan": 0
+      "count": 46,
+      "duration": 0.75,
+      "midi": 60,
+      "voice": "mellophone",
+      "level": 0.16,
+      "pan": 0.25
     },
     {
-      "count": 46.5,
-      "duration": 0.45,
-      "midi": 43,
-      "voice": "timpani",
-      "level": 0.3,
-      "pan": 0
-    },
-    {
-      "count": 47.0,
-      "duration": 0.45,
-      "midi": 36,
-      "voice": "timpani",
-      "level": 0.3,
-      "pan": 0
-    },
-    {
-      "count": 47.5,
-      "duration": 0.45,
-      "midi": 43,
-      "voice": "timpani",
-      "level": 0.3,
-      "pan": 0
+      "count": 47,
+      "duration": 0.75,
+      "midi": 55,
+      "voice": "baritone",
+      "level": 0.16,
+      "pan": 0.25
     },
     {
       "count": 48,
       "duration": 4,
       "midi": 36,
-      "voice": "brass",
+      "voice": "tuba",
       "level": 0.19654152596479815,
       "pan": -0.45
     },
@@ -940,7 +670,7 @@
       "count": 48,
       "duration": 4,
       "midi": 43,
-      "voice": "brass",
+      "voice": "tuba",
       "level": 0.19654152596479815,
       "pan": -0.30000000000000004
     },
@@ -948,7 +678,7 @@
       "count": 48,
       "duration": 4,
       "midi": 48,
-      "voice": "brass",
+      "voice": "baritone",
       "level": 0.19654152596479815,
       "pan": -0.15000000000000002
     },
@@ -956,7 +686,7 @@
       "count": 48,
       "duration": 4,
       "midi": 55,
-      "voice": "brass",
+      "voice": "baritone",
       "level": 0.19654152596479815,
       "pan": 0.0
     },
@@ -964,7 +694,7 @@
       "count": 48,
       "duration": 4,
       "midi": 63,
-      "voice": "brass",
+      "voice": "mellophone",
       "level": 0.19654152596479815,
       "pan": 0.14999999999999997
     },
@@ -972,7 +702,7 @@
       "count": 48,
       "duration": 4,
       "midi": 67,
-      "voice": "brass",
+      "voice": "trumpet",
       "level": 0.19654152596479815,
       "pan": 0.30000000000000004
     },
@@ -980,23 +710,15 @@
       "count": 48,
       "duration": 4,
       "midi": 72,
-      "voice": "brass",
+      "voice": "trumpet",
       "level": 0.19654152596479815,
       "pan": 0.45
-    },
-    {
-      "count": 48,
-      "duration": 3,
-      "midi": 60,
-      "voice": "cymbal",
-      "level": 0.17,
-      "pan": 0.2
     },
     {
       "count": 52,
       "duration": 3.5,
       "midi": 36,
-      "voice": "brass",
+      "voice": "tuba",
       "level": 0.21166010488516726,
       "pan": -0.45
     },
@@ -1004,7 +726,7 @@
       "count": 52,
       "duration": 3.5,
       "midi": 48,
-      "voice": "brass",
+      "voice": "baritone",
       "level": 0.21166010488516726,
       "pan": -0.30000000000000004
     },
@@ -1012,7 +734,7 @@
       "count": 52,
       "duration": 3.5,
       "midi": 55,
-      "voice": "brass",
+      "voice": "baritone",
       "level": 0.21166010488516726,
       "pan": -0.15000000000000002
     },
@@ -1020,7 +742,7 @@
       "count": 52,
       "duration": 3.5,
       "midi": 60,
-      "voice": "brass",
+      "voice": "mellophone",
       "level": 0.21166010488516726,
       "pan": 0.0
     },
@@ -1028,7 +750,7 @@
       "count": 52,
       "duration": 3.5,
       "midi": 64,
-      "voice": "brass",
+      "voice": "mellophone",
       "level": 0.21166010488516726,
       "pan": 0.14999999999999997
     },
@@ -1036,7 +758,7 @@
       "count": 52,
       "duration": 3.5,
       "midi": 67,
-      "voice": "brass",
+      "voice": "trumpet",
       "level": 0.21166010488516726,
       "pan": 0.30000000000000004
     },
@@ -1044,23 +766,15 @@
       "count": 52,
       "duration": 3.5,
       "midi": 76,
-      "voice": "brass",
+      "voice": "trumpet",
       "level": 0.21166010488516726,
       "pan": 0.45
-    },
-    {
-      "count": 52,
-      "duration": 3,
-      "midi": 60,
-      "voice": "cymbal",
-      "level": 0.17,
-      "pan": 0.2
     },
     {
       "count": 56,
       "duration": 16,
       "midi": 24,
-      "voice": "low",
+      "voice": "tuba",
       "level": 0.24,
       "pan": 0
     },
@@ -1068,7 +782,7 @@
       "count": 56,
       "duration": 16,
       "midi": 36,
-      "voice": "low",
+      "voice": "tuba",
       "level": 0.14,
       "pan": -0.25
     },
@@ -1076,7 +790,7 @@
       "count": 56,
       "duration": 4,
       "midi": 60,
-      "voice": "brass",
+      "voice": "mellophone",
       "level": 0.1909090909090909,
       "pan": -0.55
     },
@@ -1084,7 +798,7 @@
       "count": 56,
       "duration": 4,
       "midi": 60,
-      "voice": "brass",
+      "voice": "mellophone",
       "level": 0.1909090909090909,
       "pan": 0.05
     },
@@ -1092,79 +806,15 @@
       "count": 56,
       "duration": 4,
       "midi": 60,
-      "voice": "brass",
+      "voice": "mellophone",
       "level": 0.1909090909090909,
       "pan": 0.55
-    },
-    {
-      "count": 56,
-      "duration": 0.35,
-      "midi": 36,
-      "voice": "bass",
-      "level": 0.15,
-      "pan": 0
-    },
-    {
-      "count": 57,
-      "duration": 0.35,
-      "midi": 36,
-      "voice": "bass",
-      "level": 0.15,
-      "pan": 0
-    },
-    {
-      "count": 57,
-      "duration": 0.3,
-      "midi": 60,
-      "voice": "snare",
-      "level": 0.13,
-      "pan": 0.25
-    },
-    {
-      "count": 58,
-      "duration": 0.35,
-      "midi": 36,
-      "voice": "bass",
-      "level": 0.15,
-      "pan": 0
-    },
-    {
-      "count": 59,
-      "duration": 0.35,
-      "midi": 36,
-      "voice": "bass",
-      "level": 0.15,
-      "pan": 0
-    },
-    {
-      "count": 59,
-      "duration": 0.3,
-      "midi": 60,
-      "voice": "snare",
-      "level": 0.13,
-      "pan": 0.25
-    },
-    {
-      "count": 59.5,
-      "duration": 0.2,
-      "midi": 60,
-      "voice": "snare",
-      "level": 0.09,
-      "pan": 0.25
-    },
-    {
-      "count": 59.75,
-      "duration": 0.2,
-      "midi": 60,
-      "voice": "snare",
-      "level": 0.09,
-      "pan": 0.25
     },
     {
       "count": 60,
       "duration": 4,
       "midi": 67,
-      "voice": "brass",
+      "voice": "trumpet",
       "level": 0.1909090909090909,
       "pan": -0.55
     },
@@ -1172,7 +822,7 @@
       "count": 60,
       "duration": 4,
       "midi": 67,
-      "voice": "brass",
+      "voice": "trumpet",
       "level": 0.1909090909090909,
       "pan": 0.05
     },
@@ -1180,79 +830,15 @@
       "count": 60,
       "duration": 4,
       "midi": 67,
-      "voice": "brass",
+      "voice": "trumpet",
       "level": 0.1909090909090909,
       "pan": 0.55
-    },
-    {
-      "count": 60,
-      "duration": 0.35,
-      "midi": 36,
-      "voice": "bass",
-      "level": 0.15,
-      "pan": 0
-    },
-    {
-      "count": 61,
-      "duration": 0.35,
-      "midi": 36,
-      "voice": "bass",
-      "level": 0.15,
-      "pan": 0
-    },
-    {
-      "count": 61,
-      "duration": 0.3,
-      "midi": 60,
-      "voice": "snare",
-      "level": 0.13,
-      "pan": 0.25
-    },
-    {
-      "count": 62,
-      "duration": 0.35,
-      "midi": 36,
-      "voice": "bass",
-      "level": 0.15,
-      "pan": 0
-    },
-    {
-      "count": 63,
-      "duration": 0.35,
-      "midi": 36,
-      "voice": "bass",
-      "level": 0.15,
-      "pan": 0
-    },
-    {
-      "count": 63,
-      "duration": 0.3,
-      "midi": 60,
-      "voice": "snare",
-      "level": 0.13,
-      "pan": 0.25
-    },
-    {
-      "count": 63.5,
-      "duration": 0.2,
-      "midi": 60,
-      "voice": "snare",
-      "level": 0.09,
-      "pan": 0.25
-    },
-    {
-      "count": 63.75,
-      "duration": 0.2,
-      "midi": 60,
-      "voice": "snare",
-      "level": 0.09,
-      "pan": 0.25
     },
     {
       "count": 64,
       "duration": 6,
       "midi": 72,
-      "voice": "brass",
+      "voice": "trumpet",
       "level": 0.1909090909090909,
       "pan": -0.55
     },
@@ -1260,7 +846,7 @@
       "count": 64,
       "duration": 6,
       "midi": 72,
-      "voice": "brass",
+      "voice": "trumpet",
       "level": 0.1909090909090909,
       "pan": 0.05
     },
@@ -1268,111 +854,31 @@
       "count": 64,
       "duration": 6,
       "midi": 72,
-      "voice": "brass",
+      "voice": "trumpet",
       "level": 0.1909090909090909,
       "pan": 0.55
     },
     {
-      "count": 64,
-      "duration": 0.35,
-      "midi": 36,
-      "voice": "bass",
-      "level": 0.15,
-      "pan": 0
-    },
-    {
-      "count": 65,
-      "duration": 0.35,
-      "midi": 36,
-      "voice": "bass",
-      "level": 0.15,
-      "pan": 0
-    },
-    {
-      "count": 65,
-      "duration": 0.3,
-      "midi": 60,
-      "voice": "snare",
-      "level": 0.13,
+      "count": 68,
+      "duration": 0.75,
+      "midi": 48,
+      "voice": "baritone",
+      "level": 0.16,
       "pan": 0.25
     },
     {
-      "count": 66,
-      "duration": 0.35,
-      "midi": 36,
-      "voice": "bass",
-      "level": 0.15,
-      "pan": 0
-    },
-    {
-      "count": 67,
-      "duration": 0.35,
-      "midi": 36,
-      "voice": "bass",
-      "level": 0.15,
-      "pan": 0
-    },
-    {
-      "count": 67,
-      "duration": 0.3,
-      "midi": 60,
-      "voice": "snare",
-      "level": 0.13,
+      "count": 69,
+      "duration": 0.75,
+      "midi": 55,
+      "voice": "baritone",
+      "level": 0.16,
       "pan": 0.25
-    },
-    {
-      "count": 67.5,
-      "duration": 0.2,
-      "midi": 60,
-      "voice": "snare",
-      "level": 0.09,
-      "pan": 0.25
-    },
-    {
-      "count": 67.75,
-      "duration": 0.2,
-      "midi": 60,
-      "voice": "snare",
-      "level": 0.09,
-      "pan": 0.25
-    },
-    {
-      "count": 68.0,
-      "duration": 0.45,
-      "midi": 36,
-      "voice": "timpani",
-      "level": 0.3,
-      "pan": 0
-    },
-    {
-      "count": 68.5,
-      "duration": 0.45,
-      "midi": 43,
-      "voice": "timpani",
-      "level": 0.3,
-      "pan": 0
-    },
-    {
-      "count": 69.0,
-      "duration": 0.45,
-      "midi": 36,
-      "voice": "timpani",
-      "level": 0.3,
-      "pan": 0
-    },
-    {
-      "count": 69.5,
-      "duration": 0.45,
-      "midi": 43,
-      "voice": "timpani",
-      "level": 0.3,
-      "pan": 0
     },
     {
       "count": 70,
       "duration": 2,
       "midi": 36,
-      "voice": "brass",
+      "voice": "tuba",
       "level": 0.14287057079748788,
       "pan": -0.45
     },
@@ -1380,7 +886,7 @@
       "count": 70,
       "duration": 2,
       "midi": 48,
-      "voice": "brass",
+      "voice": "baritone",
       "level": 0.14287057079748788,
       "pan": -0.30000000000000004
     },
@@ -1388,7 +894,7 @@
       "count": 70,
       "duration": 2,
       "midi": 55,
-      "voice": "brass",
+      "voice": "baritone",
       "level": 0.14287057079748788,
       "pan": -0.15000000000000002
     },
@@ -1396,7 +902,7 @@
       "count": 70,
       "duration": 2,
       "midi": 60,
-      "voice": "brass",
+      "voice": "mellophone",
       "level": 0.14287057079748788,
       "pan": 0.0
     },
@@ -1404,7 +910,7 @@
       "count": 70,
       "duration": 2,
       "midi": 64,
-      "voice": "brass",
+      "voice": "mellophone",
       "level": 0.14287057079748788,
       "pan": 0.14999999999999997
     },
@@ -1412,7 +918,7 @@
       "count": 70,
       "duration": 2,
       "midi": 67,
-      "voice": "brass",
+      "voice": "trumpet",
       "level": 0.14287057079748788,
       "pan": 0.30000000000000004
     },
@@ -1420,47 +926,31 @@
       "count": 70,
       "duration": 2,
       "midi": 72,
-      "voice": "brass",
+      "voice": "trumpet",
       "level": 0.14287057079748788,
       "pan": 0.45
     },
     {
-      "count": 70.0,
-      "duration": 0.45,
-      "midi": 36,
-      "voice": "timpani",
-      "level": 0.3,
-      "pan": 0
+      "count": 70,
+      "duration": 0.75,
+      "midi": 60,
+      "voice": "mellophone",
+      "level": 0.16,
+      "pan": 0.25
     },
     {
-      "count": 70.5,
-      "duration": 0.45,
-      "midi": 43,
-      "voice": "timpani",
-      "level": 0.3,
-      "pan": 0
-    },
-    {
-      "count": 71.0,
-      "duration": 0.45,
-      "midi": 36,
-      "voice": "timpani",
-      "level": 0.3,
-      "pan": 0
-    },
-    {
-      "count": 71.5,
-      "duration": 0.45,
-      "midi": 43,
-      "voice": "timpani",
-      "level": 0.3,
-      "pan": 0
+      "count": 71,
+      "duration": 0.75,
+      "midi": 55,
+      "voice": "baritone",
+      "level": 0.16,
+      "pan": 0.25
     },
     {
       "count": 72,
       "duration": 7.5,
       "midi": 36,
-      "voice": "brass",
+      "voice": "tuba",
       "level": 0.21333333333333335,
       "pan": -0.45
     },
@@ -1468,7 +958,7 @@
       "count": 72,
       "duration": 7.5,
       "midi": 43,
-      "voice": "brass",
+      "voice": "tuba",
       "level": 0.21333333333333335,
       "pan": -0.3375
     },
@@ -1476,7 +966,7 @@
       "count": 72,
       "duration": 7.5,
       "midi": 48,
-      "voice": "brass",
+      "voice": "baritone",
       "level": 0.21333333333333335,
       "pan": -0.225
     },
@@ -1484,7 +974,7 @@
       "count": 72,
       "duration": 7.5,
       "midi": 55,
-      "voice": "brass",
+      "voice": "baritone",
       "level": 0.21333333333333335,
       "pan": -0.1125
     },
@@ -1492,7 +982,7 @@
       "count": 72,
       "duration": 7.5,
       "midi": 60,
-      "voice": "brass",
+      "voice": "mellophone",
       "level": 0.21333333333333335,
       "pan": 0.0
     },
@@ -1500,7 +990,7 @@
       "count": 72,
       "duration": 7.5,
       "midi": 64,
-      "voice": "brass",
+      "voice": "mellophone",
       "level": 0.21333333333333335,
       "pan": 0.1125
     },
@@ -1508,7 +998,7 @@
       "count": 72,
       "duration": 7.5,
       "midi": 67,
-      "voice": "brass",
+      "voice": "trumpet",
       "level": 0.21333333333333335,
       "pan": 0.225
     },
@@ -1516,7 +1006,7 @@
       "count": 72,
       "duration": 7.5,
       "midi": 72,
-      "voice": "brass",
+      "voice": "trumpet",
       "level": 0.21333333333333335,
       "pan": 0.3375
     },
@@ -1524,23 +1014,15 @@
       "count": 72,
       "duration": 7.5,
       "midi": 76,
-      "voice": "brass",
+      "voice": "trumpet",
       "level": 0.21333333333333335,
       "pan": 0.45
-    },
-    {
-      "count": 72,
-      "duration": 3,
-      "midi": 60,
-      "voice": "cymbal",
-      "level": 0.17,
-      "pan": 0.2
     },
     {
       "count": 80,
       "duration": 16,
       "midi": 24,
-      "voice": "low",
+      "voice": "tuba",
       "level": 0.24,
       "pan": 0
     },
@@ -1548,7 +1030,7 @@
       "count": 80,
       "duration": 16,
       "midi": 36,
-      "voice": "low",
+      "voice": "tuba",
       "level": 0.14,
       "pan": -0.25
     },
@@ -1556,7 +1038,7 @@
       "count": 80,
       "duration": 1.75,
       "midi": 60,
-      "voice": "brass",
+      "voice": "mellophone",
       "level": 0.26,
       "pan": -0.4
     },
@@ -1564,39 +1046,15 @@
       "count": 80,
       "duration": 1.75,
       "midi": 48,
-      "voice": "brass",
+      "voice": "baritone",
       "level": 0.19,
       "pan": 0.4
-    },
-    {
-      "count": 80,
-      "duration": 0.35,
-      "midi": 36,
-      "voice": "bass",
-      "level": 0.15,
-      "pan": 0
-    },
-    {
-      "count": 81,
-      "duration": 0.35,
-      "midi": 36,
-      "voice": "bass",
-      "level": 0.15,
-      "pan": 0
-    },
-    {
-      "count": 81,
-      "duration": 0.3,
-      "midi": 60,
-      "voice": "snare",
-      "level": 0.13,
-      "pan": 0.25
     },
     {
       "count": 82,
       "duration": 1.75,
       "midi": 62,
-      "voice": "brass",
+      "voice": "mellophone",
       "level": 0.26,
       "pan": -0.4
     },
@@ -1604,55 +1062,15 @@
       "count": 82,
       "duration": 1.75,
       "midi": 50,
-      "voice": "brass",
+      "voice": "baritone",
       "level": 0.19,
       "pan": 0.4
-    },
-    {
-      "count": 82,
-      "duration": 0.35,
-      "midi": 36,
-      "voice": "bass",
-      "level": 0.15,
-      "pan": 0
-    },
-    {
-      "count": 83,
-      "duration": 0.35,
-      "midi": 36,
-      "voice": "bass",
-      "level": 0.15,
-      "pan": 0
-    },
-    {
-      "count": 83,
-      "duration": 0.3,
-      "midi": 60,
-      "voice": "snare",
-      "level": 0.13,
-      "pan": 0.25
-    },
-    {
-      "count": 83.5,
-      "duration": 0.2,
-      "midi": 60,
-      "voice": "snare",
-      "level": 0.09,
-      "pan": 0.25
-    },
-    {
-      "count": 83.75,
-      "duration": 0.2,
-      "midi": 60,
-      "voice": "snare",
-      "level": 0.09,
-      "pan": 0.25
     },
     {
       "count": 84,
       "duration": 1.75,
       "midi": 64,
-      "voice": "brass",
+      "voice": "mellophone",
       "level": 0.26,
       "pan": -0.4
     },
@@ -1660,39 +1078,15 @@
       "count": 84,
       "duration": 1.75,
       "midi": 52,
-      "voice": "brass",
+      "voice": "baritone",
       "level": 0.19,
       "pan": 0.4
-    },
-    {
-      "count": 84,
-      "duration": 0.35,
-      "midi": 36,
-      "voice": "bass",
-      "level": 0.15,
-      "pan": 0
-    },
-    {
-      "count": 85,
-      "duration": 0.35,
-      "midi": 36,
-      "voice": "bass",
-      "level": 0.15,
-      "pan": 0
-    },
-    {
-      "count": 85,
-      "duration": 0.3,
-      "midi": 60,
-      "voice": "snare",
-      "level": 0.13,
-      "pan": 0.25
     },
     {
       "count": 86,
       "duration": 1.75,
       "midi": 67,
-      "voice": "brass",
+      "voice": "trumpet",
       "level": 0.26,
       "pan": -0.4
     },
@@ -1700,55 +1094,15 @@
       "count": 86,
       "duration": 1.75,
       "midi": 55,
-      "voice": "brass",
+      "voice": "baritone",
       "level": 0.19,
       "pan": 0.4
-    },
-    {
-      "count": 86,
-      "duration": 0.35,
-      "midi": 36,
-      "voice": "bass",
-      "level": 0.15,
-      "pan": 0
-    },
-    {
-      "count": 87,
-      "duration": 0.35,
-      "midi": 36,
-      "voice": "bass",
-      "level": 0.15,
-      "pan": 0
-    },
-    {
-      "count": 87,
-      "duration": 0.3,
-      "midi": 60,
-      "voice": "snare",
-      "level": 0.13,
-      "pan": 0.25
-    },
-    {
-      "count": 87.5,
-      "duration": 0.2,
-      "midi": 60,
-      "voice": "snare",
-      "level": 0.09,
-      "pan": 0.25
-    },
-    {
-      "count": 87.75,
-      "duration": 0.2,
-      "midi": 60,
-      "voice": "snare",
-      "level": 0.09,
-      "pan": 0.25
     },
     {
       "count": 88,
       "duration": 1.75,
       "midi": 64,
-      "voice": "brass",
+      "voice": "mellophone",
       "level": 0.26,
       "pan": -0.4
     },
@@ -1756,39 +1110,15 @@
       "count": 88,
       "duration": 1.75,
       "midi": 52,
-      "voice": "brass",
+      "voice": "baritone",
       "level": 0.19,
       "pan": 0.4
-    },
-    {
-      "count": 88,
-      "duration": 0.35,
-      "midi": 36,
-      "voice": "bass",
-      "level": 0.15,
-      "pan": 0
-    },
-    {
-      "count": 89,
-      "duration": 0.35,
-      "midi": 36,
-      "voice": "bass",
-      "level": 0.15,
-      "pan": 0
-    },
-    {
-      "count": 89,
-      "duration": 0.3,
-      "midi": 60,
-      "voice": "snare",
-      "level": 0.13,
-      "pan": 0.25
     },
     {
       "count": 90,
       "duration": 1.75,
       "midi": 67,
-      "voice": "brass",
+      "voice": "trumpet",
       "level": 0.26,
       "pan": -0.4
     },
@@ -1796,55 +1126,15 @@
       "count": 90,
       "duration": 1.75,
       "midi": 55,
-      "voice": "brass",
+      "voice": "baritone",
       "level": 0.19,
       "pan": 0.4
-    },
-    {
-      "count": 90,
-      "duration": 0.35,
-      "midi": 36,
-      "voice": "bass",
-      "level": 0.15,
-      "pan": 0
-    },
-    {
-      "count": 91,
-      "duration": 0.35,
-      "midi": 36,
-      "voice": "bass",
-      "level": 0.15,
-      "pan": 0
-    },
-    {
-      "count": 91,
-      "duration": 0.3,
-      "midi": 60,
-      "voice": "snare",
-      "level": 0.13,
-      "pan": 0.25
-    },
-    {
-      "count": 91.5,
-      "duration": 0.2,
-      "midi": 60,
-      "voice": "snare",
-      "level": 0.09,
-      "pan": 0.25
-    },
-    {
-      "count": 91.75,
-      "duration": 0.2,
-      "midi": 60,
-      "voice": "snare",
-      "level": 0.09,
-      "pan": 0.25
     },
     {
       "count": 92,
       "duration": 1.75,
       "midi": 72,
-      "voice": "brass",
+      "voice": "trumpet",
       "level": 0.26,
       "pan": -0.4
     },
@@ -1852,71 +1142,31 @@
       "count": 92,
       "duration": 1.75,
       "midi": 60,
-      "voice": "brass",
+      "voice": "mellophone",
       "level": 0.19,
       "pan": 0.4
     },
     {
-      "count": 92.0,
-      "duration": 0.45,
-      "midi": 36,
-      "voice": "timpani",
-      "level": 0.3,
-      "pan": 0
-    },
-    {
       "count": 92,
-      "duration": 0.35,
-      "midi": 36,
-      "voice": "bass",
-      "level": 0.15,
-      "pan": 0
-    },
-    {
-      "count": 92.5,
-      "duration": 0.45,
-      "midi": 43,
-      "voice": "timpani",
-      "level": 0.3,
-      "pan": 0
-    },
-    {
-      "count": 93.0,
-      "duration": 0.45,
-      "midi": 36,
-      "voice": "timpani",
-      "level": 0.3,
-      "pan": 0
-    },
-    {
-      "count": 93,
-      "duration": 0.35,
-      "midi": 36,
-      "voice": "bass",
-      "level": 0.15,
-      "pan": 0
-    },
-    {
-      "count": 93,
-      "duration": 0.3,
-      "midi": 60,
-      "voice": "snare",
-      "level": 0.13,
+      "duration": 0.75,
+      "midi": 48,
+      "voice": "baritone",
+      "level": 0.16,
       "pan": 0.25
     },
     {
-      "count": 93.5,
-      "duration": 0.45,
-      "midi": 43,
-      "voice": "timpani",
-      "level": 0.3,
-      "pan": 0
+      "count": 93,
+      "duration": 0.75,
+      "midi": 55,
+      "voice": "baritone",
+      "level": 0.16,
+      "pan": 0.25
     },
     {
       "count": 94,
       "duration": 1.75,
       "midi": 74,
-      "voice": "brass",
+      "voice": "trumpet",
       "level": 0.26,
       "pan": -0.4
     },
@@ -1924,87 +1174,31 @@
       "count": 94,
       "duration": 1.75,
       "midi": 62,
-      "voice": "brass",
+      "voice": "mellophone",
       "level": 0.19,
       "pan": 0.4
     },
     {
-      "count": 94.0,
-      "duration": 0.45,
-      "midi": 36,
-      "voice": "timpani",
-      "level": 0.3,
-      "pan": 0
-    },
-    {
       "count": 94,
-      "duration": 0.35,
-      "midi": 36,
-      "voice": "bass",
-      "level": 0.15,
-      "pan": 0
-    },
-    {
-      "count": 94.5,
-      "duration": 0.45,
-      "midi": 43,
-      "voice": "timpani",
-      "level": 0.3,
-      "pan": 0
-    },
-    {
-      "count": 95.0,
-      "duration": 0.45,
-      "midi": 36,
-      "voice": "timpani",
-      "level": 0.3,
-      "pan": 0
-    },
-    {
-      "count": 95,
-      "duration": 0.35,
-      "midi": 36,
-      "voice": "bass",
-      "level": 0.15,
-      "pan": 0
-    },
-    {
-      "count": 95,
-      "duration": 0.3,
+      "duration": 0.75,
       "midi": 60,
-      "voice": "snare",
-      "level": 0.13,
+      "voice": "mellophone",
+      "level": 0.16,
       "pan": 0.25
     },
     {
-      "count": 95.5,
-      "duration": 0.45,
-      "midi": 43,
-      "voice": "timpani",
-      "level": 0.3,
-      "pan": 0
-    },
-    {
-      "count": 95.5,
-      "duration": 0.2,
-      "midi": 60,
-      "voice": "snare",
-      "level": 0.09,
-      "pan": 0.25
-    },
-    {
-      "count": 95.75,
-      "duration": 0.2,
-      "midi": 60,
-      "voice": "snare",
-      "level": 0.09,
+      "count": 95,
+      "duration": 0.75,
+      "midi": 55,
+      "voice": "baritone",
+      "level": 0.16,
       "pan": 0.25
     },
     {
       "count": 96,
       "duration": 16,
       "midi": 24,
-      "voice": "low",
+      "voice": "tuba",
       "level": 0.24,
       "pan": 0
     },
@@ -2012,7 +1206,7 @@
       "count": 96,
       "duration": 16,
       "midi": 36,
-      "voice": "low",
+      "voice": "tuba",
       "level": 0.14,
       "pan": -0.25
     },
@@ -2020,7 +1214,7 @@
       "count": 96,
       "duration": 8,
       "midi": 36,
-      "voice": "brass",
+      "voice": "tuba",
       "level": 0.22,
       "pan": -0.45
     },
@@ -2028,7 +1222,7 @@
       "count": 96,
       "duration": 8,
       "midi": 43,
-      "voice": "brass",
+      "voice": "tuba",
       "level": 0.22,
       "pan": -0.3375
     },
@@ -2036,7 +1230,7 @@
       "count": 96,
       "duration": 8,
       "midi": 48,
-      "voice": "brass",
+      "voice": "baritone",
       "level": 0.22,
       "pan": -0.225
     },
@@ -2044,7 +1238,7 @@
       "count": 96,
       "duration": 8,
       "midi": 55,
-      "voice": "brass",
+      "voice": "baritone",
       "level": 0.22,
       "pan": -0.1125
     },
@@ -2052,7 +1246,7 @@
       "count": 96,
       "duration": 8,
       "midi": 60,
-      "voice": "brass",
+      "voice": "mellophone",
       "level": 0.22,
       "pan": 0.0
     },
@@ -2060,7 +1254,7 @@
       "count": 96,
       "duration": 8,
       "midi": 64,
-      "voice": "brass",
+      "voice": "mellophone",
       "level": 0.22,
       "pan": 0.1125
     },
@@ -2068,7 +1262,7 @@
       "count": 96,
       "duration": 8,
       "midi": 67,
-      "voice": "brass",
+      "voice": "trumpet",
       "level": 0.22,
       "pan": 0.225
     },
@@ -2076,7 +1270,7 @@
       "count": 96,
       "duration": 8,
       "midi": 72,
-      "voice": "brass",
+      "voice": "trumpet",
       "level": 0.22,
       "pan": 0.3375
     },
@@ -2084,23 +1278,15 @@
       "count": 96,
       "duration": 8,
       "midi": 76,
-      "voice": "brass",
+      "voice": "trumpet",
       "level": 0.22,
       "pan": 0.45
-    },
-    {
-      "count": 96,
-      "duration": 3,
-      "midi": 60,
-      "voice": "cymbal",
-      "level": 0.17,
-      "pan": 0.2
     },
     {
       "count": 104,
       "duration": 8,
       "midi": 24,
-      "voice": "brass",
+      "voice": "tuba",
       "level": 0.2466576574931336,
       "pan": -0.45
     },
@@ -2108,7 +1294,7 @@
       "count": 104,
       "duration": 8,
       "midi": 36,
-      "voice": "brass",
+      "voice": "tuba",
       "level": 0.2466576574931336,
       "pan": -0.35000000000000003
     },
@@ -2116,7 +1302,7 @@
       "count": 104,
       "duration": 8,
       "midi": 48,
-      "voice": "brass",
+      "voice": "baritone",
       "level": 0.2466576574931336,
       "pan": -0.25
     },
@@ -2124,7 +1310,7 @@
       "count": 104,
       "duration": 8,
       "midi": 55,
-      "voice": "brass",
+      "voice": "baritone",
       "level": 0.2466576574931336,
       "pan": -0.15000000000000002
     },
@@ -2132,7 +1318,7 @@
       "count": 104,
       "duration": 8,
       "midi": 60,
-      "voice": "brass",
+      "voice": "mellophone",
       "level": 0.2466576574931336,
       "pan": -0.050000000000000024
     },
@@ -2140,7 +1326,7 @@
       "count": 104,
       "duration": 8,
       "midi": 64,
-      "voice": "brass",
+      "voice": "mellophone",
       "level": 0.2466576574931336,
       "pan": 0.050000000000000024
     },
@@ -2148,7 +1334,7 @@
       "count": 104,
       "duration": 8,
       "midi": 67,
-      "voice": "brass",
+      "voice": "trumpet",
       "level": 0.2466576574931336,
       "pan": 0.14999999999999997
     },
@@ -2156,7 +1342,7 @@
       "count": 104,
       "duration": 8,
       "midi": 72,
-      "voice": "brass",
+      "voice": "trumpet",
       "level": 0.2466576574931336,
       "pan": 0.25
     },
@@ -2164,7 +1350,7 @@
       "count": 104,
       "duration": 8,
       "midi": 76,
-      "voice": "brass",
+      "voice": "trumpet",
       "level": 0.2466576574931336,
       "pan": 0.35
     },
@@ -2172,17 +1358,9 @@
       "count": 104,
       "duration": 8,
       "midi": 79,
-      "voice": "brass",
+      "voice": "trumpet",
       "level": 0.2466576574931336,
       "pan": 0.45
-    },
-    {
-      "count": 104,
-      "duration": 3,
-      "midi": 60,
-      "voice": "cymbal",
-      "level": 0.17,
-      "pan": 0.2
     }
   ]
 }
