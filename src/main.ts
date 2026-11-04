@@ -1,39 +1,75 @@
 import * as THREE from "three";
 import "./style.css";
-import { show } from "./show";
-import { checkShow, distance, formatDot, parseDot, type Dot } from "./drill";
-import { Run, tempo, target, drift, PLAYER } from "./game";
-import { calibrationOffset } from "./tempo";
+import { distance, type Dot } from "./drill";
+import { shows, difficulties, tuning, type Difficulty } from "./repertoire";
+import {
+  PerformanceRun,
+  formMetrics,
+  type Result,
+  type Step,
+} from "./performance";
+import { Playback } from "./playback";
+import { Controls } from "./controls";
+import { RoomClient, type Packet } from "./multiplayer";
+import { readProgress, recordResult } from "./progress";
+import { conduct } from "./drum-major";
 import { loadCombinedMarcher } from "./combined-marcher";
 import { roster } from "./marching-motion";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
-const errors = checkShow(show);
-if (errors.length) throw Error(errors.join("\n"));
-const app = document.querySelector<HTMLDivElement>("#app")!;
-app.innerHTML = `<main><header><a class="brand" href="#">ON THE DOT<span>FIELD NOTES / 001</span></a><span class="edition">FIRST REHEARSAL · SOLO SLICE</span><button id="sound" aria-label="Toggle click sound">Sound on</button></header><section id="stage"><div id="scene"></div><div id="hud" hidden><div class="score"><label>DOT <b id="dot">100.0</b></label><label>FORM <b id="form">100.0</b></label></div><div id="page"></div><div id="beat"></div><div id="feedback" role="status"></div><canvas id="map" width="310" height="170" aria-label="Full field map: gold player, white dot, blue band"></canvas><div id="book" hidden></div><button id="pause">Pause · Esc</button></div><div id="overlay"></div></section><footer><span>← → STEER ON THE COUNT</span><span>TAB · DOT BOOK</span><span>112 BPM / 12 BRASS / 80 COUNTS</span></footer></main>`;
 const $ = (id: string) => document.getElementById(id)!;
+const esc = (value: unknown) =>
+  String(value).replace(
+    /[&<>"']/g,
+    (c) =>
+      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[
+        c
+      ]!,
+  );
+let selected = shows[0],
+  difficulty: Difficulty = "Medium",
+  playerId = 5;
+let mode: "menu" | "lobby" | "loading" | "run" | "recap" | "calibrate" = "menu";
+let run: PerformanceRun | undefined,
+  playback: Playback | undefined,
+  room: RoomClient | undefined;
+let lastPage = -1,
+  lastSend = 0,
+  startedRun = "",
+  rejoinUntil = 0,
+  lastBandBeat = 0;
+let fieldStyle = "";
+let overhead = false,
+  muted = false,
+  warningUntil = 0,
+  warningAt = -10,
+  roomInterrupted = false,
+  returningControl = false;
+let calibration = Number(localStorage.getItem("mb-calibration") ?? 0),
+  calStart = 0,
+  calLastBeat = -1,
+  calGaps: number[] = [];
+let bandSamples: number[] = [];
+const controls = new Controls(),
+  remote = new Map<
+    string,
+    { position: Dot; count: number; step?: Step; at: number }
+  >(),
+  results = new Map<
+    string,
+    { result: Result; incomplete: boolean; band: number }
+  >();
+const app = document.querySelector<HTMLDivElement>("#app")!;
+app.innerHTML = `<main><header><a class="brand" href="/">ON THE DOT<span>THE FIELD IS LISTENING</span></a><span class="edition">BRASS / RHYTHM / FORM</span><button id="sound">Sound on</button></header><section id="stage"><div id="scene"></div><div id="labels"></div><div id="hud" hidden><div id="page"></div><div id="beat"></div><div id="feedback" role="status"></div><canvas id="map" width="310" height="170" aria-label="Field overview"></canvas><canvas id="conductor" width="160" height="205" aria-label="Drum major conducting the musical count"></canvas><button id="view">Overhead</button><button id="pause">Pause</button><button id="recenter" hidden>Recenter tilt</button><button id="rhythm" hidden aria-label="Tap once for each step">STEP<span>tap the count</span></button></div><div id="overlay"></div><div id="notice" role="status"></div><div id="rotate">Turn your phone sideways to take the field.</div></section><footer><span>SPACE · STEP &nbsp; ↑ ↓ · TRAVEL &nbsp; ← → · ADJUST</span><span>4-TO-5 MAX · EVERY TAP COUNTS</span></footer></main>`;
 const overlay = $("overlay"),
   hud = $("hud");
-let audio: AudioContext;
-let start = 0,
-  mode: "menu" | "calibrate" | "run" | "recap" = "menu",
-  run: Run,
-  offset = Number(localStorage.getItem("mb-calibration") ?? 0),
-  muted = false,
-  paused = false,
-  pauseTime = 0,
-  nextClick = -8,
-  lastCount = -8,
-  calStart = 0,
-  calClicks = 0;
-let gaps: number[] = [];
-let lastTapBeat = -1;
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x0a1724);
 scene.fog = new THREE.Fog(0x0a1724, 80, 210);
 const camera = new THREE.PerspectiveCamera(48, 1, 0.1, 400),
   renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setPixelRatio(Math.min(devicePixelRatio, 1.75));
+renderer.setPixelRatio(
+  Math.min(devicePixelRatio, matchMedia("(pointer:coarse)").matches ? 1 : 1.75),
+);
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -50,7 +86,8 @@ scene.add(new THREE.HemisphereLight(0xcce9ff, 0x304234, 2));
 const light = new THREE.DirectionalLight(0xffedcd, 3);
 light.position.set(-30, 70, -30);
 light.castShadow = true;
-light.shadow.mapSize.set(2048, 2048);
+const shadowSize = matchMedia("(pointer:coarse)").matches ? 1024 : 2048;
+light.shadow.mapSize.set(shadowSize, shadowSize);
 Object.assign(light.shadow.camera, {
   left: -90,
   right: 90,
@@ -87,11 +124,13 @@ for (const y of [0, 85.33]) box(160, 0.08, 0.15, 0xe1ddc0, 0, 0.04, y);
 for (let tier = 0; tier < 5; tier++)
   box(175, 2, 5, 0x263c4e, 0, tier * 2, 98 + tier * 5);
 type DetailedMarcher = Awaited<ReturnType<typeof loadCombinedMarcher>>;
-const band: (DetailedMarcher | undefined)[] = new Array(show.performers.length);
+const band: (DetailedMarcher | undefined)[] = new Array(
+  selected.drill.performers.length,
+);
 let bandReady = false,
   bandError = false;
 Promise.all(
-  show.performers.map(async (_, id) => {
+  selected.drill.performers.map(async (_, id) => {
     const person = roster[id];
     const model = await loadCombinedMarcher(person.gender, person.height);
     band[id] = model;
@@ -101,6 +140,7 @@ Promise.all(
   .then(() => {
     bandReady = true;
     updateAssetStatus();
+    if (mode === "lobby") lobby();
   })
   .catch((error) => {
     bandError = true;
@@ -121,7 +161,7 @@ function updateAssetStatus() {
   if (startButton) startButton.disabled = !bandReady;
 }
 const ring = new THREE.Mesh(
-  new THREE.RingGeometry(0.65, 0.8, 40),
+  new THREE.RingGeometry(0.12, 0.2, 40),
   new THREE.MeshBasicMaterial({ color: 0xffd17c, side: THREE.DoubleSide }),
 );
 ring.rotation.x = -Math.PI / 2;
@@ -152,234 +192,685 @@ function drawMap(actual: Dot[], dot: Dot) {
     ctx.fill();
   };
   actual.forEach((p, i) =>
-    draw(p, i === PLAYER ? "#ffc76f" : "#9fcbd1", i === PLAYER ? 4 : 2),
+    draw(p, i === playerId ? "#ffc76f" : "#9fcbd1", i === playerId ? 4 : 2),
   );
   ctx.strokeStyle = "#fff";
   ctx.beginPath();
   ctx.arc(155 + dot.x * 1.8, 160 - dot.y * 1.75, 6, 0, Math.PI * 2);
   ctx.stroke();
 }
-function initAudio() {
-  audio ??= new AudioContext();
-  void audio.resume();
+function notice(text: string) {
+  $("notice").textContent = text;
+  setTimeout(() => {
+    if ($("notice").textContent === text) $("notice").textContent = "";
+  }, 5000);
 }
-function click(when: number, strong = false) {
-  if (muted) return;
-  const o = audio.createOscillator(),
-    g = audio.createGain();
-  o.frequency.value = strong ? 1100 : 740;
-  g.gain.setValueAtTime(0.12, when);
-  g.gain.exponentialRampToValueAtTime(0.001, when + 0.045);
-  o.connect(g).connect(audio.destination);
-  o.start(when);
-  o.stop(when + 0.05);
+function status(text: string) {
+  const el = document.getElementById("asset-status");
+  if (el) el.textContent = text;
+  else notice(text);
+}
+function getPlayback() {
+  playback ??= new Playback();
+  playback.gain.gain.value = muted ? 0 : 1;
+  return playback;
+}
+function showOptions(host = false) {
+  const progress = readProgress();
+  return shows
+    .map(
+      (s) =>
+        `<option value="${s.id}" ${s.id === selected.id ? "selected" : ""} ${!host && !progress.unlocked.includes(s.id) ? "disabled" : ""}>${s.name}${progress.unlocked.includes(s.id) ? "" : ` · unlock at ${tuning.unlock}`}</option>`,
+    )
+    .join("");
+}
+function difficultyOptions() {
+  return difficulties
+    .map((d) => `<option ${difficulty === d ? "selected" : ""}>${d}</option>`)
+    .join("");
+}
+function settings() {
+  return `<div class="settings"><label>SHOW<select id="show-choice">${showOptions()}</select></label><label>DIFFICULTY<select id="difficulty">${difficultyOptions()}</select></label></div>`;
+}
+function bindSettings(multiplayer = false) {
+  const change = async () => {
+    selected = shows.find(
+      (s) => s.id === ($("show-choice") as HTMLSelectElement).value,
+    )!;
+    difficulty = ($("difficulty") as HTMLSelectElement).value as Difficulty;
+    if (multiplayer)
+      try {
+        await room!.request("select", { show: selected.id, difficulty });
+      } catch (e) {
+        notice(String(e));
+      }
+    else updateBest();
+  };
+  $("show-choice").onchange = change;
+  $("difficulty").onchange = change;
+}
+function updateBest() {
+  const best = readProgress().best[`${selected.id}:${difficulty}`];
+  const el = document.getElementById("personal-best");
+  if (el)
+    el.textContent =
+      best === undefined
+        ? "Your first performance awaits."
+        : `Personal best · ${best.toFixed(1)} / 100`;
 }
 function menu() {
   mode = "menu";
   hud.hidden = true;
   overlay.hidden = false;
-  overlay.innerHTML = `<div class="intro"><p class="eyebrow">A MARCHING FIELD EXPERIMENT</p><h1>Find your dot.<br>Feel the line.</h1><p>You march automatically, with a slight tendency to drift. Nudge <strong>← / → on the click</strong> to bend your path. The gold marker is you; the larger ring is your dot. Balance your written dot against a drifting band.</p><div class="instructions"><span>01 &nbsp; Listen to the count-off</span><span>02 &nbsp; Steer relative to your path</span><span>03 &nbsp; Stand still on holds</span></div><button class="primary" id="start">Take the field <span>↗</span></button><button id="calibrate">Calibrate timing</button><a href="/uniform.html" style="display:block;margin-top:14px;color:#efc17a">Review the detailed character ↗</a><a href="/music.html" style="display:block;margin-top:14px;color:#efc17a">Listen to the Sunrise music draft ↗</a><small id="asset-status"></small><small id="calinfo">Calibration saved on this device · ${Math.round(offset * 1000)} ms</small><details><summary>Drill-sheet translator</summary><input id="drill" aria-label="Drill sheet coordinates" value="2 outside S1 40, 3 behind FH"><button id="translate">Translate & check</button><output id="translated"></output></details></div><div class="stamp">L1<span>THE FIRST<br>EIGHT COUNTS</span></div>`;
+  getPlaybackIfExistsStop();
+  overlay.innerHTML = `<div class="intro"><p class="eyebrow">A MARCHING FIELD GAME</p><h1>Every step.<br>Every interval.</h1><p>Tap <strong>Space</strong> on the count. Hold <strong>↑</strong> to travel forward or <strong>↓</strong> backward; add <strong>← →</strong> to adjust. Tapping with no travel input marks time. During holds, let the band play—and keep your feet still.</p>${settings()}<small id="personal-best"></small><button class="primary" id="start">Take the field ↗</button><button id="tilt">Enable phone tilt</button><button id="calibrate">Calibrate timing</button><small id="asset-status"></small><details ${location.hash.startsWith("#room=") ? "open" : ""}><summary>March with friends · 2–4 players</summary><label>DISPLAY NAME<input id="name" maxlength="24" value="${esc(localStorage.getItem("mb-name") ?? "Marcher")}" autocomplete="nickname"></label><div class="room-entry"><button id="create">Create room</button><input id="code" aria-label="Room code" maxlength="6" placeholder="ROOM CODE" value="${esc(location.hash.replace("#room=", "").slice(0, 6))}"><button id="join">Join room</button></div><small>Compete on your own score. Make the band better together.</small></details><p class="review-links"><a href="/uniform.html">Uniform studio ↗</a> · <a href="/music.html">Music study ↗</a></p></div>`;
+  bindSettings();
+  updateBest();
   updateAssetStatus();
-  $("start").onclick = () => startRun();
-  $("calibrate").onclick = calibrate;
-  $("translate").onclick = () => {
-    try {
-      const d = parseDot(($("drill") as HTMLInputElement).value);
-      $("translated").textContent =
-        `x ${d.x}, y ${d.y} steps → ${formatDot(d)}`;
-    } catch (e) {
-      $("translated").textContent = String(e);
-    }
-  };
+  $("start").onclick = () => void solo();
+  $("tilt").onclick = () => void enableTilt();
+  $("calibrate").onclick = () => void calibrate();
+  for (const action of ["create", "join"] as const)
+    $(action).onclick = () => void enterRoom(action);
 }
-function startRun(seed = Math.floor(Math.random() * 100000)) {
+function mobileReady() {
+  if (
+    matchMedia("(pointer:coarse)").matches &&
+    (!controls.enabled || !controls.hasReading)
+  )
+    throw Error(
+      "Enable phone tilt and hold the phone comfortably before starting.",
+    );
+}
+function getPlaybackIfExistsStop() {
+  playback?.stop();
+}
+async function enableTilt() {
+  try {
+    await controls.enable();
+    status(
+      "Tilt enabled. Hold comfortably in landscape, then Recenter before playing.",
+    );
+    const b = document.getElementById("tilt");
+    if (b) b.textContent = "Recenter phone tilt";
+  } catch (e) {
+    status(String(e));
+  }
+}
+async function solo() {
   if (!bandReady) return;
-  initAudio();
-  run = new Run(seed);
-  start = audio.currentTime + 0.15 + tempo.seconds(8);
-  nextClick = -8;
-  lastCount = -8;
-  paused = false;
-  $("feedback").textContent = "";
+  try {
+    mobileReady();
+    mode = "loading";
+    status("Preparing the brass…");
+    await getPlayback().prepare(selected);
+    playerId = 5;
+    begin(Math.floor(Math.random() * 0xffffffff));
+  } catch (e) {
+    mode = "menu";
+    status(String(e));
+  }
+}
+function begin(seed: number, delay = 0, restore = false) {
+  run = new PerformanceRun(selected, difficulty, playerId, seed);
+  run.incomplete = restore;
+  results.clear();
+  remote.clear();
+  bandSamples = [];
+  lastBandBeat = 0;
+  lastPage = -1;
+  lastSend = 0;
+  rejoinUntil = 0;
+  roomInterrupted = false;
+  returningControl = false;
   mode = "run";
   overlay.hidden = true;
   hud.hidden = false;
-  $("book").hidden = true;
-  $("pause").textContent = "Pause · Esc";
+  controls.keys.clear();
+  $("pause").hidden = !!room;
+  $("rhythm").hidden = !matchMedia("(pointer:coarse)").matches;
+  $("recenter").hidden = !controls.enabled;
+  const p = getPlayback();
+  p.start(selected, delay);
+  if (restore && room?.room.run) {
+    const elapsed =
+      (Date.now() + room.offset - room.room.run.at) / 1000 -
+      selected.tempo.seconds(8) -
+      0.15;
+    const count = selected.tempo.count(Math.max(0, elapsed));
+    run.steps.push({
+      synthetic: true,
+      seconds: Math.max(0, elapsed),
+      end: Math.max(0, elapsed) + 0.01,
+      from: run.ai(count, playerId),
+      to: run.ai(count, playerId),
+      size: 0,
+      page: selected.page(count),
+      number: 0,
+      timing: 0,
+      direction: 0,
+      sizeError: 0,
+      hold: true,
+      backward: false,
+    });
+    p.stop();
+    p.show = selected;
+    p.rejoin(Math.max(0, elapsed));
+    rejoinUntil = p.resumeUntil;
+    returningControl = true;
+  }
 }
-function calibrate() {
-  initAudio();
-  mode = "calibrate";
-  gaps = [];
-  lastTapBeat = -1;
-  calClicks = 0;
-  calStart = audio.currentTime + 0.5;
-  overlay.innerHTML = `<div class="panel"><p class="eyebrow">DEVICE TIMING</p><h1>Tap with the click.</h1><p>Listen for four counts, then tap Space on eight clicks. Wired headphones work best; large Bluetooth delays can be ambiguous.</p><div id="calbeat">Listen…</div><button id="tap" class="primary">Tap · Space</button><p id="calstatus">0 / 8 taps</p><button id="cancel">Back</button></div>`;
-  $("tap").onclick = tap;
-  $("cancel").onclick = menu;
-}
-function tap() {
-  if (mode !== "calibrate" || audio.currentTime < calStart + tempo.seconds(4))
+function rhythm() {
+  if (mode === "calibrate") {
+    calTap();
     return;
-  const beat = Math.round((audio.currentTime - calStart) / (60 / 112));
-  const gap = audio.currentTime - calStart - (beat * 60) / 112;
-  if (beat === lastTapBeat) return;
-  lastTapBeat = beat;
-  gaps.push(gap);
-  $("calstatus").textContent = `${gaps.length} / 8 taps`;
-  if (gaps.length === 8) {
-    offset = calibrationOffset(gaps);
-    localStorage.setItem("mb-calibration", String(offset));
+  }
+  if (
+    mode !== "run" ||
+    !run ||
+    !playback ||
+    playback.paused ||
+    playback.countingIn ||
+    playback.context.currentTime < rejoinUntil ||
+    roomInterrupted
+  )
+    return;
+  run.tap(playback.seconds, controls.value, calibration);
+}
+$("rhythm").addEventListener("pointerdown", (e) => {
+  e.preventDefault();
+  rhythm();
+});
+$("recenter").onclick = () => controls.recenter();
+$("view").onclick = () => {
+  overhead = !overhead;
+  $("view").textContent = overhead ? "Follow camera" : "Overhead";
+};
+$("sound").onclick = () => {
+  muted = !muted;
+  if (playback) playback.gain.gain.value = muted ? 0 : 1;
+  $("sound").textContent = muted ? "Sound off" : "Sound on";
+};
+function pause() {
+  if (mode !== "run" || room || !playback) return;
+  controls.keys.clear();
+  if (playback.paused) {
+    playback.resume();
+    $("pause").textContent = "Pause";
+  } else {
+    playback.pause();
+    $("pause").textContent = "Resume";
+  }
+}
+$("pause").onclick = pause;
+window.addEventListener("keydown", (e) => {
+  if ((e.target as HTMLElement).matches("input,select,textarea")) return;
+  if ([" ", "Escape"].includes(e.key)) e.preventDefault();
+  if (e.repeat) return;
+  if (e.key === " ") rhythm();
+  if (e.key === "Escape") pause();
+});
+window.addEventListener("blur", () => {
+  if (mode === "run" && !room && !playback?.paused) pause();
+});
+async function calibrate() {
+  const p = getPlayback();
+  await p.context.resume();
+  p.stop();
+  mode = "calibrate";
+  calGaps = [];
+  calLastBeat = -1;
+  calStart = p.context.currentTime + 0.5;
+  for (let i = 0; i < 20; i++) p.click(calStart + (i * 60) / 84, i % 4 === 0);
+  overlay.innerHTML = `<div class="panel"><p class="eyebrow">DEVICE TIMING</p><h1>Find the pulse.</h1><p>Listen to four clicks, then tap with eight. Your timing adjustment stays on this device.</p><button class="primary" id="cal-tap">Tap · Space</button><p id="cal-status">Listen…</p><button id="cal-back">Back</button></div>`;
+  $("cal-tap").onclick = calTap;
+  $("cal-back").onclick = menu;
+}
+function calTap() {
+  if (!playback) return;
+  const elapsed = playback.context.currentTime - calStart,
+    beat = Math.round(elapsed / (60 / 84));
+  if (beat < 4) return;
+  if (calGaps.length && beat === calLastBeat) return;
+  calLastBeat = beat;
+  calGaps.push(elapsed - (beat * 60) / 84);
+  $("cal-status").textContent = `${calGaps.length} / 8 taps`;
+  if (calGaps.length === 8) {
+    const sorted = [...calGaps].sort((a, b) => a - b);
+    calibration = (sorted[3] + sorted[4]) / 2;
+    localStorage.setItem("mb-calibration", String(calibration));
     menu();
   }
 }
-function recap() {
+async function enterRoom(action: "create" | "join") {
+  const name = ($("name") as HTMLInputElement).value.trim();
+  if (!name) {
+    status("Enter a display name.");
+    return;
+  }
+  localStorage.setItem("mb-name", name);
+  try {
+    status("Connecting to the room…");
+    room = new RoomClient();
+    bindRoom();
+    await room.enter(
+      action,
+      name,
+      ($("code") as HTMLInputElement).value.trim(),
+    );
+    lobby();
+  } catch (e) {
+    room = undefined;
+    status(`${String(e)} · The room service must be running.`);
+  }
+}
+function bindRoom() {
+  room!.onnotice = (text) => {
+    notice(text);
+    if (
+      run &&
+      (text.startsWith("Room connection") ||
+        (text.startsWith("Peer link lost") && !room?.isHost))
+    ) {
+      run.incomplete = true;
+      roomInterrupted = true;
+    }
+  };
+  room!.onpacket = (packet: Packet) => {
+    if (packet.kind === "position") {
+      remote.set(packet.id, {
+        position: packet.position,
+        count: packet.count,
+        step: packet.step,
+        at: performance.now(),
+      });
+    } else {
+      results.set(packet.id, {
+        result: packet.result,
+        incomplete: packet.incomplete,
+        band: packet.band ?? 0,
+      });
+      if (mode === "recap") renderResults();
+    }
+  };
+  room!.onroom = () => {
+    const r = room!;
+    if (!r.room) return;
+    selected = shows.find((s) => s.id === r.room.show) ?? shows[0];
+    difficulty = r.room.difficulty;
+    playerId = r.me?.slot ?? 5;
+    if (r.me?.incomplete && run) run.incomplete = true;
+    if (
+      roomInterrupted &&
+      r.me?.connected &&
+      r.transportReady &&
+      playback &&
+      mode === "run"
+    ) {
+      roomInterrupted = false;
+      returningControl = true;
+      rejoinUntil =
+        playback.context.currentTime +
+        4 *
+          (selected.tempo.seconds(
+            Math.max(0, selected.tempo.count(playback.seconds)) + 1,
+          ) -
+            playback.seconds);
+      notice("Reconnected · control returns after four counts");
+    }
+    if (r.room.run && r.room.run.id !== startedRun) {
+      startedRun = r.room.run.id;
+      mode = "loading";
+      const launch = () =>
+        void getPlayback()
+          .prepare(selected)
+          .then(() => {
+            const delay = (r.room.run!.at - Date.now() - r.offset) / 1000;
+            begin(r.room.run!.seed, Math.max(0, delay), delay < -0.5);
+          })
+          .catch((e) => notice(String(e)));
+      if (
+        Date.now() + r.offset > r.room.run.at + 500 &&
+        playback?.context.state !== "running"
+      ) {
+        overlay.hidden = false;
+        hud.hidden = true;
+        overlay.innerHTML =
+          '<div class="panel"><p class="eyebrow">YOUR ROOM IS STILL PLAYING</p><h1>Rejoin the band.</h1><p>AI is covering your spot. Rejoin after a count-in; this performance stays marked incomplete.</p><button class="primary" id="rejoin">Enable audio and rejoin</button></div>';
+        $("rejoin").onclick = launch;
+      } else launch();
+    } else if (!r.room.run && mode !== "loading") lobby();
+  };
+}
+function lobby() {
+  if (!room) return;
+  mode = "lobby";
+  hud.hidden = true;
+  overlay.hidden = false;
+  playback?.stop();
+  startedRun = "";
+  const r = room,
+    me = r.me;
+  overlay.innerHTML = `<div class="panel lobby"><p class="eyebrow">MARCH TOGETHER / COMPETE INDIVIDUALLY</p><h1>Room ${esc(r.room.code)}</h1><div class="settings"><label>SHOW<select id="show-choice" ${r.isHost ? "" : "disabled"}>${showOptions()}</select></label><label>DIFFICULTY<select id="difficulty" ${r.isHost ? "" : "disabled"}>${difficultyOptions()}</select></label></div><ul class="members">${r.room.members.map((m) => `<li><span>${esc(m.name)} ${m.id === r.room.host ? "· host" : ""}</span><b>${!m.connected ? "Connecting" : m.ready ? "Ready" : "Not ready"}</b></li>`).join("")}</ul><p id="connection">${r.transportReady ? "Peer links connected." : "Connecting peer links…"} ${r.room.members.length} / 4 players</p><button id="ready" class="primary" ${!bandReady || !r.transportReady ? "disabled" : ""}>${me?.ready ? "Unready" : "Confirm Ready"}</button>${r.isHost ? `<button id="room-start" ${r.room.members.length < 2 || r.room.members.some((m) => !m.ready || !m.connected) ? "disabled" : ""}>Start count-in</button>` : ""}<button id="invite">Copy invite link</button><button id="room-tilt">${controls.enabled ? "Recenter tilt" : "Enable phone tilt"}</button><button id="leave">Leave room</button><small id="asset-status"></small></div>`;
+  bindSettings(true);
+  $("ready").onclick = async () => {
+    try {
+      mobileReady();
+      await getPlayback().prepare(selected);
+      await r.request("ready", { ready: !me?.ready });
+    } catch (e) {
+      notice(String(e));
+    }
+  };
+  const start = document.getElementById("room-start");
+  if (start)
+    start.onclick = () =>
+      void r.request("start").catch((e) => notice(String(e)));
+  $("invite").onclick = () =>
+    void navigator.clipboard
+      .writeText(`${location.origin}/#room=${r.room.code}`)
+      .then(() => notice("Invite link copied"))
+      .catch(() => notice(`Room code: ${r.room.code}`));
+  $("room-tilt").onclick = () =>
+    controls.enabled ? controls.recenter() : void enableTilt();
+  $("leave").onclick = () =>
+    void r.leave().finally(() => {
+      room = undefined;
+      location.hash = "";
+      menu();
+    });
+}
+function finish() {
+  if (!run) return;
+  run.advance(112);
+  playback?.stop();
   mode = "recap";
   hud.hidden = true;
   overlay.hidden = false;
-  const s = run.scores();
-  overlay.innerHTML = `<div class="panel recap"><p class="eyebrow">REHEARSAL RECAP · SEED ${run.seed}</p><h1>${s.total.toFixed(2)}<small> / 100</small></h1><p>One rep in the books.</p><div class="caption"><span>VISUAL · DOT</span><b>${s.dot.toFixed(2)}</b></div><div class="caption"><span>VISUAL · FORM</span><b>${s.form.toFixed(2)}</b></div><div class="caption"><span>MUSIC · TIMING</span><b>${s.timing.toFixed(2)}</b></div><div class="caption"><span>BAND PERFORMANCE</span><b>${s.band.toFixed(2)}</b></div><p>${run.grades.length} nudges · ${run.faults} hold faults<br>Visual: dot / form equally · timing modifier · band 5%</p><button id="same" class="primary">Replay same seed ↗</button><button id="again">New band drift</button><button id="home">Back to field notes</button></div>`;
-  $("same").onclick = () => startRun(run.seed);
-  $("again").onclick = () => startRun();
-  $("home").onclick = menu;
+  const result = run.results(),
+    incomplete = run.incomplete || !!room?.me?.incomplete;
+  recordResult(selected.id, difficulty, result.total, !incomplete);
+  const bandScore = bandSamples.length
+    ? bandSamples.reduce((a, b) => a + b, 0) / bandSamples.length
+    : 0;
+  const id = room?.id ?? "solo";
+  results.set(id, { result, incomplete, band: bandScore });
+  room?.send({ kind: "result", id, result, incomplete, band: bandScore });
+  renderResults();
 }
-function togglePause() {
-  if (mode !== "run") return;
-  if (!paused) {
-    pauseTime = audio.currentTime;
-    paused = true;
-    $("feedback").textContent = "Paused";
+function renderResults() {
+  if (!run) return;
+  const own = run.results(),
+    r = room;
+  const entries = r
+    ? r.room.members.map((m) => ({
+        name: m.name,
+        id: m.id,
+        data: results.get(m.id),
+        incomplete: m.incomplete,
+      }))
+    : [
+        {
+          name: "Your performance",
+          id: "solo",
+          data: results.get("solo"),
+          incomplete: run.incomplete,
+        },
+      ];
+  entries.sort(
+    (a, b) =>
+      (b.data && !b.data.incomplete ? b.data.result.total : -1) -
+      (a.data && !a.data.incomplete ? a.data.result.total : -1),
+  );
+  const band = results.get(r?.room.host ?? "solo")?.band;
+  overlay.innerHTML = `<div class="panel recap"><p class="eyebrow">${esc(selected.name)} / ${difficulty} / RESULTS</p><h1>${own.total.toFixed(1)}<small> / 100</small></h1><p>${run.incomplete ? "Incomplete performance · no record or unlock awarded." : "Your individual performance. Every step counted."}</p><div class="caption"><span>SHARED BAND SCORE · SEPARATE</span><b>${band === undefined ? "Waiting for host…" : band.toFixed(1)}</b></div>${entries.map((e, i) => `<div class="caption"><span>${i + 1}. ${esc(e.name)}</span><b>${e.data ? `${e.data.result.total.toFixed(1)}${e.data.incomplete ? " · incomplete" : ""}` : e.incomplete ? "Disconnected · incomplete" : "Finishing…"}</b></div>`).join("")}<div class="analytics">${[
+    ["DOT", own.dot],
+    ["FORM", own.form],
+    ["TIMING", own.timing],
+    ["STEP SIZE", own.stepSize],
+    ["DIRECTION", own.direction],
+  ]
+    .map(
+      ([name, value]) =>
+        `<div><span>${name}</span><b>${Number(value).toFixed(1)}</b></div>`,
+    )
+    .join(
+      "",
+    )}</div><p>${own.misses} missed counts · ${own.extra} extra steps · ${own.faults} hold faults<br>Average step ${own.averageStep.toFixed(1)} in · largest ${own.maxStep.toFixed(1)} in<br>Technique deduction ${own.technique.toFixed(1)} points · DOT/FORM 50/50</p><details><summary>Inspect every set</summary><div class="table-wrap"><table><thead><tr><th>Set</th><th>DOT</th><th>FORM</th><th>Timing</th><th>Size</th><th>Direction</th><th>Off dot</th><th>Faults</th></tr></thead><tbody>${own.sets.map((s, i) => `<tr><th>${i + 1}. ${esc(s.name)}</th><td>${s.dot.toFixed(0)}</td><td>${s.form.toFixed(0)}</td><td>${s.timing.toFixed(0)}</td><td>${s.stepSize.toFixed(0)}</td><td>${s.direction.toFixed(0)}</td><td>${s.distance.toFixed(1)} in<small>${s.discount.toFixed(1)} in discounted for form</small></td><td>${s.misses} missed / ${s.extra} extra / ${s.faults} hold</td></tr>`).join("")}</tbody></table></div></details><p>${readProgress().unlocked.includes("reprise") ? "Sunrise / Reprise unlocked." : `Reach ${tuning.unlock} individual points to unlock Sunrise / Reprise.`}</p>${r ? `${r.isHost ? '<button class="primary" id="room-again">Return room to lobby</button>' : "<p>Waiting for the host to return to the lobby.</p>"}<button id="exit-results">Leave room</button>` : '<button class="primary" id="again">Full-show retry ↗</button><button id="home">Choose show</button>'}</div>`;
+  if (r) {
+    const again = document.getElementById("room-again");
+    if (again)
+      again.onclick = () =>
+        void r.request("lobby").catch((e) => notice(String(e)));
+    $("exit-results").onclick = () =>
+      void r.leave().finally(() => {
+        room = undefined;
+        menu();
+      });
   } else {
-    start += audio.currentTime - pauseTime;
-    paused = false;
-    $("feedback").textContent = "";
+    $("again").onclick = () => void solo();
+    $("home").onclick = menu;
   }
-  $("pause").textContent = paused ? "Resume · Esc" : "Pause · Esc";
 }
-$("pause").onclick = togglePause;
-$("sound").onclick = () => {
-  muted = !muted;
-  $("sound").textContent = muted ? "Sound off" : "Sound on";
-};
-window.addEventListener("keydown", (e) => {
-  if ((e.target as HTMLElement).tagName === "INPUT") return;
-  if (["ArrowLeft", "ArrowRight", "Tab", " ", "Escape"].includes(e.key))
-    e.preventDefault();
-  if (e.repeat) return;
-  if (mode === "calibrate" && e.key === " ") tap();
-  if (mode !== "run") return;
-  if (e.key === "Escape") togglePause();
-  if (e.key === "Tab") $("book").hidden = !$("book").hidden;
-  if (!paused && (e.key === "ArrowLeft" || e.key === "ArrowRight"))
-    $("feedback").textContent = run.nudge(
-      e.key === "ArrowLeft" ? -1 : 1,
-      audio.currentTime - start - offset,
-    );
-});
 function resize() {
-  const s = $("stage");
-  renderer.setSize(s.clientWidth, s.clientHeight);
-  camera.aspect = s.clientWidth / s.clientHeight;
+  const stage = $("stage");
+  renderer.setSize(stage.clientWidth, stage.clientHeight);
+  camera.aspect = stage.clientWidth / stage.clientHeight;
   camera.updateProjectionMatrix();
 }
 window.addEventListener("resize", resize);
 resize();
-let cameraBack = 0;
+const nameLabels = new Map<string, HTMLElement>();
+function drawNames(positions: Dot[]) {
+  const members = room?.room?.members ?? [];
+  for (const [id, label] of nameLabels)
+    if (!members.some((m) => m.id === id)) {
+      label.remove();
+      nameLabels.delete(id);
+    }
+  for (const m of members) {
+    let label = nameLabels.get(m.id);
+    if (!label) {
+      label = document.createElement("span");
+      label.className = "name-label";
+      $("labels").append(label);
+      nameLabels.set(m.id, label);
+    }
+    label.textContent = m.name + (m.connected ? "" : " · AI");
+    const p = positions[m.slot],
+      point = new THREE.Vector3(p.x, 4.7, p.y).project(camera);
+    label.style.left = `${(point.x + 1) * 0.5 * $("stage").clientWidth}px`;
+    label.style.top = `${(1 - point.y) * 0.5 * $("stage").clientHeight}px`;
+    label.hidden = mode !== "run" || point.z > 1;
+  }
+}
+function warning(text: string) {
+  if (performance.now() / 1000 - warningAt < 5) return;
+  warningAt = performance.now() / 1000;
+  warningUntil = performance.now() + 2200;
+  $("feedback").textContent = text;
+}
 function frame() {
   requestAnimationFrame(frame);
-  let count = 0;
-  let positions = show.initial;
-  if (mode === "calibrate") {
-    while (calStart + (calClicks * 60) / 112 < audio.currentTime + 0.08) {
-      click(calStart + (calClicks * 60) / 112, calClicks % 4 === 0);
-      calClicks++;
-    }
-    $("calbeat").textContent = String(
-      (Math.max(0, Math.floor((audio.currentTime - calStart) / (60 / 112))) %
-        4) +
-        1,
-    );
+  if (fieldStyle !== selected.id) {
+    fieldStyle = selected.id;
+    const reprise = selected.id === "reprise";
+    scene.background = new THREE.Color(reprise ? 0x15162c : 0x0a1724);
+    (scene.fog as THREE.Fog).color.copy(scene.background);
+    light.color.setHex(reprise ? 0xe2d8ff : 0xffedcd);
+    renderer.toneMappingExposure = reprise ? 0.8 : 0.95;
   }
-  if (mode === "run") {
-    const seconds = (paused ? pauseTime : audio.currentTime) - start;
-    count = tempo.count(seconds);
-    if (!paused)
-      while (
-        nextClick <= 80 &&
-        tempo.seconds(nextClick) + start < audio.currentTime + 0.08
-      ) {
-        if (nextClick >= 0 || [-8, -6, -4, -3, -2, -1].includes(nextClick))
-          click(
-            Math.max(audio.currentTime, tempo.seconds(nextClick) + start),
-            nextClick % 4 === 0,
-          );
-        nextClick++;
+  let count = 0,
+    positions = selected.drill.initial;
+  if (mode === "run" && run && playback) {
+    count = Math.min(112, selected.tempo.count(playback.seconds));
+    if (count >= 0 && !playback.paused && !playback.countingIn)
+      run.advance(count);
+    if (room?.room) {
+      for (const m of room.room.members) {
+        if (m.id === room.id) continue;
+        const packet = remote.get(m.id);
+        if (m.connected && packet && performance.now() - packet.at < 2500)
+          run.remote.set(m.slot, packet.position);
+        else run.remote.delete(m.slot);
       }
-    if (count >= 80) {
-      run.position(80);
-      recap();
-      count = 80;
     }
-    positions = Array.from({ length: 12 }, (_, id) =>
-      id === PLAYER
-        ? run.position(count)
-        : drift(Math.max(0, count), id, run.seed),
-    );
-    const page = Math.min(9, Math.floor(Math.max(0, count) / 8)),
-      p = show.pages[page],
-      goal = p.dots[PLAYER],
-      s = run.scores();
-    $("dot").textContent = s.dot.toFixed(1);
-    $("form").textContent = s.form.toFixed(1);
-    $("page").textContent = `PAGE ${page + 1} / 10 · ${p.name.toUpperCase()}`;
-    $("beat").textContent =
-      count < 0
-        ? ({ [-8]: "5", [-6]: "6", [-4]: "5", [-3]: "6", [-2]: "7", [-1]: "8" }[
-            Math.floor(count)
-          ] ?? "·")
-        : String(tempo.counter(count));
-    $("book").textContent =
-      `Page ${page + 1} · ${formatDot(goal)} · ${run.isHold(count) ? "HOLD 8" : `${(8 / (distance(page ? show.pages[page - 1].dots[PLAYER] : show.initial[PLAYER], goal) / 8)).toFixed(1)} to 5`} · ${Math.round(distance(positions[PLAYER], target(Math.max(0, count), PLAYER)) * 22.5)} inches off path`;
-    if (Math.floor(count) !== lastCount) {
-      lastCount = Math.floor(count);
-      if (count >= 0 && lastCount % 8 === 0)
-        $("feedback").textContent = run.isHold(count)
-          ? "Hold · no steering"
-          : p.name;
+    positions = run.actual(Math.max(0, count));
+    if (roomInterrupted || returningControl) {
+      const ai = run.ai(Math.max(0, count), playerId);
+      positions[playerId] = ai;
+      if (returningControl && playback.context.currentTime >= rejoinUntil) {
+        returningControl = false;
+        const sec = playback.seconds;
+        run.steps.push({
+          synthetic: true,
+          seconds: sec,
+          end: sec + 0.01,
+          from: ai,
+          to: ai,
+          size: 0,
+          page: selected.page(count),
+          number: run.steps.length,
+          timing: 0,
+          direction: 0,
+          sizeError: 0,
+          hold: false,
+          backward: false,
+        });
+        notice("Your control has resumed · result remains incomplete");
+      }
+    }
+    if (room && performance.now() - lastSend > 80) {
+      lastSend = performance.now();
+      room.send({
+        kind: "position",
+        id: room.id,
+        count,
+        position: positions[playerId],
+        step: run.steps.at(-1),
+      });
+    }
+    const page = selected.page(count),
+      goal = selected.goal(count)[playerId];
+    $("page").textContent =
+      `${selected.name.toUpperCase()} · SET ${page + 1} / 14 · ${selected.drill.pages[page].name}`;
+    $("beat").textContent = returningControl
+      ? `IN ${Math.max(1, Math.ceil((rejoinUntil - playback.context.currentTime) / (60 / 84)))}`
+      : playback.paused
+        ? "PAUSED"
+        : playback.countingIn
+          ? playback.countoff
+          : String(selected.tempo.counter(count));
+    if (page !== lastPage && count >= 0 && !playback.countingIn) {
+      lastPage = page;
+      warningUntil = performance.now() + 1800;
+      $("feedback").textContent = selected.hold(count) ? "HOLD" : "MOVE";
+    }
+    if (performance.now() > warningUntil) $("feedback").textContent = "";
+    if (
+      !selected.hold(count) &&
+      distance(
+        positions[playerId],
+        selected.target(Math.max(0, count))[playerId],
+      ) > 2.5
+    )
+      warning("Recover toward your dot");
+    if (
+      run.steps.at(-1)?.hold &&
+      performance.now() > warningUntil &&
+      selected.hold(count)
+    )
+      warning("Hold your feet");
+    if (Math.floor(count) > lastBandBeat) {
+      lastBandBeat = Math.floor(count);
+      const ideal = selected.target(count);
+      const visual = positions.map((p, i) => {
+        const m = formMetrics(p, positions, ideal, i);
+        return (
+          50 * Math.exp(-(m.raw - 0.5 * m.eligible) / 0.85) +
+          25 * Math.exp(-m.spacing / 0.85) +
+          25 * Math.exp(-m.shape / 0.85)
+        );
+      });
+      bandSamples.push(visual.reduce((a, b) => a + b, 0) / visual.length);
     }
     ring.position.set(goal.x, 0.1, goal.y);
     drawMap(positions, goal);
+    conduct(
+      $("conductor") as HTMLCanvasElement,
+      playback.countingIn && !playback.rejoining
+        ? selected.tempo.count(
+            playback.context.currentTime - playback.countoffAt,
+          )
+        : count,
+    );
+    if (count >= 112) finish();
   }
   const c = Math.max(0, count),
-    page = Math.min(9, Math.floor(c / 8));
-  const before = page
-    ? show.pages[page - 1].dots[PLAYER]
-    : show.initial[PLAYER];
-  const backwards = show.pages[page].dots[PLAYER].y > before.y;
-  band.forEach((m, i) => {
-    if (!m) return;
-    m.group.position.set(positions[i].x, 0, positions[i].y);
-    const prev = page ? show.pages[page - 1].dots[i] : show.initial[i];
-    const goal = show.pages[page].dots[i];
-    const dx = (goal.x - prev.x) / 8,
-      dz = (goal.y - prev.y) / 8;
-    m.animate(
-      c,
-      mode !== "run" || count < 0 || Math.hypot(dx, dz) === 0,
-      dz > 0,
-      dx,
-      dz,
-    );
+    page = selected.page(c);
+  band.forEach((model, i) => {
+    if (!model) return;
+    model.group.position.set(positions[i].x, 0, positions[i].y);
+    const member = room?.room?.members.find((m) => m.slot === i),
+      remoteStep = member ? remote.get(member.id)?.step : undefined;
+    const step = i === playerId ? run?.steps.at(-1) : remoteStep;
+    if (mode === "run" && step && (i === playerId || member?.connected)) {
+      const nowSeconds = selected.tempo.seconds(c),
+        phase = Math.max(
+          0,
+          Math.min(1, (nowSeconds - step.seconds) / (step.end - step.seconds)),
+        );
+      const moving = phase < 1 && !playback?.paused && !playback?.countingIn;
+      const dx = step.to.x - step.from.x,
+        dz = step.to.y - step.from.y;
+      model.animate(
+        step.number + phase,
+        !moving,
+        step.backward,
+        Math.abs(dx) + Math.abs(dz) < 0.001 ? 0 : dx,
+        Math.abs(dx) + Math.abs(dz) < 0.001 ? -0.05 : dz,
+      );
+    } else {
+      const prev = page
+          ? selected.drill.pages[page - 1].dots[i]
+          : selected.drill.initial[i],
+        goal = selected.drill.pages[page].dots[i];
+      model.animate(
+        c,
+        mode !== "run" ||
+          count < 0 ||
+          selected.hold(c) ||
+          i === playerId ||
+          !!playback?.paused ||
+          !!playback?.countingIn,
+        goal.y > prev.y,
+        (goal.x - prev.x) / 8,
+        (goal.y - prev.y) / 8,
+      );
+    }
   });
-  const player = positions[PLAYER];
+  const player = positions[playerId];
   playerMarker.position.set(player.x, 0.1, player.y);
-  cameraBack += (Number(backwards && mode === "run") - cameraBack) * 0.035;
+  ring.visible = mode === "run";
+  playerMarker.visible = mode === "run";
   camera.position.lerp(
-    new THREE.Vector3(player.x + 12, 17, player.y - 23 + cameraBack * 46),
-    0.045,
+    overhead
+      ? new THREE.Vector3(player.x, 65, player.y - 1)
+      : new THREE.Vector3(player.x + 9, 13, player.y + 21),
+    0.07,
   );
-  camera.lookAt(player.x, 0, player.y + 7 - cameraBack * 14);
+  camera.lookAt(player.x, 1, overhead ? player.y : player.y - 8);
   renderer.render(scene, camera);
+  drawNames(positions);
 }
 menu();
 frame();
+const saved = new RoomClient();
+saved.onnotice = notice;
+void saved.restore().then((restored) => {
+  if (restored) {
+    room = saved;
+    bindRoom();
+    room.onroom();
+  }
+});
