@@ -457,3 +457,7 @@ On the and of eight before leaving a hold, the left foot visually prepares towar
 ### Mouse heading during holds (Taylor, Nov 4)
 
 Keep the gold mouse-aim arrow visible during written holds, including the final three-count cyan next-dot preview. Both cues may appear together: gold is the player's chosen heading, cyan points to the upcoming dot. This is preparation feedback only; holding and scoring behavior are unchanged.
+
+### Beat-aligned distance calculations (Nov 4 bug fix)
+
+Distance auditing confirmed Sunrise's first two moving sets each cover 8 standard steps (5 yards). Previously, a Perfect tap 30 ms early used floor(count), assigning the first step to the previous set and calculating remaining steps one beat too large. This left consistently early players one standard step short despite accurate aim. Good/Perfect presses within 90 ms now use the nearest musical beat for destination/set and remaining-step calculations; timing grading retains the actual press timestamp. An accepted early step for a new set is scheduled no earlier than that set's start, so there is no pre-set travel. Early hold-downbeat actions remain stationary hold faults. Off-beat late travel still stops at the hold boundary, and recovery stays capped at 4-to-5.

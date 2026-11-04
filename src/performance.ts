@@ -204,12 +204,16 @@ export class PerformanceRun {
     timingOffset = 0,
     steeringMode: "nudge" | "tilt" = "nudge",
   ) {
-    const count = this.show.tempo.count(seconds);
-    if (count < 0 || count >= 112) return;
-    this.advance(count);
+    const actualCount = this.show.tempo.count(seconds);
+    if (actualCount < 0 || actualCount >= this.show.drill.totalCounts) return;
+    // Good/Perfect taps belong to the nearest beat, including just before a set boundary.
+    const beat = this.show.tempo.nearest(seconds);
+    const count = Math.abs(beat.gap) <= 0.09000001 ? beat.count : actualCount;
+    if (count >= this.show.drill.totalCounts) return;
+    this.advance(actualCount);
     const page = this.show.page(count),
       hold = this.show.hold(count),
-      from = this.position(count),
+      from = this.position(actualCount),
       goal = this.show.goal(count)[this.player];
     const previous = page
       ? this.show.drill.pages[page - 1].dots[this.player]
@@ -310,15 +314,16 @@ export class PerformanceRun {
             : gap <= 0.15
               ? 45
               : 0;
+    const startSeconds = Math.max(seconds, this.show.tempo.seconds(page * 8));
     this.steps.push({
       stepOff:
         !hold &&
         page > 0 &&
         this.show.hold(page * 8 - 0.001) &&
         !this.steps.some((s) => s.page === page && !s.synthetic),
-      seconds,
+      seconds: startSeconds,
       end: Math.min(
-        seconds + duration,
+        startSeconds + duration,
         this.show.tempo.seconds((page + 1) * 8),
       ),
       from,

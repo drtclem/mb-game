@@ -420,7 +420,7 @@ function rhythm(override?: Steering, pressedSeconds?: number) {
     calibration,
     override ? "nudge" : "tilt",
   );
-  if (selected.hold(selected.tempo.count(pressedSeconds ?? playback.seconds))) {
+  if (run.steps.at(-1)?.hold) {
     warningAt = performance.now() / 1000;
     warningUntil = performance.now() + 2000;
     $("feedback").textContent = "Not yet";

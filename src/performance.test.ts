@@ -68,7 +68,7 @@ describe("tap-driven performance", () => {
 describe("phrase boundaries and complete performances", () => {
   it("never lets a late moving step continue into a hold", () => {
     const r = new PerformanceRun(show, "Easy", 5, 1);
-    r.tap(show.tempo.seconds(24) - 0.02, { forward: 1, side: 0 });
+    r.tap(show.tempo.seconds(24) - 0.12, { forward: 1, side: 0 });
     expect(r.steps.at(-1)!.end).toBeLessThanOrEqual(show.tempo.seconds(24));
     expect(r.position(24)).toEqual(r.position(31.9));
   });
