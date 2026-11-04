@@ -18,6 +18,7 @@ import {
   haltClosure,
   stepOffPreparation,
   haltBodyOffset,
+  contactGaitCount,
 } from "./marching-motion";
 import { stepAnimation } from "./step-animation";
 import { countDisplay, moveDisplay } from "./count-display";
@@ -971,12 +972,7 @@ function frame() {
     preparation =
       mode === "run" && !playback?.paused && !playback?.countingIn && c < 104
         ? stepOffPreparation(c, selected.hold(c), selected.hold((page + 1) * 8))
-        : 0,
-    closure = haltClosure(
-      c,
-      selected.hold(c),
-      selected.hold(Math.max(0, page * 8 - 0.001)),
-    );
+        : 0;
   band.forEach((model, i) => {
     if (!model) return;
     model.group.position.set(positions[i].x, 0, positions[i].y);
@@ -995,6 +991,11 @@ function frame() {
       !step.hold &&
       Math.round(selected.tempo.count(step.seconds)) === page * 8 + 7;
     const plantedArrival = arrivingAtHold && (!controlled || finalTappedStep);
+    if (mode === "run" && run && !controlled && !selected.hold(c)) {
+      // Body passes halfway between contacts; feet land on the numbered beat.
+      const body = run.ai(Math.min(c + 0.5, (page + 1) * 8), i);
+      model.group.position.set(body.x, 0, body.y);
+    }
     if (plantedArrival) {
       const from = page
         ? selected.drill.pages[page - 1].dots[i]
@@ -1005,8 +1006,14 @@ function frame() {
       const dz =
         controlled && step ? step.to.y - step.from.y : (end.y - from.y) / 8;
       const anchor = controlled && step ? step.to : run!.ai((page + 1) * 8, i);
-      model.group.position.set(anchor.x - dx * 0.5, 0, anchor.y - dz * 0.5);
-      model.animate(0, true, dz > 0, dx, dz, 0);
+      const closure = haltClosure(c, false, true);
+      const offset = haltBodyOffset(c, true, true, closure);
+      model.group.position.set(
+        anchor.x - dx * offset,
+        0,
+        anchor.y - dz * offset,
+      );
+      model.animate(0, true, dz > 0, dx, dz, closure);
     } else if (preparation > 0) {
       const from = selected.drill.pages[page].dots[i],
         next = selected.drill.pages[page + 1].dots[i];
@@ -1029,21 +1036,14 @@ function frame() {
         selected.tempo.seconds(c),
         selected.hold(c),
       );
-      model.animate(
-        pose.count,
-        pose.hold,
-        pose.backward,
-        pose.dx,
-        pose.dz,
-        closure,
-      );
+      model.animate(pose.count, pose.hold, pose.backward, pose.dx, pose.dz);
     } else {
       const prev = page
           ? selected.drill.pages[page - 1].dots[i]
           : selected.drill.initial[i],
         goal = selected.drill.pages[page].dots[i];
       model.animate(
-        closure < 1 ? page * 8 : c,
+        contactGaitCount(c),
         mode !== "run" ||
           count < 0 ||
           selected.hold(c) ||
@@ -1051,50 +1051,9 @@ function frame() {
           !!playback?.paused ||
           !!playback?.countingIn,
         goal.y > prev.y,
-        closure < 1 && page > 0
-          ? (prev.x -
-              (page > 1
-                ? selected.drill.pages[page - 2].dots[i]
-                : selected.drill.initial[i]
-              ).x) /
-              8
-          : (goal.x - prev.x) / 8,
-        closure < 1 && page > 0
-          ? (prev.y -
-              (page > 1
-                ? selected.drill.pages[page - 2].dots[i]
-                : selected.drill.initial[i]
-              ).y) /
-              8
-          : (goal.y - prev.y) / 8,
-        closure,
+        (goal.x - prev.x) / 8,
+        (goal.y - prev.y) / 8,
       );
-    }
-    if (mode === "run" && !plantedArrival) {
-      const offset = selected.hold(c)
-        ? haltBodyOffset(c, true, true, closure)
-        : 0;
-      if (offset > 0) {
-        const arrivalPage = selected.hold(c) ? page - 1 : page;
-        if (arrivalPage >= 0) {
-          const end = selected.drill.pages[arrivalPage].dots[i];
-          const start =
-            arrivalPage > 0
-              ? selected.drill.pages[arrivalPage - 1].dots[i]
-              : selected.drill.initial[i];
-          const dx =
-            step && !step.hold
-              ? step.to.x - step.from.x
-              : (end.x - start.x) / 8;
-          const dz =
-            step && !step.hold
-              ? step.to.y - step.from.y
-              : (end.y - start.y) / 8;
-          // Keep the last leading foot on the arrival coordinate while the body closes over it.
-          model.group.position.x -= dx * offset;
-          model.group.position.z -= dz * offset;
-        }
-      }
     }
   });
   const player = positions[playerId];

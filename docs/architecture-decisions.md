@@ -469,3 +469,9 @@ A tap previously began at the partially animated position of the preceding step.
 ### Anchored right-foot halt (Taylor, Nov 4)
 
 Before a hold, count eight displays the planted right-foot arrival rather than continuing the generic swing until hold count one. For an input-controlled marcher this requires its actual final-count tap and uses that accepted step's endpoint, never snapping a missed dot to the written target. AI marchers use their imperfect arrival endpoint. During hold count one only the trailing left foot lifts and closes; the right foot has zero lift/roll and remains fixed in field space while the body centers over it. Incorrect hold inputs retain their existing visible fault step.
+
+### Contact phase and closing-foot landing (Taylor's repeated halt review, Nov 4)
+
+The previous halt correction still used two incompatible phases: ordinary AI gait started its swing on the count, while the planted halt assumed contact on the count. Align AI gait to foot contact (gait phase count + 1) with a half-count body interpolation reference. Judging positions are unchanged. A rig-level regression guards the switch from the last traveling pose to right-foot contact.
+
+The closing left foot must **land on hold count one**, rather than beginning its closing swing then and finishing on count two. After the right lands on count eight, begin closing on the and of eight and finish at the next downbeat. Remove the old post-boundary closing/body-offset branch. This supersedes earlier wording that spread the close through hold count one. User-controlled arrivals still require the final actual tap, and do not repair a missed dot.

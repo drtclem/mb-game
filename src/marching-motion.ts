@@ -36,14 +36,14 @@ export function footPose(
   };
 }
 
-/** Close the last stride during count one of a hold, never during count eight. */
+/** Right foot lands on eight; the left closes on the next downbeat. */
 export function haltClosure(
   count: number,
   holding: boolean,
-  wasHolding: boolean,
+  nextHolding: boolean,
 ) {
-  if (!holding || wasHolding || count < 8) return 1;
-  const t = Math.max(0, Math.min(1, count % 8));
+  if (holding || !nextHolding) return 1;
+  const t = Math.max(0, Math.min(1, ((count % 8) - 7.5) * 2));
   return t * t * (3 - 2 * t);
 }
 
@@ -76,4 +76,9 @@ export function haltFootPose(side: number, closure: number) {
     lift: side === 0 ? Math.sin(Math.PI * (1 - remaining)) * 0.025 : 0,
     roll: 0,
   };
+}
+
+/** A numbered musical count is the foot contact, not the start of its swing. */
+export function contactGaitCount(count: number) {
+  return count + 1;
 }

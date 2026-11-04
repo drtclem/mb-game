@@ -43,13 +43,15 @@ describe("feet together during holds", () => {
 
 import { haltClosure } from "./marching-motion";
 describe("halt closing count", () => {
-  it("keeps count eight traveling and closes through the first hold count", () => {
-    expect(haltClosure(23.99, false, false)).toBe(1);
-    expect(haltClosure(24, true, false)).toBe(0);
-    expect(haltClosure(24.5, true, false)).toBeCloseTo(0.5);
-    expect(haltClosure(25, true, false)).toBe(1);
+  it("plants the right on eight and lands the closing left on hold count one", () => {
+    expect(haltClosure(23, false, true)).toBe(0);
+    expect(haltClosure(23.5, false, true)).toBe(0);
+    expect(haltClosure(23.75, false, true)).toBeCloseTo(0.5);
+    expect(haltClosure(24, true, true)).toBe(1);
+    expect(haltClosure(25, true, true)).toBe(1);
   });
-  it("does not reopen the stance on later holds or the opening hold", () => {
+  it("does not close continuous moving arrivals or reopen later holds", () => {
+    expect(haltClosure(15.75, false, false)).toBe(1);
     expect(haltClosure(0, true, true)).toBe(1);
     expect(haltClosure(32, true, true)).toBe(1);
   });

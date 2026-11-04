@@ -54,3 +54,7 @@ A second travel regression reproduced with two taps 200 ms apart: the first acce
 ## Extra halt step — November 4
 
 Found two visual causes: generic final-count swing continued until the hold boundary, and halt closure added lift to both feet. Replaced it with a planted final right-foot pose and a left-only closing pose. A regression test evaluates five closure phases and proves the right foot's world-space forward coordinate remains constant with zero lift/roll while the left closes. Type check, 105 unit tests and build pass. Live screenshots captured moving count 8/8, hold count 1/8 and hold count 2/8; the band transitions from the planted arrival to feet together without a new right-foot lift. Browser error logs were empty.
+
+## Halt phase handoff — November 4
+
+The earlier pure closure test missed the preceding gait: immediately before the planted arrival the ordinary right-foot travel was +0.5, while the arrival requested -0.5, a one-stride discontinuity. Added an actual skeletal rig fixture and transition tests, aligned AI contact phase/body reference, and moved the left closing swing before the hold downbeat. Tests check the real right ankle through six closing phases, no full-stride handoff jump, and feet closed at the hold downbeat. Type check, 108 tests and build pass. Browser captures compare moving count 8/8 with hold count 1/8 and now show a closed stance on the hold downbeat. Console error logs were empty.
