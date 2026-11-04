@@ -87,3 +87,31 @@ describe("dot distances and beat-aligned recovery", () => {
     expect(run.steps.every((s) => s.size <= 2)).toBe(true);
   });
 });
+
+it("preserves the whole distance of each tap when the next tap arrives before its animation ends", () => {
+  const show = shows[0],
+    run = new PerformanceRun(show, "Easy", 5, 1);
+  run.tap(show.tempo.seconds(8), { forward: 1, side: 0, aim: { x: 0, y: -1 } });
+  const seconds = show.tempo.seconds(8) + 0.2;
+  const before = run.position(show.tempo.count(seconds));
+  run.tap(seconds, { forward: 1, side: 0, aim: { x: 0, y: -1 } });
+  expect(run.steps[1].from).toEqual(run.steps[0].to);
+  expect(run.position(show.tempo.count(seconds))).toEqual(before);
+  expect(run.position(9).y).toBeCloseTo(
+    40 - run.steps.reduce((sum, s) => sum + s.size, 0),
+  );
+});
+
+it("keeps standard step distances through alternating early and late Space taps", () => {
+  const show = shows[0],
+    run = new PerformanceRun(show, "Easy", 5, 1);
+  for (let c = 8; c < 24; c++) {
+    const seconds = show.tempo.seconds(c) + (c % 2 ? 0.08 : -0.08);
+    run.tap(seconds, { forward: 1, side: 0, aim: { x: 0, y: -1 } });
+    const latest = run.steps.at(-1)!;
+    expect(latest.size).toBeCloseTo(1);
+    if (run.steps.length > 1) expect(latest.from).toEqual(run.steps.at(-2)!.to);
+    if (c === 15 || c === 23)
+      expect(run.position(c + 1)).toEqual(show.goal(c)[5]);
+  }
+});

@@ -6,6 +6,7 @@ export type Step = {
   seconds: number;
   end: number;
   from: Dot;
+  visualFrom?: Dot;
   to: Dot;
   size: number;
   page: number;
@@ -144,9 +145,10 @@ export class PerformanceRun {
     const step = this.steps[lo - 1];
     if (!step) return { ...this.show.drill.initial[this.player] };
     const t = clamp((sec - step.seconds) / (step.end - step.seconds), 0, 1);
+    const from = step.visualFrom ?? step.from;
     return {
-      x: step.from.x + (step.to.x - step.from.x) * t,
-      y: step.from.y + (step.to.y - step.from.y) * t,
+      x: from.x + (step.to.x - from.x) * t,
+      y: from.y + (step.to.y - from.y) * t,
     };
   }
   ai(count: number, id: number): Dot {
@@ -213,7 +215,8 @@ export class PerformanceRun {
     this.advance(actualCount);
     const page = this.show.page(count),
       hold = this.show.hold(count),
-      from = this.position(actualCount),
+      visualFrom = this.position(actualCount),
+      from = this.steps.at(-1)?.to ?? visualFrom,
       goal = this.show.goal(count)[this.player];
     const previous = page
       ? this.show.drill.pages[page - 1].dots[this.player]
@@ -326,7 +329,8 @@ export class PerformanceRun {
         startSeconds + duration,
         this.show.tempo.seconds((page + 1) * 8),
       ),
-      from,
+      from: { ...from },
+      visualFrom: startSeconds > seconds ? { ...from } : visualFrom,
       to,
       size,
       page,

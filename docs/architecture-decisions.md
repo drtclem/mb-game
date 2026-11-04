@@ -461,3 +461,7 @@ Keep the gold mouse-aim arrow visible during written holds, including the final 
 ### Beat-aligned distance calculations (Nov 4 bug fix)
 
 Distance auditing confirmed Sunrise's first two moving sets each cover 8 standard steps (5 yards). Previously, a Perfect tap 30 ms early used floor(count), assigning the first step to the previous set and calculating remaining steps one beat too large. This left consistently early players one standard step short despite accurate aim. Good/Perfect presses within 90 ms now use the nearest musical beat for destination/set and remaining-step calculations; timing grading retains the actual press timestamp. An accepted early step for a new set is scheduled no earlier than that set's start, so there is no pre-set travel. Early hold-downbeat actions remain stationary hold faults. Off-beat late travel still stops at the hold boundary, and recovery stays capped at 4-to-5.
+
+### Preserve accepted travel across overlapping tap animations (Nov 4 bug fix)
+
+A tap previously began at the partially animated position of the preceding step. If the next input arrived before that animation finished, its unfinished distance disappeared. Accepted steps now chain their logical endpoints; each step's optional visualFrom preserves smooth rendering from the current displayed position. The next tap cannot erase the previous accepted distance. Step size, judging, dot destinations, recovery limits and hold constraints keep their existing rules.
