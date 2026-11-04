@@ -943,7 +943,8 @@ function frame() {
           Math.min(0.4, length * 0.2),
         );
       }
-    } else if (!playback.countingIn && !selected.hold(count)) {
+    }
+    if (!playback.countingIn) {
       const direction = mouseActive ? mouseDirection() : run.heading(count);
       if (Math.hypot(direction.x, direction.y) > 0.01) {
         headingArrow.visible = true;
