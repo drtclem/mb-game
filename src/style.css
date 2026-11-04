@@ -648,3 +648,22 @@ td small {
     scroll-behavior: auto;
   }
 }
+#motion-state {
+  position: absolute;
+  top: 76px;
+  left: 24px;
+  padding: 8px 10px;
+  background: #102534e8;
+  border: 1px solid #65818a88;
+  color: #f4ce90;
+  font: 11px monospace;
+  letter-spacing: 0.04em;
+  pointer-events: none;
+}
+@media (max-height: 600px) {
+  #motion-state {
+    top: 62px;
+    left: 15px;
+    font-size: 10px;
+  }
+}

@@ -59,7 +59,7 @@ const controls = new Controls(),
     { result: Result; incomplete: boolean; band: number }
   >();
 const app = document.querySelector<HTMLDivElement>("#app")!;
-app.innerHTML = `<main><header><a class="brand" href="/">ON THE DOT<span>THE FIELD IS LISTENING</span></a><span class="edition">BRASS / RHYTHM / FORM</span><button id="sound">Sound on</button></header><section id="stage"><div id="scene"></div><div id="labels"></div><div id="hud" hidden><div id="page"></div><div id="beat"></div><div id="feedback" role="status"></div><canvas id="map" width="310" height="170" aria-label="Field overview"></canvas><canvas id="conductor" width="160" height="205" aria-label="Drum major conducting the musical count"></canvas><button id="view">Overhead</button><button id="pause">Pause</button><button id="recenter" hidden>Recenter tilt</button><button id="rhythm" hidden aria-label="Tap once for each step">STEP<span>tap the count</span></button></div><div id="overlay"></div><div id="notice" role="status"></div><div id="rotate">Turn your phone sideways to take the field.</div></section><footer><span>SPACE · STEP &nbsp; ↑ ↓ · TRAVEL &nbsp; ← → · ADJUST</span><span>4-TO-5 MAX · EVERY TAP COUNTS</span></footer></main>`;
+app.innerHTML = `<main><header><a class="brand" href="/">ON THE DOT<span>THE FIELD IS LISTENING</span></a><span class="edition">BRASS / RHYTHM / FORM</span><button id="sound">Sound on</button></header><section id="stage"><div id="scene"></div><div id="labels"></div><div id="hud" hidden><div id="motion-state" role="status"></div><div id="page"></div><div id="beat"></div><div id="feedback" role="status"></div><canvas id="map" width="310" height="170" aria-label="Field overview"></canvas><canvas id="conductor" width="160" height="205" aria-label="Drum major conducting the musical count"></canvas><button id="view">Overhead</button><button id="pause">Pause</button><button id="recenter" hidden>Recenter tilt</button><button id="rhythm" hidden aria-label="Tap once for each step">STEP<span>tap the count</span></button></div><div id="overlay"></div><div id="notice" role="status"></div><div id="rotate">Turn your phone sideways to take the field.</div></section><footer><span>SPACE · STEP &nbsp; ↑ ↓ · TRAVEL &nbsp; ← → · ADJUST</span><span>4-TO-5 MAX · EVERY TAP COUNTS</span></footer></main>`;
 const overlay = $("overlay"),
   hud = $("hud");
 const scene = new THREE.Scene();
@@ -263,7 +263,7 @@ function menu() {
   hud.hidden = true;
   overlay.hidden = false;
   getPlaybackIfExistsStop();
-  overlay.innerHTML = `<div class="intro"><p class="eyebrow">A MARCHING FIELD GAME</p><h1>Every step.<br>Every interval.</h1><p>Tap <strong>Space</strong> on the count. Hold <strong>↑</strong> to travel forward or <strong>↓</strong> backward; add <strong>← →</strong> to adjust. Tapping with no travel input marks time. During holds, let the band play—and keep your feet still.</p>${settings()}<small id="personal-best"></small><button class="primary" id="start">Take the field ↗</button><button id="tilt">Enable phone tilt</button><button id="calibrate">Calibrate timing</button><small id="asset-status"></small><details ${location.hash.startsWith("#room=") ? "open" : ""}><summary>March with friends · 2–4 players</summary><label>DISPLAY NAME<input id="name" maxlength="24" value="${esc(localStorage.getItem("mb-name") ?? "Marcher")}" autocomplete="nickname"></label><div class="room-entry"><button id="create">Create room</button><input id="code" aria-label="Room code" maxlength="6" placeholder="ROOM CODE" value="${esc(location.hash.replace("#room=", "").slice(0, 6))}"><button id="join">Join room</button></div><small>Compete on your own score. Make the band better together.</small></details><p class="review-links"><a href="/uniform.html">Uniform studio ↗</a> · <a href="/music.html">Music study ↗</a></p></div>`;
+  overlay.innerHTML = `<div class="intro"><p class="eyebrow">A MARCHING FIELD GAME</p><h1>Every step.<br>Every interval.</h1><p>Hold <strong>↑ while tapping Space</strong> on each count to march forward. Hold <strong>↓ while tapping Space</strong> to march backward; add <strong>← →</strong> to adjust. Tapping with no travel input marks time. During holds, let the band play—and keep your feet still.</p><small>The show starts with an eight-count HOLD after the count-in. Wait for MOVE before stepping.</small>${settings()}<small id="personal-best"></small><button class="primary" id="start">Take the field ↗</button><button id="tilt">Enable phone tilt</button><button id="calibrate">Calibrate timing</button><small id="asset-status"></small><details ${location.hash.startsWith("#room=") ? "open" : ""}><summary>March with friends · 2–4 players</summary><label>DISPLAY NAME<input id="name" maxlength="24" value="${esc(localStorage.getItem("mb-name") ?? "Marcher")}" autocomplete="nickname"></label><div class="room-entry"><button id="create">Create room</button><input id="code" aria-label="Room code" maxlength="6" placeholder="ROOM CODE" value="${esc(location.hash.replace("#room=", "").slice(0, 6))}"><button id="join">Join room</button></div><small>Compete on your own score. Make the band better together.</small></details><p class="review-links"><a href="/uniform.html">Uniform studio ↗</a> · <a href="/music.html">Music study ↗</a></p></div>`;
   bindSettings();
   updateBest();
   updateAssetStatus();
@@ -375,7 +375,19 @@ function rhythm() {
     roomInterrupted
   )
     return;
-  run.tap(playback.seconds, controls.value, calibration);
+  const input = controls.value;
+  run.tap(playback.seconds, input, calibration);
+  if (
+    !selected.hold(selected.tempo.count(playback.seconds)) &&
+    Math.abs(input.forward) <= 0.1
+  ) {
+    warningAt = performance.now() / 1000;
+    warningUntil = performance.now() + 2500;
+    $("feedback").textContent =
+      controls.enabled && !controls.keys.size
+        ? "Mark time · tilt forward or back to travel"
+        : "Mark time · hold ↑ or ↓ while tapping Space";
+  }
 }
 $("rhythm").addEventListener("pointerdown", (e) => {
   e.preventDefault();
@@ -752,6 +764,16 @@ function frame() {
     }
     const page = selected.page(count),
       goal = selected.goal(count)[playerId];
+    const movingPhase =
+      count >= 0 &&
+      !playback.countingIn &&
+      !playback.paused &&
+      !selected.hold(count);
+    $("motion-state").hidden = !movingPhase;
+    $("motion-state").textContent =
+      Math.abs(controls.value.forward) > 0.1
+        ? "NEXT STEP: TRAVEL · TAP THE COUNT"
+        : "NEXT STEP: MARK TIME";
     $("page").textContent =
       `${selected.name.toUpperCase()} · SET ${page + 1} / 14 · ${selected.drill.pages[page].name}`;
     $("beat").textContent = returningControl

@@ -40,16 +40,16 @@ export class Controls {
     });
   }
   get value(): Steering {
-    return this.enabled
-      ? this.tilt
-      : {
-          forward:
-            Number(this.keys.has("ArrowUp")) -
-            Number(this.keys.has("ArrowDown")),
-          side:
-            Number(this.keys.has("ArrowRight")) -
-            Number(this.keys.has("ArrowLeft")),
-        };
+    // A deliberate key press takes priority, including on devices with tilt enabled.
+    if (this.keys.size)
+      return {
+        forward:
+          Number(this.keys.has("ArrowUp")) - Number(this.keys.has("ArrowDown")),
+        side:
+          Number(this.keys.has("ArrowRight")) -
+          Number(this.keys.has("ArrowLeft")),
+      };
+    return this.enabled ? this.tilt : { forward: 0, side: 0 };
   }
   recenter() {
     this.neutral = this.latest ? { ...this.latest } : undefined;
