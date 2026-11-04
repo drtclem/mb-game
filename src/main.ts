@@ -14,6 +14,7 @@ import { Controls, arrowStep } from "./controls";
 import { RoomClient, type Packet } from "./multiplayer";
 import { readProgress, recordResult } from "./progress";
 import { conduct } from "./drum-major";
+import { haltClosure } from "./marching-motion";
 import { stepAnimation } from "./step-animation";
 import { countDisplay, moveDisplay } from "./count-display";
 import { nextMovePreview } from "./next-move";
@@ -926,7 +927,12 @@ function frame() {
     if (count >= 112) finish();
   }
   const c = Math.max(0, count),
-    page = selected.page(c);
+    page = selected.page(c),
+    closure = haltClosure(
+      c,
+      selected.hold(c),
+      selected.hold(Math.max(0, page * 8 - 0.001)),
+    );
   band.forEach((model, i) => {
     if (!model) return;
     model.group.position.set(positions[i].x, 0, positions[i].y);
@@ -939,14 +945,21 @@ function frame() {
         selected.tempo.seconds(c),
         selected.hold(c),
       );
-      model.animate(pose.count, pose.hold, pose.backward, pose.dx, pose.dz);
+      model.animate(
+        pose.count,
+        pose.hold,
+        pose.backward,
+        pose.dx,
+        pose.dz,
+        closure,
+      );
     } else {
       const prev = page
           ? selected.drill.pages[page - 1].dots[i]
           : selected.drill.initial[i],
         goal = selected.drill.pages[page].dots[i];
       model.animate(
-        c,
+        closure < 1 ? page * 8 : c,
         mode !== "run" ||
           count < 0 ||
           selected.hold(c) ||
@@ -954,8 +967,23 @@ function frame() {
           !!playback?.paused ||
           !!playback?.countingIn,
         goal.y > prev.y,
-        (goal.x - prev.x) / 8,
-        (goal.y - prev.y) / 8,
+        closure < 1 && page > 0
+          ? (prev.x -
+              (page > 1
+                ? selected.drill.pages[page - 2].dots[i]
+                : selected.drill.initial[i]
+              ).x) /
+              8
+          : (goal.x - prev.x) / 8,
+        closure < 1 && page > 0
+          ? (prev.y -
+              (page > 1
+                ? selected.drill.pages[page - 2].dots[i]
+                : selected.drill.initial[i]
+              ).y) /
+              8
+          : (goal.y - prev.y) / 8,
+        closure,
       );
     }
   });

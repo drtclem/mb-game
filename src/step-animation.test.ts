@@ -40,3 +40,17 @@ describe("feet together during holds", () => {
     expect(stepAnimation(mistake, 10.6, true).hold).toBe(true);
   });
 });
+
+import { haltClosure } from "./marching-motion";
+describe("halt closing count", () => {
+  it("keeps count eight traveling and closes through the first hold count", () => {
+    expect(haltClosure(23.99, false, false)).toBe(1);
+    expect(haltClosure(24, true, false)).toBe(0);
+    expect(haltClosure(24.5, true, false)).toBeCloseTo(0.5);
+    expect(haltClosure(25, true, false)).toBe(1);
+  });
+  it("does not reopen the stance on later holds or the opening hold", () => {
+    expect(haltClosure(0, true, true)).toBe(1);
+    expect(haltClosure(32, true, true)).toBe(1);
+  });
+});

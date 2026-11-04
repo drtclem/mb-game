@@ -171,6 +171,7 @@ export function rigCombinedSurface(
       backward: boolean,
       dx = 0,
       dz = backward ? 1 : -1,
+      closure = 1,
     ) {
       const orientation = group.getWorldQuaternion(new THREE.Quaternion());
       const direction = new THREE.Vector3(dx, 0, dz).normalize(),
@@ -181,7 +182,12 @@ export function rigCombinedSurface(
         leg.ankle.quaternion.identity();
       }
       const targets = legs.map((leg, i) => {
-        const pose = footPose(count, i, hold, backward);
+        const pose = footPose(count, i, hold && closure >= 1, backward);
+        if (hold && closure < 1) {
+          pose.travel *= 1 - closure;
+          pose.roll *= 1 - closure;
+          pose.lift = Math.sin(Math.PI * closure) * 0.025;
+        }
         const target = leg.foot.clone();
         // Track beneath the body rather than preserving the modeling pose's wide stance.
         target.x *= 0.45;

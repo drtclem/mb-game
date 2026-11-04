@@ -439,3 +439,7 @@ Keyboard Left/Right now add smaller persistent 6° nudges, bounded by the existi
 During the final three counts before the next moving set, show a cyan upcoming-dot marker, directional arrow and 3–2–1 countdown. Skip intervening hold destinations; never activate the future destination early. Replace the preview with the active target when its set begins.
 
 The persistent top-right drum-major sketch uses a regular mirrored 4/4 down–in–out–up pattern. Its beat positions and visible beat label use the same audio-derived count as the beat blocks, including the eight-count count-in. Multiplayer rejoin count-ins begin on a bar boundary to preserve the conducting phase.
+
+### Halt closing count (Taylor, Nov 4)
+
+Count nine (count one of the following hold) is the closing motion, rather than snapping to attention at the boundary or closing on count eight. Blend the last stride to feet together during that first hold count; remain closed from count two onward. Opening and consecutive holds stay closed. This visual closing motion does not translate the performer or create a gameplay input/fault; mistaken hold presses retain the existing Not yet behavior.

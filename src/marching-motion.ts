@@ -35,3 +35,14 @@ export function footPose(
         : 0.23 * Math.cos(Math.PI * (phase - 1)),
   };
 }
+
+/** Close the last stride during count one of a hold, never during count eight. */
+export function haltClosure(
+  count: number,
+  holding: boolean,
+  wasHolding: boolean,
+) {
+  if (!holding || wasHolding || count < 8) return 1;
+  const t = Math.max(0, Math.min(1, count % 8));
+  return t * t * (3 - 2 * t);
+}
