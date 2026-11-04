@@ -1,86 +1,112 @@
-import {describe,it,expect} from 'vitest';
-import { PerformanceRun, formMetrics } from './performance';
-import { shows } from './repertoire';
+import { describe, it, expect } from "vitest";
+import { PerformanceRun, formMetrics } from "./performance";
+import { shows } from "./repertoire";
 const show = shows[0];
-describe('tap-driven performance',()=>{
-  it('never travels without taps, and marks time at neutral',()=>{
-    const r=new PerformanceRun(show,'Medium',5,4);
-    const initial={...r.position(0)};
+describe("tap-driven performance", () => {
+  it("never travels without taps, and marks time at neutral", () => {
+    const r = new PerformanceRun(show, "Medium", 5, 4);
+    const initial = { ...r.position(0) };
     r.advance(12);
     expect(r.position(12)).toEqual(initial);
-    r.tap(show.tempo.seconds(12),{forward:0,side:0});
+    r.tap(show.tempo.seconds(12), { forward: 0, side: 0 });
     expect(r.position(13)).toEqual(initial);
     expect(r.steps).toHaveLength(1);
   });
-  it('takes every tap, including wrong-way and extra taps; recovery never exceeds 4-to-5',()=>{
-    const r=new PerformanceRun(show,'Medium',5,4);
-    const initial=r.position(8);
-    r.tap(show.tempo.seconds(8),{forward:-1,side:0});
+  it("takes every tap, including wrong-way and extra taps; recovery never exceeds 4-to-5", () => {
+    const r = new PerformanceRun(show, "Medium", 5, 4);
+    const initial = r.position(8);
+    r.tap(show.tempo.seconds(8), { forward: -1, side: 0 });
     expect(r.position(9).y).toBeGreaterThan(initial.y);
-    r.tap(show.tempo.seconds(12),{forward:1,side:0});
-    r.tap(show.tempo.seconds(12)+.1,{forward:1,side:0});
+    r.tap(show.tempo.seconds(12), { forward: 1, side: 0 });
+    r.tap(show.tempo.seconds(12) + 0.1, { forward: 1, side: 0 });
     expect(r.steps).toHaveLength(3);
-    for(const step of r.steps) expect(step.size).toBeLessThanOrEqual(2.000001);
+    for (const step of r.steps) expect(step.size).toBeLessThanOrEqual(2.000001);
   });
-  it('holds actual position, bounds mistaken hold steps and retargets the next set',()=>{
-    const r=new PerformanceRun(show,'Hard',5,4);
-    const anchor=r.position(24);
+  it("holds actual position, bounds mistaken hold steps and retargets the next set", () => {
+    const r = new PerformanceRun(show, "Hard", 5, 4);
+    const anchor = r.position(24);
     r.advance(24);
     expect(r.position(25)).toEqual(anchor);
-    for(let i=0;i<24;i++) r.tap(show.tempo.seconds(24+i*.1),{forward:1,side:1});
-    const p=r.position(28);
-    expect(Math.hypot(p.x-anchor.x,p.y-anchor.y)).toBeLessThanOrEqual(.35001);
+    for (let i = 0; i < 24; i++)
+      r.tap(show.tempo.seconds(24 + i * 0.1), { forward: 1, side: 1 });
+    const p = r.position(28);
+    expect(Math.hypot(p.x - anchor.x, p.y - anchor.y)).toBeLessThanOrEqual(
+      0.35001,
+    );
     expect(r.faults).toBe(24);
-    r.tap(show.tempo.seconds(32),{forward:-1,side:0});
+    r.tap(show.tempo.seconds(32), { forward: -1, side: 0 });
     expect(r.steps.at(-1)!.page).toBe(4);
   });
-  it('judges neighboring shape and interval, excluding the player from the reference',()=>{
-    const ideal=show.target(12);
-    const actual=ideal.map(p=>({x:p.x+1,y:p.y}));
-    const good=formMetrics(actual[5],actual,ideal,5);
+  it("judges neighboring shape and interval, excluding the player from the reference", () => {
+    const ideal = show.target(12);
+    const actual = ideal.map((p) => ({ x: p.x + 1, y: p.y }));
+    const good = formMetrics(actual[5], actual, ideal, 5);
     expect(good.shape).toBeCloseTo(0);
     expect(good.spacing).toBeCloseTo(0);
-    const bad=formMetrics(ideal[5],actual,ideal,5);
-    expect(bad.shape).toBeGreaterThan(.5);
-    expect(good.eligible).toBeGreaterThan(.9);
+    const bad = formMetrics(ideal[5], actual, ideal, 5);
+    expect(bad.shape).toBeGreaterThan(0.5);
+    expect(good.eligible).toBeGreaterThan(0.9);
   });
-  it('scores identically regardless of render frequency and does not reward idle timing',()=>{
-    const a=new PerformanceRun(show,'Easy',5,42),b=new PerformanceRun(show,'Easy',5,42);
-    for(let count=8;count<24;count++) {
-      a.tap(show.tempo.seconds(count),{forward:1,side:0});
-      b.tap(show.tempo.seconds(count),{forward:1,side:0});
-      for(let c=count;c<count+1;c+=.1) a.advance(c);
+  it("scores identically regardless of render frequency and does not reward idle timing", () => {
+    const a = new PerformanceRun(show, "Easy", 5, 42),
+      b = new PerformanceRun(show, "Easy", 5, 42);
+    for (let count = 8; count < 24; count++) {
+      a.tap(show.tempo.seconds(count), { forward: 1, side: 0 });
+      b.tap(show.tempo.seconds(count), { forward: 1, side: 0 });
+      for (let c = count; c < count + 1; c += 0.1) a.advance(c);
     }
-    a.advance(112);b.advance(112);
+    a.advance(112);
+    b.advance(112);
     expect(a.results()).toEqual(b.results());
-    const idle=new PerformanceRun(show,'Easy',5,42);idle.advance(112);
+    const idle = new PerformanceRun(show, "Easy", 5, 42);
+    idle.advance(112);
     expect(idle.results().timing).toBe(0);
   });
 });
-describe('phrase boundaries and complete performances',()=>{
-  it('never lets a late moving step continue into a hold',()=>{
-    const r=new PerformanceRun(show,'Easy',5,1);
-    r.tap(show.tempo.seconds(24)-.02,{forward:1,side:0});
+describe("phrase boundaries and complete performances", () => {
+  it("never lets a late moving step continue into a hold", () => {
+    const r = new PerformanceRun(show, "Easy", 5, 1);
+    r.tap(show.tempo.seconds(24) - 0.02, { forward: 1, side: 0 });
     expect(r.steps.at(-1)!.end).toBeLessThanOrEqual(show.tempo.seconds(24));
     expect(r.position(24)).toEqual(r.position(31.9));
   });
-  it('makes a clean full show qualify while wrong-way marching loses points',()=>{
-    const clean=new PerformanceRun(show,'Easy',5,2),wrong=new PerformanceRun(show,'Easy',5,2);
-    for(let c=0;c<112;c++)if(!show.hold(c)){
-      clean.tap(show.tempo.seconds(c),{forward:show.backward(c)?-1:1,side:0});
-      wrong.tap(show.tempo.seconds(c),{forward:show.backward(c)?1:-1,side:0});
-    }
-    clean.advance(112);wrong.advance(112);
+  it("makes a clean full show qualify while wrong-way marching loses points", () => {
+    const clean = new PerformanceRun(show, "Easy", 5, 2),
+      wrong = new PerformanceRun(show, "Easy", 5, 2);
+    for (let c = 0; c < 112; c++)
+      if (!show.hold(c)) {
+        clean.tap(show.tempo.seconds(c), {
+          forward: show.backward(c) ? -1 : 1,
+          side: 0,
+        });
+        wrong.tap(show.tempo.seconds(c), {
+          forward: show.backward(c) ? 1 : -1,
+          side: 0,
+        });
+      }
+    clean.advance(112);
+    wrong.advance(112);
     expect(clean.results().total).toBeGreaterThan(65);
-    expect(clean.results().total).toBeGreaterThan(wrong.results().total+30);
+    expect(clean.results().total).toBeGreaterThan(wrong.results().total + 30);
   });
 });
-describe('camera-consistent correction controls',()=>{
-  it('right remains field-right when the written set marches backward',()=>{
-    const r=new PerformanceRun(show,'Easy',5,1);
-    for(let c=8;c<24;c++)r.tap(show.tempo.seconds(c),{forward:1,side:0});
-    const from=r.position(32);
-    r.tap(show.tempo.seconds(32),{forward:-1,side:1});
+describe("camera-consistent correction controls", () => {
+  it("right remains field-right when the written set marches backward", () => {
+    const r = new PerformanceRun(show, "Easy", 5, 1);
+    for (let c = 8; c < 24; c++)
+      r.tap(show.tempo.seconds(c), { forward: 1, side: 0 });
+    const from = r.position(32);
+    r.tap(show.tempo.seconds(32), { forward: -1, side: 1 });
     expect(r.position(33).x).toBeGreaterThan(from.x);
+  });
+});
+describe("device calibration", () => {
+  it("adjusts timing judgement without moving the physical tap timestamp", () => {
+    const r = new PerformanceRun(show, "Easy", 5, 1),
+      actual = show.tempo.seconds(8) + 0.2;
+    r.tap(actual, { forward: 1, side: 0 }, 0.2);
+    expect(r.steps[0].seconds).toBe(actual);
+    expect(r.steps[0].timing).toBe(100);
+    expect(r.position(8)).toEqual(show.drill.initial[5]);
   });
 });
