@@ -10,7 +10,7 @@ import {
   type Steering,
 } from "./performance";
 import { Playback } from "./playback";
-import { Controls, arrowStep } from "./controls";
+import { Controls, ArrowChords } from "./controls";
 import { RoomClient, type Packet } from "./multiplayer";
 import { readProgress, recordResult } from "./progress";
 import { conduct } from "./drum-major";
@@ -294,7 +294,7 @@ function menu() {
   hud.hidden = true;
   overlay.hidden = false;
   getPlaybackIfExistsStop();
-  overlay.innerHTML = `<div class="intro"><p class="eyebrow">A MARCHING FIELD GAME</p><h1>Every step.<br>Every interval.</h1><p><strong>Press an arrow on every moving count.</strong> ↑ marches forward, ↓ marches backward, and ← → take a step with a direction adjustment toward your dot. No Space or key combinations. During holds, stop pressing; an early step stays in place and costs points.</p><small>The show starts with an eight-count HOLD after the count-in. Wait for MOVE before stepping.</small>${settings()}<small id="personal-best"></small><button class="primary" id="start">Take the field ↗</button><button id="tilt">Enable phone tilt</button><button id="calibrate">Calibrate timing</button><small id="asset-status"></small><details ${location.hash.startsWith("#room=") ? "open" : ""}><summary>March with friends · 2–4 players</summary><label>DISPLAY NAME<input id="name" maxlength="24" value="${esc(localStorage.getItem("mb-name") ?? "Marcher")}" autocomplete="nickname"></label><div class="room-entry"><button id="create">Create room</button><input id="code" aria-label="Room code" maxlength="6" placeholder="ROOM CODE" value="${esc(location.hash.replace("#room=", "").slice(0, 6))}"><button id="join">Join room</button></div><small>Compete on your own score. Make the band better together.</small></details><p class="review-links"><a href="/uniform.html">Uniform studio ↗</a> · <a href="/music.html">Music study ↗</a></p></div>`;
+  overlay.innerHTML = `<div class="intro"><p class="eyebrow">A MARCHING FIELD GAME</p><h1>Every step.<br>Every interval.</h1><p><strong>Press an arrow on every moving count.</strong> ↑ marches forward, ↓ marches backward, and ← → take a step with a direction adjustment toward your dot. Combine ↑/↓ with ←/→ for one diagonal step. No Space. During holds, stop pressing; an early step stays in place and costs points.</p><small>The show starts with an eight-count HOLD after the count-in. Wait for MOVE before stepping.</small>${settings()}<small id="personal-best"></small><button class="primary" id="start">Take the field ↗</button><button id="tilt">Enable phone tilt</button><button id="calibrate">Calibrate timing</button><small id="asset-status"></small><details ${location.hash.startsWith("#room=") ? "open" : ""}><summary>March with friends · 2–4 players</summary><label>DISPLAY NAME<input id="name" maxlength="24" value="${esc(localStorage.getItem("mb-name") ?? "Marcher")}" autocomplete="nickname"></label><div class="room-entry"><button id="create">Create room</button><input id="code" aria-label="Room code" maxlength="6" placeholder="ROOM CODE" value="${esc(location.hash.replace("#room=", "").slice(0, 6))}"><button id="join">Join room</button></div><small>Compete on your own score. Make the band better together.</small></details><p class="review-links"><a href="/uniform.html">Uniform studio ↗</a> · <a href="/music.html">Music study ↗</a></p></div>`;
   bindSettings();
   updateBest();
   updateAssetStatus();
@@ -394,7 +394,7 @@ function begin(seed: number, delay = 0, restore = false) {
     returningControl = true;
   }
 }
-function rhythm(override?: Steering) {
+function rhythm(override?: Steering, pressedSeconds?: number) {
   if (mode === "calibrate") {
     calTap();
     return;
@@ -410,8 +410,13 @@ function rhythm(override?: Steering) {
   )
     return;
   const input = override ?? controls.value;
-  run.tap(playback.seconds, input, calibration, override ? "nudge" : "tilt");
-  if (selected.hold(selected.tempo.count(playback.seconds))) {
+  run.tap(
+    pressedSeconds ?? playback.seconds,
+    input,
+    calibration,
+    override ? "nudge" : "tilt",
+  );
+  if (selected.hold(selected.tempo.count(pressedSeconds ?? playback.seconds))) {
     warningAt = performance.now() / 1000;
     warningUntil = performance.now() + 2000;
     $("feedback").textContent = "Not yet";
@@ -431,7 +436,9 @@ $("sound").onclick = () => {
   if (playback) playback.gain.gain.value = muted ? 0 : 1;
   $("sound").textContent = muted ? "Sound off" : "Sound on";
 };
+const chords = new ArrowChords((input, seconds) => rhythm(input, seconds));
 function pause() {
+  chords.cancel();
   if (mode !== "run" || room || !playback) return;
   controls.keys.clear();
   if (playback.paused) {
@@ -447,14 +454,22 @@ window.addEventListener("keydown", (e) => {
   if ((e.target as HTMLElement).matches("input,select,textarea")) return;
   if ([" ", "Escape"].includes(e.key)) e.preventDefault();
   if (e.repeat) return;
-  const action = arrowStep(
-    e,
-    selected.backward(playback ? selected.tempo.count(playback.seconds) : 0),
-  );
-  if (action) rhythm(action);
+  if (mode === "calibrate" && e.key.startsWith("Arrow")) calTap();
+  else if (
+    mode === "run" &&
+    playback &&
+    !playback.paused &&
+    !playback.countingIn
+  )
+    chords.press(
+      e,
+      playback.seconds,
+      selected.backward(selected.tempo.count(playback.seconds)),
+    );
   if (e.key === "Escape") pause();
 });
 window.addEventListener("blur", () => {
+  chords.cancel();
   if (mode === "run" && !room && !playback?.paused) pause();
 });
 async function calibrate() {

@@ -443,3 +443,7 @@ The persistent top-right drum-major sketch uses a regular mirrored 4/4 down–in
 ### Halt closing count (Taylor, Nov 4)
 
 Count nine (count one of the following hold) is the closing motion, rather than snapping to attention at the boundary or closing on count eight. Blend the last stride to feet together during that first hold count; remain closed from count two onward. Opening and consecutive holds stay closed. This visual closing motion does not translate the performer or create a gameplay input/fault; mistaken hold presses retain the existing Not yet behavior.
+
+### Two-arrow rhythm chords (Taylor, Nov 4)
+
+Compatible arrows pressed within a fixed 45 ms window produce one diagonal guided step and one timing judgment. Up/Down selects travel, Left/Right supplies the persistent steering nudge; either key order works. A lone lateral arrow retains the written travel direction. Opposite arrows in a chord produce one small mark-time step. Use the first press's music timestamp for movement/scoring, not the delayed chord dispatch. Repeated keydown events are ignored; distinct same-arrow taps remain separate. Cancel pending chords on blur or pause. Mobile input is unchanged. This supersedes the prior prohibition on keyboard combinations.

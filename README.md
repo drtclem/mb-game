@@ -21,8 +21,9 @@ Vite proxies `/api` to the room service on port 8787. Use the URL Vite prints. S
 
 ## Play
 
-- **Press an arrow on each moving count.** Each distinct press triggers one step; no Space or combinations.
+- **Press an arrow on each moving count.** Each distinct press triggers one step; no Space. Combine ↑/↓ with ←/→ for one diagonal step.
 - **Up / Down:** forward / backward travel. **Left / Right:** a step plus a 6° steering nudge. The adjustment persists until counter-steered and resets for each new set; the route remains guided toward the current dot. Key auto-repeat does not create extra steps.
+- Arrow presses within 45 ms form one chord and one timing judgment, using the first press time. Opposite arrows mark time. Held-key auto-repeat is ignored; release and tap again for each count.
 - The camera does not flip for backward sets. Wrong-direction and extra presses visibly affect the marcher; recovery still tops out at **4-to-5 (45 inches)**.
 - **HOLD:** stop pressing. An arrow press animates a small step in place, leaves the actual position unchanged, shows **Not yet**, and incurs a fault.
 - **Escape / Pause** pauses solo only. Resume has a fresh count-in. Multiplayer keeps running.
