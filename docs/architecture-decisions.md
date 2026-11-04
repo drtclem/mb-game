@@ -407,3 +407,13 @@ Taylor selected the opening of Strauss’s *Also sprach Zarathustra* as the firs
 ### Brass-only music revision (Taylor, Nov 3)
 
 Taylor requested a more drum-corps-like brass sound and brass-only instrumentation. Revision 2 removes percussion, adds instrument-specific synthesized ensemble profiles and preserves the draft count/tempo/hold map. A lifelike production performance remains a later audio-production step; no external generation or reference-recording upload is authorized by this implementation.
+
+### Full-build implementation checkpoint (Taylor authorized “build it all out”, Nov 3)
+
+The latest Nov 3 discussion decisions supersede the historical prototype details above. The live entry point now uses `performance.ts` and `repertoire.ts`: two music-matched 112-count shows, tap-driven movement, bounded recovery and hold mistakes, neutral mark time, forward/backward input with fixed camera orientation, local shape/interval judging, technique deductions, separate band result, per-set analytics, browser-local progression, landscape phone tap/tilt input, solo pause/count-in, and a persistent conducting sketch inset. `game.ts`/`show.ts` remain historical test fixtures, not the live gameplay engine.
+
+Tunable first-pass values: unlock at 65 individual points; hold radius .35 coordinate steps around actual hold entry; maximum correction angle π/7; timing/size/direction technique deductions up to 20/10/10 points plus 1.5 per hold fault (combined cap 60). These are implementation defaults for playtesting, not newly locked design decisions. The 4-to-5 physical step cap remains 2 coordinate units.
+
+Rooms use a dependency-free Node HTTP/SSE signaling service and host-star WebRTC data channels. Host selection, Ready gates, 2–4 adjacent slots, shared start, AI on disconnect and incomplete results are implemented. Each device still judges locally. HTTPS hosting and configured TURN must be verified on actual separate networks before release. No external service was purchased or deployed. `README.md` has local and production setup, and explicit verification limits.
+
+The second show is an original reprise of the approved Strauss study, separately rendered in D with different articulation, tempo, diagonal drill and twilight field lighting. Show 1 remains the reviewed brass-only draft. Final music/drum-major art and later marcher customization remain deferred. Original judges/staff/crowd roadmap items have not been implemented in this checkpoint; the tap/recovery and form-preservation mechanics provide the current gameplay beyond steering.

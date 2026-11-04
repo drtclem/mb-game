@@ -1,0 +1,9 @@
+- [x] Tap simulation and scoring
+- [x] Shows, music and gameplay UI
+- [x] Mobile controls and conducting inset (physical iPhone check still required)
+- [x] Rooms and WebRTC (four local browser players tested)
+- [x] Analytics, progression and reconnect
+- [x] Local type checks, 61 unit tests, 2 service tests, production build and audit
+- [ ] Hosted HTTPS + TURN verification on separate networks
+- [ ] Physical iPhone Safari motion/audio and performance acceptance
+- [ ] Final drum-major art and music production (explicitly deferred)

@@ -154,6 +154,6 @@ Control mapping confirmed November 3: Space + arrows on laptop; screen taps + ti
 
 **Multiplayer progression confirmed:** completed individual multiplayer scores qualify for personal bests and unlocks, like solo scores. Incomplete results do not qualify.
 
-**Next question, one at a time:** are there other visual/design changes Taylor wants to prioritize before implementation? The core control, scoring, multiplayer and progression decisions are sufficiently defined for a first implementation; remaining numerical tuning can be tested in play.
+**Implementation authorized:** Taylor requested the full build. See `tasks/plan.md`, `tasks/todo.md` and the implementation checkpoint in `architecture-decisions.md`. Remaining numerical settings are playtest defaults; deferred artwork/customization remain deferred.
 
 Remaining queue items will be refined or skipped as answers arrive. Taylor's earlier message ended with “make sure”; allow them to add that unfinished requirement when ready.
