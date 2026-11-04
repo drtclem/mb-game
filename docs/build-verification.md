@@ -58,3 +58,7 @@ Found two visual causes: generic final-count swing continued until the hold boun
 ## Halt phase handoff — November 4
 
 The earlier pure closure test missed the preceding gait: immediately before the planted arrival the ordinary right-foot travel was +0.5, while the arrival requested -0.5, a one-stride discontinuity. Added an actual skeletal rig fixture and transition tests, aligned AI contact phase/body reference, and moved the left closing swing before the hold downbeat. Tests check the real right ankle through six closing phases, no full-stride handoff jump, and feet closed at the hold downbeat. Type check, 108 tests and build pass. Browser captures compare moving count 8/8 with hold count 1/8 and now show a closed stance on the hold downbeat. Console error logs were empty.
+
+## Instructional first-step reference — November 4
+
+Read the complete auto-caption transcript of Taylor's linked Tyler Loretz video and inspected the demonstrations, including the forward step-and-freeze at 6:04. No recording or third-party model was incorporated. Applied independent left-foot reset/alternation, low forward/backward preparation, forefoot push and input-time foot contact. Tests cover clean odd/even contacts, holds with extra prior taps, skipped initial sets, aborted preparation and ankle/clearance profiles. Type check, 114 tests and build pass. Browser smoke play used four distinct Space inputs in the moving set, with no console errors. Exact movement remains tested in the existing distance regression suite; final naturalness still needs user review.

@@ -15,6 +15,7 @@ export type Step = {
   timingBeat?: number;
   synthetic?: boolean;
   stepOff?: boolean;
+  foot?: 0 | 1;
   direction: number;
   sizeError: number;
   hold: boolean;
@@ -318,12 +319,18 @@ export class PerformanceRun {
               ? 45
               : 0;
     const startSeconds = Math.max(seconds, this.show.tempo.seconds(page * 8));
+    let phraseStart = page;
+    while (phraseStart > 0 && !this.show.hold((phraseStart - 1) * 8))
+      phraseStart--;
+    const previousMoving = [...this.steps]
+      .reverse()
+      .find((s) => !s.hold && !s.synthetic);
+    const stepOff =
+      !hold && (!previousMoving || previousMoving.page < phraseStart);
+    const foot: 0 | 1 = stepOff ? 0 : previousMoving?.foot === 0 ? 1 : 0;
     this.steps.push({
-      stepOff:
-        !hold &&
-        page > 0 &&
-        this.show.hold(page * 8 - 0.001) &&
-        !this.steps.some((s) => s.page === page && !s.synthetic),
+      stepOff,
+      foot: hold ? undefined : foot,
       seconds: startSeconds,
       end: Math.min(
         startSeconds + duration,

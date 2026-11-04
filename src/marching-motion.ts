@@ -82,3 +82,19 @@ export function haltFootPose(side: number, closure: number) {
 export function contactGaitCount(count: number) {
   return count + 1;
 }
+
+/** Low toe-led left extension, supported by a push from the right forefoot. */
+export function stepOffFootPose(
+  progress: number,
+  side: number,
+  backward: boolean,
+) {
+  const t = Math.max(0, Math.min(1, progress)),
+    ease = t * t * (3 - 2 * t);
+  if (side === 1) return { travel: 0, lift: 0, roll: -0.22 * ease };
+  return {
+    travel: -0.5 * ease,
+    lift: Math.sin(Math.PI * t) * (backward ? 0.012 : 0.018),
+    roll: backward ? -0.22 * ease : 0.23 * ease - 0.1 * Math.sin(Math.PI * t),
+  };
+}

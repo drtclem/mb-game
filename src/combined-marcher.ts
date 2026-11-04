@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import { footPose, haltFootPose } from "./marching-motion";
+import { footPose, haltFootPose, stepOffFootPose } from "./marching-motion";
 import { twoBoneTargets } from "./skeletal-motion";
 import { legWeights } from "./combined-skin";
 
@@ -184,14 +184,11 @@ export function rigCombinedSurface(
       }
       const targets = legs.map((leg, i) => {
         const pose =
-          hold && closure < 1
-            ? haltFootPose(i, closure)
-            : footPose(count, i, hold, backward);
-        if (preparation > 0) {
-          pose.travel = i === 0 ? -0.5 * preparation : 0;
-          pose.lift = i === 0 ? 0.04 * Math.sin(Math.PI * preparation) : 0;
-          pose.roll = 0;
-        }
+          preparation > 0
+            ? stepOffFootPose(preparation, i, backward)
+            : hold && closure < 1
+              ? haltFootPose(i, closure)
+              : footPose(count, i, hold, backward);
         const target = leg.foot.clone();
         // Track beneath the body rather than preserving the modeling pose's wide stance.
         target.x *= 0.45;

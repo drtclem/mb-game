@@ -1031,10 +1031,18 @@ function frame() {
       step &&
       (i === playerId || member?.connected)
     ) {
+      const nextBeat =
+        (step.timingBeat ?? Math.round(selected.tempo.count(step.seconds))) + 1;
       const pose = stepAnimation(
         step,
         selected.tempo.seconds(c),
         selected.hold(c),
+        {
+          contact: selected.tempo.seconds(nextBeat),
+          halfBeat:
+            selected.tempo.seconds(nextBeat) -
+            selected.tempo.seconds(nextBeat - 0.5),
+        },
       );
       model.animate(pose.count, pose.hold, pose.backward, pose.dx, pose.dz);
     } else {

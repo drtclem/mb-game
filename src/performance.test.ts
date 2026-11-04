@@ -176,3 +176,31 @@ describe("mouse-directed steps", () => {
     expect(r.faults).toBe(1);
   });
 });
+
+describe("left-foot step-offs", () => {
+  it("uses left on odd and right on even counts for an on-time phrase", () => {
+    const run = new PerformanceRun(show, "Easy", 5, 1);
+    for (let count = 8; count < 24; count++) {
+      run.tap(show.tempo.seconds(count), { forward: 1, side: 0 });
+      expect(run.steps.at(-1)!.foot).toBe(count % 2);
+    }
+  });
+  it("resets to left after a hold even with extra prior taps and hold mistakes", () => {
+    const run = new PerformanceRun(show, "Easy", 5, 1);
+    run.tap(show.tempo.seconds(8), { forward: 1, side: 0 });
+    run.tap(show.tempo.seconds(8) + 0.2, { forward: 1, side: 0 });
+    run.tap(show.tempo.seconds(9), { forward: 1, side: 0 });
+    run.tap(show.tempo.seconds(26), { forward: 1, side: 0 });
+    run.tap(show.tempo.seconds(32), { forward: -1, side: 0 });
+    expect(run.steps.at(-1)!.stepOff).toBe(true);
+    expect(run.steps.at(-1)!.foot).toBe(0);
+    run.tap(show.tempo.seconds(33), { forward: -1, side: 0 });
+    expect(run.steps.at(-1)!.foot).toBe(1);
+  });
+  it("starts left even if the first moving set was entirely missed", () => {
+    const run = new PerformanceRun(show, "Easy", 5, 1);
+    run.tap(show.tempo.seconds(16), { forward: 1, side: 0 });
+    expect(run.steps.at(-1)!.stepOff).toBe(true);
+    expect(run.steps.at(-1)!.foot).toBe(0);
+  });
+});

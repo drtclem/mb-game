@@ -5,6 +5,7 @@ import {
   stepOffPreparation,
   haltBodyOffset,
   haltFootPose,
+  stepOffFootPose,
 } from "./marching-motion";
 
 describe("marcher animation", () => {
@@ -84,5 +85,25 @@ describe("single-foot halt closure", () => {
       expect(body - left.travel).toBeCloseTo(-(1 - progress));
     }
     expect(haltFootPose(0, 0.5).lift).toBeGreaterThan(0);
+  });
+});
+
+describe("reference step-off mechanics", () => {
+  it("pushes from the right forefoot while the left foot stays low and arrives toe-up", () => {
+    const right = stepOffFootPose(1, 1, false),
+      left = stepOffFootPose(1, 0, false);
+    expect(right.travel).toBe(0);
+    expect(right.lift).toBe(0);
+    expect(right.roll).toBeLessThan(0);
+    expect(left.travel).toBe(-0.5);
+    expect(left.roll).toBeGreaterThan(0);
+    for (let t = 0; t <= 1; t += 0.05)
+      expect(stepOffFootPose(t, 0, false).lift).toBeLessThanOrEqual(0.018);
+  });
+  it("keeps backward steps low with both heels modestly raised", () => {
+    for (const side of [0, 1])
+      expect(stepOffFootPose(1, side, true).roll).toBeCloseTo(-0.22);
+    for (let t = 0; t <= 1; t += 0.05)
+      expect(stepOffFootPose(t, 0, true).lift).toBeLessThanOrEqual(0.012);
   });
 });

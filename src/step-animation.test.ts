@@ -60,3 +60,15 @@ describe("halt closing count", () => {
 it("lands the prepared left foot when the first step is actually tapped", () => {
   expect(stepAnimation({ ...step, stepOff: true }, 10).count).toBe(1);
 });
+
+it("lands each input-selected foot on its tap and prepares the next contact without creating one", () => {
+  const left = { ...step, foot: 0 as const };
+  const upcoming = { contact: 10.7, halfBeat: 0.35 };
+  expect(stepAnimation(left, 10, false, upcoming).count).toBe(1);
+  expect(stepAnimation(left, 10.4, false, upcoming).count).toBeGreaterThan(1);
+  expect(stepAnimation(left, 10.69, false, upcoming).count).toBeLessThan(2);
+  // A missed tap aborts the preparation rather than completing an automatic step.
+  expect(stepAnimation(left, 11, false, upcoming).count).toBe(1);
+  const right = { ...step, seconds: 10.7, end: 11.3, foot: 1 as const };
+  expect(stepAnimation(right, 10.7).count).toBe(2);
+});
