@@ -79,15 +79,18 @@ export class Playback {
   get countingIn() {
     return !this.paused && this.context.currentTime < this.resumeUntil;
   }
-  get countoff() {
-    if (!this.show) return "";
-    const c = Math.floor(
+  get countoffProgress() {
+    if (!this.show) return -1;
+    return (
       this.show.tempo.count(
         this.show.tempo.seconds(this.countoffAnchor) +
           this.context.currentTime -
           this.countoffAt,
-      ) - this.countoffAnchor,
+      ) - this.countoffAnchor
     );
+  }
+  get countoff() {
+    const c = Math.floor(this.countoffProgress);
     return (
       (
         { 0: "5", 2: "6", 4: "5", 5: "6", 6: "7", 7: "8" } as Record<

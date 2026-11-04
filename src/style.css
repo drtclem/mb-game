@@ -667,3 +667,217 @@ td small {
     font-size: 10px;
   }
 }
+/* The move structure and the musical pulse occupy separate corners. */
+#move-card {
+  position: absolute;
+  top: 20px;
+  left: 24px;
+  width: 300px;
+  padding: 14px 16px;
+  background: #102433ee;
+  border: 1px solid #66818a88;
+  border-radius: 6px;
+  pointer-events: none;
+}
+#move-card #page {
+  position: static;
+  display: block;
+  max-width: none;
+  font: 10px monospace;
+  letter-spacing: 0.08em;
+  color: #a8c2cb;
+  margin: 0 0 14px;
+}
+.move-row {
+  display: grid;
+  grid-template-columns: 32px 1fr auto;
+  align-items: start;
+  gap: 10px;
+}
+.move-label {
+  font: 9px monospace;
+  letter-spacing: 0.1em;
+  color: #e9bd78;
+  padding-top: 3px;
+}
+.move-row strong {
+  font: 700 14px Arial;
+  color: #f6f0df;
+}
+.move-row small {
+  margin: 5px 0 0;
+  font: 11px Arial;
+  color: #a9bfc7;
+}
+.move-row b {
+  font: 10px monospace;
+  color: #e9bd78;
+  padding-top: 3px;
+  white-space: nowrap;
+}
+.move-row.next {
+  border-top: 1px solid #6d8a8d44;
+  padding-top: 11px;
+}
+.move-row.next strong {
+  font-size: 12px;
+  color: #c9d8da;
+}
+#set-progress {
+  display: flex;
+  gap: 4px;
+  margin: 12px 0;
+}
+#set-progress i {
+  height: 4px;
+  flex: 1;
+  background: #314b59;
+  border-radius: 2px;
+}
+#set-progress i.complete {
+  background: #91b1b5;
+}
+#set-progress i.current {
+  background: #efc17a;
+}
+#count-panel {
+  position: absolute;
+  bottom: 24px;
+  left: 24px;
+  width: 280px;
+  padding: 12px;
+  background: #0d2130ed;
+  border: 1px solid #66818a88;
+  border-radius: 6px;
+  pointer-events: none;
+}
+.count-caption {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  font: 10px monospace;
+  letter-spacing: 0.05em;
+  color: #b8cdd2;
+}
+.count-caption b {
+  color: #f4cc89;
+  font-size: 12px;
+}
+#count-panel #beat {
+  position: static;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 7px;
+  margin-top: 9px;
+  font: 700 30px Arial;
+  color: #b9d4de;
+}
+.pulse-block {
+  display: grid;
+  place-items: center;
+  height: 57px;
+  border-radius: 4px;
+  background: #205273;
+  border: 1px solid #5284a055;
+}
+.pulse-block.downbeat {
+  background: #594574;
+  border-color: #8b72a366;
+}
+.pulse-block.active {
+  background: #20bd88;
+  color: #092c27;
+  border-color: #b9f7d6;
+  box-shadow: 0 0 12px #20bd8828;
+}
+#view {
+  top: auto;
+  left: auto;
+  right: 175px;
+  bottom: 24px;
+}
+#recenter {
+  top: 20px;
+  left: 345px;
+  right: auto;
+  bottom: auto;
+}
+#motion-state {
+  top: 209px;
+}
+#stage:focus {
+  outline: none;
+}
+@media (max-height: 600px) {
+  #move-card {
+    top: 10px;
+    left: 15px;
+    width: 225px;
+    padding: 10px 12px;
+  }
+  #move-card #page {
+    font-size: 9px;
+    margin-bottom: 9px;
+  }
+  .move-row {
+    grid-template-columns: 27px 1fr auto;
+    gap: 7px;
+  }
+  .move-row strong {
+    font-size: 12px;
+  }
+  .move-row small {
+    font-size: 10px;
+    margin-top: 3px;
+  }
+  .move-row.next {
+    padding-top: 7px;
+  }
+  #set-progress {
+    margin: 8px 0;
+  }
+  .move-row.next strong {
+    font-size: 11px;
+  }
+  #motion-state {
+    display: none;
+  }
+  #count-panel {
+    left: 15px;
+    bottom: 12px;
+    width: 225px;
+    padding: 9px;
+  }
+  .count-caption {
+    font-size: 9px;
+  }
+  #count-panel #beat {
+    font-size: 24px;
+    gap: 5px;
+    margin-top: 7px;
+  }
+  .pulse-block {
+    height: 39px;
+  }
+  #view {
+    top: 10px;
+    right: 210px;
+    left: auto;
+    bottom: auto;
+    padding: 8px 10px;
+  }
+  #pause {
+    top: 10px;
+    right: 110px;
+    bottom: auto;
+    padding: 8px 10px;
+  }
+  #recenter {
+    top: 61px;
+    right: 110px;
+    left: auto;
+    bottom: auto;
+    padding: 8px 10px;
+  }
+}

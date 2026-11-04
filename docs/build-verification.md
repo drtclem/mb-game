@@ -30,3 +30,7 @@ Hands-on keyboard testing reproduced full 45-inch recovery travel with Up + Spac
 ## Arrow-only revision and visible stride fix — November 4
 
 Taylor replaced held arrows plus Space with one distinct arrow press per step. Hold actions now animate in place with no travel and show “Not yet”. Browser testing confirmed both the opening-hold warning and travel through a moving set with individual Up presses. A separate rig test verifies that the foot remains in its landed stride instead of resetting to attention between inputs. Keyboard focus is explicitly placed on the field at start. Current type checks, 69 unit tests and production build pass.
+
+## Count structure HUD — November 4
+
+Decoded the supplied 2.33-second metronome reference locally using a temporary software decoder. Added four active beat blocks, two-part eight-count phrasing, and current/next move cards. Browser verification captured the final-four count-in (5/6/7/8), opening hold preview, and subsequent moving set. A temporary 844×390 viewport check showed the HUD fitting in landscape; the override was reset. Browser error logs were empty. Type checks, 75 unit tests and production build pass. Physical iPhone testing remains separate.

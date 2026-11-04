@@ -427,3 +427,7 @@ During a hold, a gameplay press must visibly animate a tiny step **in place**, w
 ### Feet together on holds (Taylor, Nov 4)
 
 At a written hold, close both feet into the attention stance without changing the performer's actual field position. A mistaken hold press still animates a small step in place with “Not yet” and a fault; after that action ends, return the feet together. During moving sets, completed strides remain planted as before.
+
+### Beat-block count display and move preview (Taylor, Nov 4)
+
+Use the supplied short metronome screen recording as a visual reference: four numbered beat blocks, a distinct downbeat and an active green pulse. Keep this bottom-left. The eight-beat count-in remains “5… 6… 5, 6, 7, 8”, displayed as two four-beat groups. During the show, display 1–4 beat blocks plus the count within the full eight-count set and first/second-four labels. Top-left shows the current move/hold, counts left, set progress and next move/hold. The reference was inspected from decoded local video frames; no third-party assets or recording audio are incorporated. All displays derive from the existing audio clock; music tempo and judging are unchanged.

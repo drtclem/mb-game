@@ -26,6 +26,7 @@ Vite proxies `/api` to the room service on port 8787. Use the URL Vite prints. S
 - The camera does not flip for backward sets. Wrong-direction and extra presses visibly affect the marcher; recovery still tops out at **4-to-5 (45 inches)**.
 - **HOLD:** stop pressing. An arrow press animates a small step in place, leaves the actual position unchanged, shows **Not yet**, and incurs a fault.
 - **Escape / Pause** pauses solo only. Resume has a fresh count-in. Multiplayer keeps running.
+- The bottom-left beat blocks show the musical pulse and count within each eight-count set. Top-left shows the current move/hold, counts left and next move.
 - **Overhead** toggles the camera view. The drum-major sketch remains in a top-right inset, conducting through holds.
 
 On iPhone, use landscape, enable motion permission, hold the phone comfortably and recenter tilt. Tilt forward/back for travel and sideways for corrections; use the **single STEP button** for rhythm. No touch-steering alternative. Phone motion requires HTTPS (localhost is sufficient only when running on that same device).

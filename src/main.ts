@@ -15,6 +15,7 @@ import { RoomClient, type Packet } from "./multiplayer";
 import { readProgress, recordResult } from "./progress";
 import { conduct } from "./drum-major";
 import { stepAnimation } from "./step-animation";
+import { countDisplay, moveDisplay } from "./count-display";
 import { loadCombinedMarcher } from "./combined-marcher";
 import { roster } from "./marching-motion";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
@@ -61,7 +62,7 @@ const controls = new Controls(),
     { result: Result; incomplete: boolean; band: number }
   >();
 const app = document.querySelector<HTMLDivElement>("#app")!;
-app.innerHTML = `<main><header><a class="brand" href="/">ON THE DOT<span>THE FIELD IS LISTENING</span></a><span class="edition">BRASS / RHYTHM / FORM</span><button id="sound">Sound on</button></header><section id="stage"><div id="scene"></div><div id="labels"></div><div id="hud" hidden><div id="motion-state" role="status"></div><div id="page"></div><div id="beat"></div><div id="feedback" role="status"></div><canvas id="map" width="310" height="170" aria-label="Field overview"></canvas><canvas id="conductor" width="160" height="205" aria-label="Drum major conducting the musical count"></canvas><button id="view">Overhead</button><button id="pause">Pause</button><button id="recenter" hidden>Recenter tilt</button><button id="rhythm" hidden aria-label="Tap once for each step">STEP<span>tap the count</span></button></div><div id="overlay"></div><div id="notice" role="status"></div><div id="rotate">Turn your phone sideways to take the field.</div></section><footer><span>↑ ↓ ← → · PRESS AN ARROW ON EACH COUNT</span><span>4-TO-5 MAX · EVERY TAP COUNTS</span></footer></main>`;
+app.innerHTML = `<main><header><a class="brand" href="/">ON THE DOT<span>THE FIELD IS LISTENING</span></a><span class="edition">BRASS / RHYTHM / FORM</span><button id="sound">Sound on</button></header><section id="stage"><div id="scene"></div><div id="labels"></div><div id="hud" hidden><div id="motion-state" role="status"></div><section id="move-card" aria-label="Current and next move"><div id="page"></div><div class="move-row"><span class="move-label">NOW</span><div><strong id="current-move"></strong><small id="current-detail"></small></div><b id="counts-left"></b></div><div id="set-progress" aria-label="Progress through eight counts">${Array.from({ length: 8 }, () => "<i></i>").join("")}</div><div class="move-row next"><span class="move-label">NEXT</span><div><strong id="next-move"></strong><small id="next-detail"></small></div></div></section><section id="count-panel" aria-label="Musical count"><div class="count-caption"><span id="count-label"></span><b id="count-position"></b></div><div id="beat">${Array.from({ length: 4 }, (_, i) => `<span class="pulse-block ${i === 0 ? "downbeat" : ""}">${i + 1}</span>`).join("")}</div></section><div id="feedback" role="status"></div><canvas id="map" width="310" height="170" aria-label="Field overview"></canvas><canvas id="conductor" width="160" height="205" aria-label="Drum major conducting the musical count"></canvas><button id="view">Overhead</button><button id="pause">Pause</button><button id="recenter" hidden>Recenter tilt</button><button id="rhythm" hidden aria-label="Tap once for each step">STEP<span>tap the count</span></button></div><div id="overlay"></div><div id="notice" role="status"></div><div id="rotate">Turn your phone sideways to take the field.</div></section><footer><span>↑ ↓ ← → · PRESS AN ARROW ON EACH COUNT</span><span>4-TO-5 MAX · EVERY TAP COUNTS</span></footer></main>`;
 const overlay = $("overlay"),
   hud = $("hud");
 const scene = new THREE.Scene();
@@ -776,15 +777,32 @@ function frame() {
     $("motion-state").textContent = controls.enabled
       ? "TILT TO STEER · TAP STEP ON THE COUNT"
       : "PRESS AN ARROW ON THE COUNT";
+    const countIn = playback.countingIn ? playback.countoffProgress : undefined;
+    const beats = countDisplay(count, countIn),
+      moves = moveDisplay(selected, count, countIn);
     $("page").textContent =
-      `${selected.name.toUpperCase()} · SET ${page + 1} / 14 · ${selected.drill.pages[page].name}`;
-    $("beat").textContent = returningControl
-      ? `IN ${Math.max(1, Math.ceil((rejoinUntil - playback.context.currentTime) / (60 / 84)))}`
-      : playback.paused
-        ? "PAUSED"
-        : playback.countingIn
-          ? playback.countoff
-          : String(selected.tempo.counter(count));
+      `${selected.name.toUpperCase()} · SET ${moves.page + 1} / ${selected.drill.pages.length}`;
+    $("current-move").textContent = moves.now.label;
+    $("current-detail").textContent = moves.now.name;
+    $("next-move").textContent = moves.next?.label ?? "FINISH";
+    $("next-detail").textContent = moves.next?.name ?? "Final release";
+    $("counts-left").textContent = `${moves.remaining} LEFT`;
+    Array.from($("set-progress").children).forEach((tick, index) => {
+      tick.classList.toggle("complete", index < moves.progress);
+      tick.classList.toggle("current", index === moves.progress);
+    });
+    $("count-label").textContent = playback.paused
+      ? "PAUSED"
+      : returningControl
+        ? "REJOIN COUNT-IN"
+        : beats.caption;
+    $("count-position").textContent = beats.position;
+    Array.from($("beat").children).forEach((tile, index) => {
+      tile.textContent = beats.labels[index];
+      tile.classList.toggle("active", index === beats.active);
+      if (index === beats.active) tile.setAttribute("aria-current", "step");
+      else tile.removeAttribute("aria-current");
+    });
     if (page !== lastPage && count >= 0 && !playback.countingIn) {
       lastPage = page;
       const keepNotYet =
