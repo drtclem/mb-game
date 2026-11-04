@@ -5,6 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
+    "rooms": "node server/rooms.mjs",
+    "start": "node server/rooms.mjs",
+    "test:rooms": "node --test tests/rooms.acceptance.mjs",
     "build": "tsc && vite build",
     "test": "vitest run",
     "check": "tsc --noEmit --noUnusedLocals --noUnusedParameters"
