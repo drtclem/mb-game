@@ -38,3 +38,7 @@ Decoded the supplied 2.33-second metronome reference locally using a temporary s
 ## Steering and conducting synchronization — November 4
 
 Added persistent bounded keyboard nudges, proportional tilt, a three-count upcoming moving-dot cue, and a conventional 4/4 conducting pattern driven by the shared count. Regression coverage verifies nudges/reset/cap, preview boundaries and hold skipping, and conductor beat agreement through both shows' tempo changes and count-in. Type checks, 82 unit tests and production build pass. Live browser inspection showed MOVE IN 3 during the opening hold, the cyan dot/arrow, and conductor BEAT 2 matching the active second beat block. Hold input still displayed Not yet. Browser error logs were empty. Physical-device verification remains outstanding.
+
+## Mouse steering and prepared step-off — November 4
+
+Desktop trial now maps field-projected mouse aim to actual step direction, with distinct Space presses supplying rhythm. Automated tests verify travel follows aim rather than the dot, the recovery cap remains, and hold presses cannot travel. Preparation boundary tests cover the and of eight, continued holds and first tapped left-foot landing; halt arrival reference tests distinguish moving and held destinations. Type checks, 92 unit tests and production build pass. Browser testing loaded the revised instructions, aimed at the field, tapped Space and observed a visible stride and updated heading with no console errors. Detailed foot choreography still needs Taylor's visual review.

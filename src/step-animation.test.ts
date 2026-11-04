@@ -54,3 +54,7 @@ describe("halt closing count", () => {
     expect(haltClosure(32, true, true)).toBe(1);
   });
 });
+
+it("lands the prepared left foot when the first step is actually tapped", () => {
+  expect(stepAnimation({ ...step, stepOff: true }, 10).count).toBe(1);
+});

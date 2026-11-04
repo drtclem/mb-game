@@ -10,11 +10,15 @@ import {
   type Steering,
 } from "./performance";
 import { Playback } from "./playback";
-import { Controls, ArrowChords } from "./controls";
+import { Controls } from "./controls";
 import { RoomClient, type Packet } from "./multiplayer";
 import { readProgress, recordResult } from "./progress";
 import { conduct } from "./drum-major";
-import { haltClosure } from "./marching-motion";
+import {
+  haltClosure,
+  stepOffPreparation,
+  haltBodyOffset,
+} from "./marching-motion";
 import { stepAnimation } from "./step-animation";
 import { countDisplay, moveDisplay } from "./count-display";
 import { nextMovePreview } from "./next-move";
@@ -64,7 +68,7 @@ const controls = new Controls(),
     { result: Result; incomplete: boolean; band: number }
   >();
 const app = document.querySelector<HTMLDivElement>("#app")!;
-app.innerHTML = `<main><header><a class="brand" href="/">ON THE DOT<span>THE FIELD IS LISTENING</span></a><span class="edition">BRASS / RHYTHM / FORM</span><button id="sound">Sound on</button></header><section id="stage"><div id="scene"></div><div id="labels"></div><div id="hud" hidden><div id="motion-state" role="status"></div><section id="move-card" aria-label="Current and next move"><div id="page"></div><div class="move-row"><span class="move-label">NOW</span><div><strong id="current-move"></strong><small id="current-detail"></small></div><b id="counts-left"></b></div><div id="set-progress" aria-label="Progress through eight counts">${Array.from({ length: 8 }, () => "<i></i>").join("")}</div><div class="move-row next"><span class="move-label">NEXT</span><div><strong id="next-move"></strong><small id="next-detail"></small></div></div></section><section id="count-panel" aria-label="Musical count"><div class="count-caption"><span id="count-label"></span><b id="count-position"></b></div><div id="beat">${Array.from({ length: 4 }, (_, i) => `<span class="pulse-block ${i === 0 ? "downbeat" : ""}">${i + 1}</span>`).join("")}</div></section><aside id="move-preview" hidden role="status"><span id="preview-arrow" aria-hidden="true">↑</span><div><strong id="preview-count"></strong><small id="preview-name"></small></div></aside><div id="feedback" role="status"></div><canvas id="map" width="310" height="170" aria-label="Field overview"></canvas><canvas id="conductor" width="160" height="205" aria-label="Drum major conducting the musical count"></canvas><button id="view">Overhead</button><button id="pause">Pause</button><button id="recenter" hidden>Recenter tilt</button><button id="rhythm" hidden aria-label="Tap once for each step">STEP<span>tap the count</span></button></div><div id="overlay"></div><div id="notice" role="status"></div><div id="rotate">Turn your phone sideways to take the field.</div></section><footer><span>↑ ↓ ← → · PRESS AN ARROW ON EACH COUNT</span><span>4-TO-5 MAX · EVERY TAP COUNTS</span></footer></main>`;
+app.innerHTML = `<main><header><a class="brand" href="/">ON THE DOT<span>THE FIELD IS LISTENING</span></a><span class="edition">BRASS / RHYTHM / FORM</span><button id="sound">Sound on</button></header><section id="stage"><div id="scene"></div><div id="labels"></div><div id="hud" hidden><div id="motion-state" role="status"></div><section id="move-card" aria-label="Current and next move"><div id="page"></div><div class="move-row"><span class="move-label">NOW</span><div><strong id="current-move"></strong><small id="current-detail"></small></div><b id="counts-left"></b></div><div id="set-progress" aria-label="Progress through eight counts">${Array.from({ length: 8 }, () => "<i></i>").join("")}</div><div class="move-row next"><span class="move-label">NEXT</span><div><strong id="next-move"></strong><small id="next-detail"></small></div></div></section><section id="count-panel" aria-label="Musical count"><div class="count-caption"><span id="count-label"></span><b id="count-position"></b></div><div id="beat">${Array.from({ length: 4 }, (_, i) => `<span class="pulse-block ${i === 0 ? "downbeat" : ""}">${i + 1}</span>`).join("")}</div></section><aside id="move-preview" hidden role="status"><span id="preview-arrow" aria-hidden="true">↑</span><div><strong id="preview-count"></strong><small id="preview-name"></small></div></aside><div id="feedback" role="status"></div><canvas id="map" width="310" height="170" aria-label="Field overview"></canvas><canvas id="conductor" width="160" height="205" aria-label="Drum major conducting the musical count"></canvas><button id="view">Overhead</button><button id="pause">Pause</button><button id="recenter" hidden>Recenter tilt</button><button id="rhythm" hidden aria-label="Tap once for each step">STEP<span>tap the count</span></button></div><div id="overlay"></div><div id="notice" role="status"></div><div id="rotate">Turn your phone sideways to take the field.</div></section><footer><span>MOUSE · AIM YOUR STEP / SPACE · TAP THE COUNT</span><span>4-TO-5 MAX · EVERY TAP COUNTS</span></footer></main>`;
 const overlay = $("overlay"),
   hud = $("hud");
 const scene = new THREE.Scene();
@@ -294,7 +298,7 @@ function menu() {
   hud.hidden = true;
   overlay.hidden = false;
   getPlaybackIfExistsStop();
-  overlay.innerHTML = `<div class="intro"><p class="eyebrow">A MARCHING FIELD GAME</p><h1>Every step.<br>Every interval.</h1><p><strong>Press an arrow on every moving count.</strong> ↑ marches forward, ↓ marches backward, and ← → take a step with a direction adjustment toward your dot. Combine ↑/↓ with ←/→ for one diagonal step. No Space. During holds, stop pressing; an early step stays in place and costs points.</p><small>The show starts with an eight-count HOLD after the count-in. Wait for MOVE before stepping.</small>${settings()}<small id="personal-best"></small><button class="primary" id="start">Take the field ↗</button><button id="tilt">Enable phone tilt</button><button id="calibrate">Calibrate timing</button><small id="asset-status"></small><details ${location.hash.startsWith("#room=") ? "open" : ""}><summary>March with friends · 2–4 players</summary><label>DISPLAY NAME<input id="name" maxlength="24" value="${esc(localStorage.getItem("mb-name") ?? "Marcher")}" autocomplete="nickname"></label><div class="room-entry"><button id="create">Create room</button><input id="code" aria-label="Room code" maxlength="6" placeholder="ROOM CODE" value="${esc(location.hash.replace("#room=", "").slice(0, 6))}"><button id="join">Join room</button></div><small>Compete on your own score. Make the band better together.</small></details><p class="review-links"><a href="/uniform.html">Uniform studio ↗</a> · <a href="/music.html">Music study ↗</a></p></div>`;
+  overlay.innerHTML = `<div class="intro"><p class="eyebrow">A MARCHING FIELD GAME</p><h1>Every step.<br>Every interval.</h1><p><strong>Aim with the mouse. Tap Space on every moving count.</strong> Point at the field in the direction you want to step. Each Space press takes one step toward your aim; release and tap again for the next count. During holds, stop pressing; an early step stays in place and costs points.</p><small>The show starts with an eight-count HOLD after the count-in. Wait for MOVE before stepping.</small>${settings()}<small id="personal-best"></small><button class="primary" id="start">Take the field ↗</button><button id="tilt">Enable phone tilt</button><button id="calibrate">Calibrate timing</button><small id="asset-status"></small><details ${location.hash.startsWith("#room=") ? "open" : ""}><summary>March with friends · 2–4 players</summary><label>DISPLAY NAME<input id="name" maxlength="24" value="${esc(localStorage.getItem("mb-name") ?? "Marcher")}" autocomplete="nickname"></label><div class="room-entry"><button id="create">Create room</button><input id="code" aria-label="Room code" maxlength="6" placeholder="ROOM CODE" value="${esc(location.hash.replace("#room=", "").slice(0, 6))}"><button id="join">Join room</button></div><small>Compete on your own score. Make the band better together.</small></details><p class="review-links"><a href="/uniform.html">Uniform studio ↗</a> · <a href="/music.html">Music study ↗</a></p></div>`;
   bindSettings();
   updateBest();
   updateAssetStatus();
@@ -436,9 +440,31 @@ $("sound").onclick = () => {
   if (playback) playback.gain.gain.value = muted ? 0 : 1;
   $("sound").textContent = muted ? "Sound off" : "Sound on";
 };
-const chords = new ArrowChords((input, seconds) => rhythm(input, seconds));
+const mousePosition = new THREE.Vector2();
+let mouseActive = false;
+const aimRay = new THREE.Raycaster(),
+  aimPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+function mouseDirection() {
+  if (!mouseActive || !run || !playback) return { x: 0, y: 0 };
+  aimRay.setFromCamera(mousePosition, camera);
+  const point = aimRay.ray.intersectPlane(aimPlane, new THREE.Vector3());
+  if (!point) return { x: 0, y: 0 };
+  const from = run.position(selected.tempo.count(playback.seconds));
+  const x = point.x - from.x,
+    y = point.z - from.y,
+    length = Math.hypot(x, y);
+  return length < 0.2 ? { x: 0, y: 0 } : { x: x / length, y: y / length };
+}
+$("stage").addEventListener("pointermove", (e) => {
+  if (e.pointerType !== "mouse") return;
+  const rect = renderer.domElement.getBoundingClientRect();
+  mousePosition.set(
+    ((e.clientX - rect.left) / rect.width) * 2 - 1,
+    (-(e.clientY - rect.top) / rect.height) * 2 + 1,
+  );
+  mouseActive = true;
+});
 function pause() {
-  chords.cancel();
   if (mode !== "run" || room || !playback) return;
   controls.keys.clear();
   if (playback.paused) {
@@ -454,22 +480,20 @@ window.addEventListener("keydown", (e) => {
   if ((e.target as HTMLElement).matches("input,select,textarea")) return;
   if ([" ", "Escape"].includes(e.key)) e.preventDefault();
   if (e.repeat) return;
-  if (mode === "calibrate" && e.key.startsWith("Arrow")) calTap();
-  else if (
-    mode === "run" &&
-    playback &&
-    !playback.paused &&
-    !playback.countingIn
-  )
-    chords.press(
-      e,
-      playback.seconds,
-      selected.backward(selected.tempo.count(playback.seconds)),
-    );
+  if (e.key === " ") {
+    if (mode === "calibrate") calTap();
+    else {
+      const aim = mouseDirection();
+      rhythm({
+        forward: Math.hypot(aim.x, aim.y) > 0 ? (aim.y > 0 ? -1 : 1) : 0,
+        side: 0,
+        aim,
+      });
+    }
+  }
   if (e.key === "Escape") pause();
 });
 window.addEventListener("blur", () => {
-  chords.cancel();
   if (mode === "run" && !room && !playback?.paused) pause();
 });
 async function calibrate() {
@@ -481,7 +505,7 @@ async function calibrate() {
   calLastBeat = -1;
   calStart = p.context.currentTime + 0.5;
   for (let i = 0; i < 20; i++) p.click(calStart + (i * 60) / 84, i % 4 === 0);
-  overlay.innerHTML = `<div class="panel"><p class="eyebrow">DEVICE TIMING</p><h1>Find the pulse.</h1><p>Listen to four clicks, then tap with eight. Your timing adjustment stays on this device.</p><button class="primary" id="cal-tap">Tap · any arrow</button><p id="cal-status">Listen…</p><button id="cal-back">Back</button></div>`;
+  overlay.innerHTML = `<div class="panel"><p class="eyebrow">DEVICE TIMING</p><h1>Find the pulse.</h1><p>Listen to four clicks, then tap with eight. Your timing adjustment stays on this device.</p><button class="primary" id="cal-tap">Tap · Space</button><p id="cal-status">Listen…</p><button id="cal-back">Back</button></div>`;
   $("cal-tap").onclick = calTap;
   $("cal-back").onclick = menu;
 }
@@ -823,7 +847,7 @@ function frame() {
     $("motion-state").hidden = !movingPhase;
     $("motion-state").textContent = controls.enabled
       ? "TILT TO STEER · TAP STEP ON THE COUNT"
-      : "PRESS AN ARROW ON THE COUNT";
+      : "AIM WITH MOUSE · TAP SPACE ON THE COUNT";
     const countIn = playback.countingIn ? playback.countoffProgress : undefined;
     const beats = countDisplay(count, countIn),
       moves = moveDisplay(selected, count, countIn);
@@ -920,7 +944,7 @@ function frame() {
         );
       }
     } else if (!playback.countingIn && !selected.hold(count)) {
-      const direction = run.heading(count);
+      const direction = mouseActive ? mouseDirection() : run.heading(count);
       if (Math.hypot(direction.x, direction.y) > 0.01) {
         headingArrow.visible = true;
         headingArrow.position.set(
@@ -943,6 +967,10 @@ function frame() {
   }
   const c = Math.max(0, count),
     page = selected.page(c),
+    preparation =
+      mode === "run" && !playback?.paused && !playback?.countingIn && c < 104
+        ? stepOffPreparation(c, selected.hold(c), selected.hold((page + 1) * 8))
+        : 0,
     closure = haltClosure(
       c,
       selected.hold(c),
@@ -954,7 +982,23 @@ function frame() {
     const member = room?.room?.members.find((m) => m.slot === i),
       remoteStep = member ? remote.get(member.id)?.step : undefined;
     const step = i === playerId ? run?.steps.at(-1) : remoteStep;
-    if (mode === "run" && step && (i === playerId || member?.connected)) {
+    if (preparation > 0) {
+      const from = selected.drill.pages[page].dots[i],
+        next = selected.drill.pages[page + 1].dots[i];
+      model.animate(
+        0,
+        true,
+        next.y > from.y,
+        (next.x - from.x) / 8,
+        (next.y - from.y) / 8,
+        1,
+        preparation,
+      );
+    } else if (
+      mode === "run" &&
+      step &&
+      (i === playerId || member?.connected)
+    ) {
       const pose = stepAnimation(
         step,
         selected.tempo.seconds(c),
@@ -1000,6 +1044,35 @@ function frame() {
           : (goal.y - prev.y) / 8,
         closure,
       );
+    }
+    if (mode === "run") {
+      const offset = haltBodyOffset(
+        c,
+        selected.hold(c),
+        c < 104 ? selected.hold((page + 1) * 8) : true,
+        closure,
+      );
+      if (offset > 0) {
+        const arrivalPage = selected.hold(c) ? page - 1 : page;
+        if (arrivalPage >= 0) {
+          const end = selected.drill.pages[arrivalPage].dots[i];
+          const start =
+            arrivalPage > 0
+              ? selected.drill.pages[arrivalPage - 1].dots[i]
+              : selected.drill.initial[i];
+          const dx =
+            step && !step.hold
+              ? step.to.x - step.from.x
+              : (end.x - start.x) / 8;
+          const dz =
+            step && !step.hold
+              ? step.to.y - step.from.y
+              : (end.y - start.y) / 8;
+          // Keep the last leading foot on the arrival coordinate while the body closes over it.
+          model.group.position.x -= dx * offset;
+          model.group.position.z -= dz * offset;
+        }
+      }
     }
   });
   const player = positions[playerId];

@@ -1,7 +1,7 @@
 import { distance, type Dot } from "./drill";
 import { judge } from "./tempo";
 import { type Difficulty, type GameShow, tuning } from "./repertoire";
-export type Steering = { forward: number; side: number };
+export type Steering = { forward: number; side: number; aim?: Dot };
 export type Step = {
   seconds: number;
   end: number;
@@ -13,6 +13,7 @@ export type Step = {
   timing: number;
   timingBeat?: number;
   synthetic?: boolean;
+  stepOff?: boolean;
   direction: number;
   sizeError: number;
   hold: boolean;
@@ -244,12 +245,17 @@ export class PerformanceRun {
             );
     const sign = forward * correct,
       angle = this.steeringBias;
-    const vx =
+    let vx =
         dx * Math.cos(angle) * sign +
         Math.abs(dy) * Math.sin(angle) * Math.abs(forward),
       vy =
         dy * Math.cos(angle) * sign -
         Math.sign(dy || -1) * dx * Math.sin(angle) * Math.abs(forward);
+    if (input.aim) {
+      const length = Math.hypot(input.aim.x, input.aim.y);
+      vx = length > 0.001 ? input.aim.x / length : 0;
+      vy = length > 0.001 ? input.aim.y / length : 0;
+    }
     let size =
       Math.abs(forward) > 0.1
         ? Math.min(
@@ -305,6 +311,11 @@ export class PerformanceRun {
               ? 45
               : 0;
     this.steps.push({
+      stepOff:
+        !hold &&
+        page > 0 &&
+        this.show.hold(page * 8 - 0.001) &&
+        !this.steps.some((s) => s.page === page && !s.synthetic),
       seconds,
       end: Math.min(
         seconds + duration,

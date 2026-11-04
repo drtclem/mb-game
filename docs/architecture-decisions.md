@@ -447,3 +447,9 @@ Count nine (count one of the following hold) is the closing motion, rather than 
 ### Two-arrow rhythm chords (Taylor, Nov 4)
 
 Compatible arrows pressed within a fixed 45 ms window produce one diagonal guided step and one timing judgment. Up/Down selects travel, Left/Right supplies the persistent steering nudge; either key order works. A lone lateral arrow retains the written travel direction. Opposite arrows in a chord produce one small mark-time step. Use the first press's music timestamp for movement/scoring, not the delayed chord dispatch. Repeated keydown events are ignored; distinct same-arrow taps remain separate. Cancel pending chords on blur or pause. Mobile input is unchanged. This supersedes the prior prohibition on keyboard combinations.
+
+### Mouse aiming, Space rhythm and step preparation (Taylor, Nov 4)
+
+Trial desktop controls now use mouse position projected onto the field to aim, with Space supplying rhythm. Each distinct Space press commits one step in the aimed direction; no automatic dot-directed heading or accumulated keyboard nudges. Aiming alone never moves the performer; absent/neutral aim marks time. Preserve automatic recovery sizing, the 4-to-5 cap, hold faults and existing analytics. Arrow rhythm chords are superseded for the live desktop entry point. Mobile retains single-button rhythm and tilt direction.
+
+On the and of eight before leaving a hold, the left foot visually prepares toward the next set. This anticipation does not translate the performer, submit a tap or earn credit. The first actual step after a hold lands the prepared left foot. For continuous moving arrivals, maintain the body-centered dot reference; before a halt, offset the displayed body behind the leading foot during the final count, then close the body over the planted arrival foot on hold count one. Scoring coordinates remain unchanged.

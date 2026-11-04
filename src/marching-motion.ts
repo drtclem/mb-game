@@ -46,3 +46,24 @@ export function haltClosure(
   const t = Math.max(0, Math.min(1, count % 8));
   return t * t * (3 - 2 * t);
 }
+
+/** Anticipation only: the left foot prepares on the and of eight. */
+export function stepOffPreparation(
+  count: number,
+  holding: boolean,
+  nextHolding: boolean,
+) {
+  if (!holding || nextHolding) return 0;
+  return Math.max(0, Math.min(1, ((count % 8) - 7.5) * 2));
+}
+
+/** A halt arrival references the leading foot; continuous travel references the body. */
+export function haltBodyOffset(
+  count: number,
+  holding: boolean,
+  nextHolding: boolean,
+  closure: number,
+) {
+  if (holding) return (1 - closure) * 0.5;
+  return nextHolding ? Math.max(0, (count % 8) - 7) * 0.5 : 0;
+}

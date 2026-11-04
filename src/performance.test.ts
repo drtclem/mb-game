@@ -155,3 +155,24 @@ it("keeps phone tilt proportional rather than accumulating it every beat", () =>
   r.tap(show.tempo.seconds(9), { forward: 1, side: 0.5 }, 0, "tilt");
   expect(r.steeringBias).toBe(first);
 });
+
+describe("mouse-directed steps", () => {
+  it("travels along aim rather than automatically toward the dot", () => {
+    const r = new PerformanceRun(show, "Medium", 5, 4);
+    r.tap(show.tempo.seconds(8), { forward: 1, side: 0, aim: { x: 1, y: 0 } });
+    const step = r.steps.at(-1)!;
+    expect(step.to.x).toBeGreaterThan(step.from.x);
+    expect(step.to.y).toBeCloseTo(step.from.y);
+    expect(step.size).toBeLessThanOrEqual(2);
+    expect(step.stepOff).toBe(true);
+    r.tap(show.tempo.seconds(9), { forward: 1, side: 0, aim: { x: 0, y: -1 } });
+    expect(r.steps.at(-1)!.stepOff).toBe(false);
+  });
+  it("never lets mouse aim move during a hold or without a tap", () => {
+    const r = new PerformanceRun(show, "Medium", 5, 4);
+    const before = r.position(0);
+    r.tap(show.tempo.seconds(2), { forward: 1, side: 0, aim: { x: 1, y: 0 } });
+    expect(r.position(3)).toEqual(before);
+    expect(r.faults).toBe(1);
+  });
+});

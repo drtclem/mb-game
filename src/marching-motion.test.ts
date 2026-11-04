@@ -1,5 +1,10 @@
 import { describe, it, expect } from "vitest";
-import { footPose, roster } from "./marching-motion";
+import {
+  footPose,
+  roster,
+  stepOffPreparation,
+  haltBodyOffset,
+} from "./marching-motion";
 
 describe("marcher animation", () => {
   it("casts exactly six women and six men with stable individual appearances", () => {
@@ -47,4 +52,21 @@ describe("marcher animation", () => {
     for (let count = 0; count <= 2; count += 0.025)
       expect(footPose(count, 0, false, false).lift).toBeLessThanOrEqual(0.05);
   });
+});
+
+describe("step-off preparation", () => {
+  it("prepares only on the and of eight before movement", () => {
+    expect(stepOffPreparation(7.49, true, false)).toBe(0);
+    expect(stepOffPreparation(7.75, true, false)).toBe(0.5);
+    expect(stepOffPreparation(7.99, true, false)).toBeCloseTo(0.98);
+    expect(stepOffPreparation(7.75, true, true)).toBe(0);
+    expect(stepOffPreparation(7.75, false, false)).toBe(0);
+  });
+});
+
+it("uses a foot-centered arrival only before a halt", () => {
+  expect(haltBodyOffset(15.9, false, false, 1)).toBe(0);
+  expect(haltBodyOffset(23.5, false, true, 1)).toBeCloseTo(0.25);
+  expect(haltBodyOffset(24, true, true, 0)).toBe(0.5);
+  expect(haltBodyOffset(25, true, true, 1)).toBe(0);
 });
