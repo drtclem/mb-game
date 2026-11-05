@@ -497,3 +497,7 @@ Taylor authorized a coherent lower-body rebuild and a slow-motion single-perform
 The shared character module now accepts explicit lower-body poses and rolls each shoe around a fixed heel/forefoot contact. Existing upper-body geometry stays rigid. Reused the leg solver through a shared target adapter; legacy game behavior remains available during this review. No new model, stock animation or dependency was introduced.
 
 `/marching.html` is the dedicated review surface: speed control, count scrubber and buttons, pause/loop, camera presets/orbit, performer/direction selection, colored ground anchors and optional leg guides. The game menu links to it. Repertoire, judging, tap-driven movement and multiplayer remain on their current drivers until the reviewed sequence is adapted to their variable paths and inputs.
+
+### Parallel tracks and halt stance (Taylor, Nov 5)
+
+The movement study keeps both shoes facing forward in parallel tracks during marching. During the final close, the right shoe turns outward 45 degrees and the left closes with its heel at the right arch, matching Taylor's reference. The same stance is used before step-off, blending back to parallel during preparation. This remains in the review preview pending game integration.

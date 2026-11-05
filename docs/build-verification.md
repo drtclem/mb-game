@@ -76,3 +76,7 @@ Browser review of the new movement study checked count one, the passing position
 ## Movement study refinement — November 5
 
 Backward marching now keeps both heels raised through movement and settles them into the halt. Reduced swing clearance with smooth lift-off, smoothed body velocity at step-off and arrival, and softened the new rig path's knee extension constraint. Left-foot closure starts just after count eight and finishes on hold one. These changes apply to the movement study; the full game's legacy animation is unchanged. Added three regressions for backward heel elevation, prompt closure and continuous body speed. All 125 tests, type check and production build pass. Browser side-view inspection confirmed the raised-heel backward pose.
+
+## Track and halt stance — November 5
+
+Added explicit shoe yaw to the lower-body pose and rig adapter. Marching yaw remains zero, while the halt blends to a 45-degree right turnout and offset left heel-to-arch placement. Regression coverage checks both travel directions; 126 tests and type check pass.

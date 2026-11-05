@@ -166,7 +166,7 @@ export function rigCombinedSurface(
     joint.updateWorldMatrix(false, true);
   }
   function solveTargets(
-    targets: { pose: { roll: number }; target: THREE.Vector3 }[],
+    targets: { pose: { roll: number; yaw?: number }; target: THREE.Vector3 }[],
     softKnees = false,
   ) {
     const orientation = group.getWorldQuaternion(new THREE.Quaternion());
@@ -219,12 +219,19 @@ export function rigCombinedSurface(
       );
       aim(leg.hip, leg.knee, solved.knee);
       aim(leg.knee, leg.ankle, solved.end);
-      const desired = new THREE.Quaternion()
-        .setFromAxisAngle(
-          new THREE.Vector3(1, 0, 0).applyQuaternion(orientation),
-          pose.roll,
-        )
-        .multiply(orientation);
+      const yaw = new THREE.Quaternion().setFromAxisAngle(
+        new THREE.Vector3(0, 1, 0),
+        pose.yaw ?? 0,
+      );
+      const desired = orientation
+        .clone()
+        .multiply(yaw)
+        .multiply(
+          new THREE.Quaternion().setFromAxisAngle(
+            new THREE.Vector3(1, 0, 0),
+            pose.roll,
+          ),
+        );
       leg.ankle.quaternion.copy(
         leg.ankle
           .parent!.getWorldQuaternion(new THREE.Quaternion())
@@ -253,7 +260,7 @@ export function rigCombinedSurface(
             leg.foot.y * Math.sin(roll) +
             pivot * (1 - Math.cos(roll)),
         );
-        return { pose: { roll }, target };
+        return { pose: { roll, yaw: foot.yaw }, target };
       });
       solveTargets(targets, true);
     },

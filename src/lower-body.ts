@@ -6,6 +6,7 @@ export type GroundFoot = {
   z: number;
   lift: number;
   roll: number;
+  yaw: number;
   planted: boolean;
 };
 export type LowerBodyPose = {
@@ -66,9 +67,12 @@ export function rehearsalPose(count: number, backward = false): LowerBodyPose {
     }
     if (backward && count >= 0 && count < 8)
       roll = -0.34 * (1 - ease((count - 7.75) * 4));
+    // March in parallel tracks; form the heel-to-arch stance only at rest.
+    const halted = count < 0 ? 1 - ease((count + 0.5) * 2) : ease(count - 7);
     return {
-      x: side === 0 ? -0.12 : 0.12,
-      z: travel * direction,
+      x: side === 0 ? mix(-0.12, 0, halted) : 0.12,
+      z: travel * direction - (side === 0 ? 0.12 * halted : 0),
+      yaw: side === 1 ? (-Math.PI / 4) * halted : 0,
       lift,
       roll,
       planted,
