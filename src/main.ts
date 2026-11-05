@@ -15,7 +15,6 @@ import { RoomClient, type Packet } from "./multiplayer";
 import { readProgress, recordResult } from "./progress";
 import { conduct } from "./drum-major";
 import {
-  haltClosure,
   stepOffPreparation,
   haltBodyOffset,
   contactGaitCount,
@@ -1006,18 +1005,18 @@ function frame() {
       const dz =
         controlled && step ? step.to.y - step.from.y : (end.y - from.y) / 8;
       const anchor = controlled && step ? step.to : run!.ai((page + 1) * 8, i);
-      const closure = haltClosure(c, false, true);
+      const closure = Math.max(0, Math.min(1, (c % 8) - 7));
       const offset = haltBodyOffset(c, true, true, closure);
       model.group.position.set(
         anchor.x - dx * offset,
         0,
         anchor.y - dz * offset,
       );
-      model.animate(0, true, dz > 0, dx, dz, closure);
+      model.animateReviewed(0, true, dz > 0, dx, dz, closure);
     } else if (preparation > 0) {
       const from = selected.drill.pages[page].dots[i],
         next = selected.drill.pages[page + 1].dots[i];
-      model.animate(
+      model.animateReviewed(
         0,
         true,
         next.y > from.y,
@@ -1044,13 +1043,19 @@ function frame() {
             selected.tempo.seconds(nextBeat - 0.5),
         },
       );
-      model.animate(pose.count, pose.hold, pose.backward, pose.dx, pose.dz);
+      model.animateReviewed(
+        pose.count,
+        pose.hold,
+        pose.backward,
+        pose.dx,
+        pose.dz,
+      );
     } else {
       const prev = page
           ? selected.drill.pages[page - 1].dots[i]
           : selected.drill.initial[i],
         goal = selected.drill.pages[page].dots[i];
-      model.animate(
+      model.animateReviewed(
         contactGaitCount(c),
         mode !== "run" ||
           count < 0 ||

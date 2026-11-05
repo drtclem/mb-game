@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import type { LowerBodyPose } from "./lower-body";
+import { rehearsalPose, type LowerBodyPose } from "./lower-body";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { footPose, haltFootPose, stepOffFootPose } from "./marching-motion";
 import { twoBoneTargets } from "./skeletal-motion";
@@ -301,6 +301,58 @@ export function rigCombinedSurface(
         return { pose: { roll, yaw: foot.yaw, straighten: true }, target };
       });
       solveTargets(targets, true);
+    },
+    /** Apply the reviewed gait around the gameplay-owned position and stride. */
+    animateReviewed(
+      count: number,
+      hold: boolean,
+      backward: boolean,
+      dx = 0,
+      dz = backward ? 1 : -1,
+      closure = 1,
+      preparation = 0,
+    ) {
+      const phase = (((count - 1) % 2) + 2) % 2;
+      const sample =
+        preparation > 0
+          ? -0.5 + preparation * 0.5
+          : hold
+            ? closure < 1
+              ? 7 + closure
+              : 8
+            : 2 + phase;
+      const frame = rehearsalPose(sample, backward);
+      const body = { x: group.position.x, z: group.position.z };
+      const stride = Math.hypot(dx, dz);
+      const direction =
+        stride > 0.0001
+          ? { x: dx / stride, z: dz / stride }
+          : { x: 0, z: backward ? 1 : -1 };
+      const sign = backward ? 1 : -1;
+      const targets = legs.map((leg, i) => {
+        const foot = frame.feet[i];
+        const turnout = Math.abs(foot.yaw) / (Math.PI / 4);
+        const stanceZ =
+          i === 0 ? -0.12 * turnout + 0.08 * (1 - Math.cos(foot.yaw)) : 0;
+        const along =
+          ((foot.z - frame.body.z - stanceZ) * sign * stride) / height;
+        const roll = foot.roll;
+        const pivot = roll >= 0 ? 0.08 : -0.2;
+        const target = new THREE.Vector3(
+          foot.x + direction.x * along,
+          leg.foot.y * Math.cos(roll) + pivot * Math.sin(roll) + foot.lift,
+          leg.foot.z +
+            direction.z * along +
+            leg.foot.y * Math.sin(roll) +
+            pivot * (1 - Math.cos(roll)),
+        );
+        // Halt heel-to-arch geometry belongs to the facing, independent of travel.
+        target.z += stanceZ;
+        return { pose: { roll, yaw: foot.yaw, straighten: true }, target };
+      });
+      solveTargets(targets, true);
+      group.position.x = body.x;
+      group.position.z = body.z;
     },
     animate(
       count: number,

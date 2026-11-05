@@ -175,3 +175,20 @@ it("measures baked shoe turnout from the sole instead of assuming neutral bones"
     expect(authoredShoeYaw(attr, side)).toBeCloseTo(yaw, 5);
   }
 });
+
+it("uses the reviewed gait without changing gameplay travel and closes into turnout", () => {
+  const a = actor();
+  a.group.position.set(12, 0, -9);
+  for (const backward of [false, true]) {
+    for (const count of [1, 1.5, 2, 2.5]) {
+      a.animateReviewed(count, false, backward, 0.3, backward ? 1 : -1);
+      expect(a.group.position.x).toBe(12);
+      expect(a.group.position.z).toBe(-9);
+      expect(a.at(1).toArray().every(Number.isFinite)).toBe(true);
+    }
+  }
+  a.animateReviewed(0, true, false);
+  const held = a.at(1);
+  a.animateReviewed(0, true, false);
+  expect(a.at(1).distanceTo(held)).toBeLessThan(1e-7);
+});

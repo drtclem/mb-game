@@ -505,3 +505,7 @@ The movement study keeps both shoes facing forward in parallel tracks during mar
 Halt refinement (Nov 5): both feet now turn outward 45 degrees, making a 90-degree angle. The right placement stays fixed; the left turns about its heel to preserve heel-to-arch contact. Marching remains parallel.
 
 Shoe orientation correction (Nov 5): zero ankle yaw did not remove turnout baked into the source mesh. Measure each model's sole long axis and cancel that authored yaw in the explicit lower-body pose adapter before applying the requested march/halt orientation. Legacy gameplay animation is unchanged. Added a synthetic turned-sole regression; all 127 tests, type check and build pass. Browser front and feet views inspected at the passing position confirm parallel visible shoes.
+
+## Reviewed gait integrated into gameplay — November 5
+
+All game roster animation calls now use the reviewed lower-body solver and contact profiles. A stride adapter scales the sequence to the actual movement vector while preserving gameplay-owned world position, input timing, scoring and remote step handling. Shoes cancel their authored turnout, stay parallel while moving, and turn out at halts; backward motion retains raised heels. Final closure now spans count eight to hold one without the old half-count delay. The standalone movement study remains available. Type check, 128 unit tests, two room acceptance checks and production build pass.
