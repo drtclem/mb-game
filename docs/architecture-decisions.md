@@ -513,3 +513,11 @@ All game roster animation calls now use the reviewed lower-body solver and conta
 ## Automatic-footwork steering trial — November 5
 
 Taylor approved trying music-clock steps with mouse/tilt steering instead of rhythm taps. Schedule one step on each moving count, interpolate travel for the full beat, alternate left/right from musical counts, and suppress all steps during holds. Mouse aim is sampled for each beat; mobile retains tilt steering. Desktop starts facing forward until the mouse is moved. Space does not move the performer; horn cues remain deferred. The beat-clock gait now drives the player as well as AI. Timing deductions are disabled for automatic runs; dot/form, step size and direction remain judged. The manual rhythm button and timing-calibration entry are hidden for this trial.
+
+## Field anchors and form guidance — November 5
+
+Replaced the game's separate gait/arrival branches with one persistent field-space sequence per marcher. Each beat commits the previous swing anchor, keeps the support foot fixed, captures the next placement and moves the body continuously to its accepted endpoint. Holds keep the actual arrival position; no separate body-to-dot snap runs. Retry clears all anchor state. The existing explicit lower-body rig renders these anchors, retaining parallel shoes, backward forefoot posture and halt turnout.
+
+Added visible links to the adjacent performers with measured spacing and EVEN / TOO CLOSE / TOO FAR feedback against written intervals. A local curve guide passes through the adjacent actual performers and the existing fitted form reference. Signed radial error against the translated written local circle distinguishes inside/outside a curve; straight forms use a line cue. DOT/FORM weights remain 50/50 pending further play review.
+
+Validation: type check, 134 tests, two room acceptance tests and production build pass. New regressions cover planted support under changing steering, continuity across beat boundaries, stationary off-dot holds, retry reset, backward stance and translated curve-side detection. Browser run confirmed the visible spacing guide and readout with no console errors. Animation naturalness still requires play review; the old standalone study remains available.

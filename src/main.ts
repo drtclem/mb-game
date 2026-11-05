@@ -14,12 +14,8 @@ import { Controls } from "./controls";
 import { RoomClient, type Packet } from "./multiplayer";
 import { readProgress, recordResult } from "./progress";
 import { conduct } from "./drum-major";
-import {
-  stepOffPreparation,
-  haltBodyOffset,
-  contactGaitCount,
-} from "./marching-motion";
-import { stepAnimation } from "./step-animation";
+import { curveSide } from "./form-guide";
+import { FieldGait } from "./field-gait";
 import { countDisplay, moveDisplay } from "./count-display";
 import { nextMovePreview } from "./next-move";
 import { loadCombinedMarcher } from "./combined-marcher";
@@ -136,6 +132,77 @@ type DetailedMarcher = Awaited<ReturnType<typeof loadCombinedMarcher>>;
 const band: (DetailedMarcher | undefined)[] = new Array(
   selected.drill.performers.length,
 );
+const fieldGaits = Array.from(
+  { length: selected.drill.performers.length },
+  () => new FieldGait(),
+);
+const formLines = [0, 1, 2].map(() => {
+  const line = new THREE.Line(
+    new THREE.BufferGeometry(),
+    new THREE.LineBasicMaterial({
+      color: 0x8fe3cb,
+      depthTest: false,
+      transparent: true,
+      opacity: 0.85,
+    }),
+  );
+  line.renderOrder = 5;
+  scene.add(line);
+  return line;
+});
+const formReadout = document.createElement("div");
+formReadout.id = "form-readout";
+$("hud").append(formReadout);
+function updateFormGuides(actual: Dot[], count: number, visible: boolean) {
+  formLines.forEach((l) => (l.visible = visible));
+  formReadout.hidden = !visible;
+  if (!visible) return;
+  const ideal = selected.target(count);
+  const metrics = formMetrics(actual[playerId], actual, ideal, playerId);
+  const neighbors = [playerId - 1, playerId + 1].filter(
+    (i) => i >= 0 && i < actual.length,
+  );
+  const labels: string[] = [];
+  neighbors.forEach((id, side) => {
+    const gap = distance(actual[playerId], actual[id]);
+    const expected = distance(ideal[playerId], ideal[id]);
+    const delta = gap - expected;
+    const status =
+      Math.abs(delta) < 0.3 ? "EVEN" : delta < 0 ? "TOO CLOSE" : "TOO FAR";
+    const line = formLines[side];
+    line.geometry.dispose();
+    line.geometry = new THREE.BufferGeometry().setFromPoints(
+      [actual[playerId], actual[id]].map(
+        (p) => new THREE.Vector3(p.x, 0.16, p.y),
+      ),
+    );
+    (line.material as THREE.LineBasicMaterial).color.setHex(
+      Math.abs(delta) < 0.3 ? 0x8fe3cb : 0xffbc75,
+    );
+    labels.push(
+      `${id < playerId ? "LEFT" : "RIGHT"}: ${gap.toFixed(1)} steps · ${status}`,
+    );
+  });
+  const left = actual[neighbors[0]],
+    right = actual[neighbors.at(-1)!];
+  const curve = new THREE.CatmullRomCurve3(
+    [left, metrics.reference, right].map(
+      (p) => new THREE.Vector3(p.x, 0.12, p.y),
+    ),
+  );
+  formLines[2].geometry.dispose();
+  formLines[2].geometry = new THREE.BufferGeometry().setFromPoints(
+    curve.getPoints(32),
+  );
+  const curveStatus = curveSide(
+    ideal[neighbors[0]],
+    ideal[playerId],
+    ideal[neighbors.at(-1)!],
+    metrics.reference,
+    actual[playerId],
+  );
+  formReadout.textContent = `${labels.join("   |   ")} · FORM: ${metrics.shape < 0.3 ? "ON FORM" : curveStatus}`;
+}
 let bandReady = false,
   bandError = false;
 Promise.all(
@@ -352,6 +419,7 @@ function begin(seed: number, delay = 0, restore = false) {
   results.clear();
   remote.clear();
   bandSamples = [];
+  fieldGaits.forEach((g) => g.reset());
   lastBandBeat = 0;
   lastPage = -1;
   lastSend = 0;
@@ -958,108 +1026,37 @@ function frame() {
     if (count >= 112) finish();
   }
   const c = Math.max(0, count),
-    page = selected.page(c),
-    preparation =
-      mode === "run" && !playback?.paused && !playback?.countingIn && c < 104
-        ? stepOffPreparation(c, selected.hold(c), selected.hold((page + 1) * 8))
-        : 0;
+    page = selected.page(c);
   band.forEach((model, i) => {
     if (!model) return;
-    model.group.position.set(positions[i].x, 0, positions[i].y);
-    const member = room?.room?.members.find((m) => m.slot === i),
-      remoteStep = member ? remote.get(member.id)?.step : undefined;
-    const step = i === playerId ? run?.steps.at(-1) : remoteStep;
-    const arrivingAtHold =
-      mode === "run" &&
-      !selected.hold(c) &&
-      c % 8 >= 7 &&
-      (page === 13 || selected.hold((page + 1) * 8));
-    const controlled = i === playerId || !!member?.connected;
-    const finalTappedStep =
-      step &&
-      step.page === page &&
-      !step.hold &&
-      Math.round(selected.tempo.count(step.seconds)) === page * 8 + 7;
-    const plantedArrival = arrivingAtHold && (!controlled || finalTappedStep);
-    if (mode === "run" && run && !controlled && !selected.hold(c)) {
-      // Body passes halfway between contacts; feet land on the numbered beat.
-      const body = run.ai(Math.min(c + 0.5, (page + 1) * 8), i);
-      model.group.position.set(body.x, 0, body.y);
-    }
-    if (plantedArrival) {
-      const from = page
-        ? selected.drill.pages[page - 1].dots[i]
-        : selected.drill.initial[i];
-      const end = selected.drill.pages[page].dots[i];
-      const dx =
-        controlled && step ? step.to.x - step.from.x : (end.x - from.x) / 8;
-      const dz =
-        controlled && step ? step.to.y - step.from.y : (end.y - from.y) / 8;
-      const anchor = controlled && step ? step.to : run!.ai((page + 1) * 8, i);
-      const closure = Math.max(0, Math.min(1, (c % 8) - 7));
-      const offset = haltBodyOffset(c, true, true, closure);
-      model.group.position.set(
-        anchor.x - dx * offset,
-        0,
-        anchor.y - dz * offset,
-      );
-      model.animateReviewed(0, true, dz > 0, dx, dz, closure);
-    } else if (preparation > 0) {
-      const from = selected.drill.pages[page].dots[i],
-        next = selected.drill.pages[page + 1].dots[i];
-      model.animateReviewed(
-        0,
-        true,
-        next.y > from.y,
-        (next.x - from.x) / 8,
-        (next.y - from.y) / 8,
-        1,
-        preparation,
-      );
-    } else if (
-      mode === "run" &&
-      step &&
-      (i === playerId || member?.connected)
-    ) {
-      const nextBeat =
-        (step.timingBeat ?? Math.round(selected.tempo.count(step.seconds))) + 1;
-      const pose = stepAnimation(
-        step,
-        selected.tempo.seconds(c),
-        selected.hold(c),
-        {
-          contact: selected.tempo.seconds(nextBeat),
-          halfBeat:
-            selected.tempo.seconds(nextBeat) -
-            selected.tempo.seconds(nextBeat - 0.5),
-        },
-      );
-      model.animateReviewed(
-        selected.hold(c) ? pose.count : contactGaitCount(c),
-        pose.hold,
-        pose.backward,
-        pose.dx,
-        pose.dz,
-      );
-    } else {
-      const prev = page
-          ? selected.drill.pages[page - 1].dots[i]
-          : selected.drill.initial[i],
-        goal = selected.drill.pages[page].dots[i];
-      model.animateReviewed(
-        contactGaitCount(c),
-        mode !== "run" ||
-          count < 0 ||
-          selected.hold(c) ||
-          i === playerId ||
-          !!playback?.paused ||
-          !!playback?.countingIn,
-        goal.y > prev.y,
-        (goal.x - prev.x) / 8,
-        (goal.y - prev.y) / 8,
-      );
-    }
+    const holding =
+      mode !== "run" || count < 0 || !!playback?.countingIn || selected.hold(c);
+    const current = positions[i];
+    const member = room?.room?.members.find((m) => m.slot === i);
+    const step =
+      i === playerId
+        ? run?.steps.at(-1)
+        : member
+          ? remote.get(member.id)?.step
+          : undefined;
+    const future = holding
+      ? current
+      : step && step.page === page
+        ? step.to
+        : (run?.ai(Math.min(112, Math.floor(c) + 1), i) ?? current);
+    const frame = fieldGaits[i].sample(
+      c,
+      { x: current.x, z: current.y },
+      { x: future.x, z: future.y },
+      holding,
+      future.y > current.y,
+    );
+    model.poseLowerBody(frame);
+    positions = positions.map((p, j) =>
+      j === i ? { x: frame.body.x, y: frame.body.z } : p,
+    );
   });
+  updateFormGuides(positions, c, mode === "run");
   const player = positions[playerId];
   playerMarker.position.set(player.x, 0.1, player.y);
   ring.visible = mode === "run";

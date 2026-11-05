@@ -933,3 +933,25 @@ td small {
     font-size: 10px;
   }
 }
+#form-readout {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 60%;
+  padding: 10px 14px;
+  background: #10232ee6;
+  border: 1px solid #8fe3cb80;
+  color: #d9fff2;
+  font: 11px/1.6 monospace;
+  text-align: center;
+  pointer-events: none;
+  border-radius: 6px;
+}
+@media (max-width: 700px) {
+  #form-readout {
+    bottom: 12px;
+    max-width: 65%;
+    font-size: 9px;
+  }
+}
