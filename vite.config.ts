@@ -6,6 +6,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         game: "index.html",
+        marching: "marching.html",
         uniform: "uniform.html",
         music: "music.html",
       },

@@ -489,3 +489,11 @@ Preparation pushes from the right forefoot with a raised rear heel while extendi
 Characters face -Z after geometry normalization. Their anatomical left is -X and right is +X; the previous feet ordering and skin assignments had those reversed. Share FOOT_SIDES=[-1,+1] between model preparation and rig fixtures, with negative-X vertices bound to the left leg. This applies to both genders and all player/AI models.
 
 For distinct written beats, select left on odd displayed counts (zero-based even timingBeat) and right on even displayed counts. Every first actual step-off still starts left. Extra taps within the same beat may alternate as mistake steps, but the next distinct beat restores written foot parity; missing a tap does not permanently reverse subsequent feet. This supersedes the earlier rule that carried tap-count parity through an entire phrase.
+
+### Lower-body rebuild and movement study (Taylor, Nov 5)
+
+Taylor authorized a coherent lower-body rebuild and a slow-motion single-performer review before returning it to the full band. Added `lower-body.ts`: a deterministic sequence in field space, independent of the tap-animation patches. Count zero represents the first left contact; odd displayed counts land left and even counts right. A support foot holds its field anchor through its support interval, while the body passes it. The initial left prepares during the and before one. Right lands on eight; left closes between eight and the next one, then both stay planted. Forward heel/toe and backward forefoot contact profiles use the same placement sequence.
+
+The shared character module now accepts explicit lower-body poses and rolls each shoe around a fixed heel/forefoot contact. Existing upper-body geometry stays rigid. Reused the leg solver through a shared target adapter; legacy game behavior remains available during this review. No new model, stock animation or dependency was introduced.
+
+`/marching.html` is the dedicated review surface: speed control, count scrubber and buttons, pause/loop, camera presets/orbit, performer/direction selection, colored ground anchors and optional leg guides. The game menu links to it. Repertoire, judging, tap-driven movement and multiplayer remain on their current drivers until the reviewed sequence is adapted to their variable paths and inputs.

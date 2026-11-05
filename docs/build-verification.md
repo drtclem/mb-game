@@ -66,3 +66,9 @@ Read the complete auto-caption transcript of Taylor's linked Tyler Loretz video 
 ## Anatomical foot identity — November 4
 
 Found mirrored model preparation and skin binding: the nominal Left leg occupied +X even though actors face -Z. Corrected both geometry-side ordering and vertex-to-joint assignment, plus old test fixtures that repeated that reversal. New checks derive anatomical right from facing×up, assert left lies on the opposite side, and verify physical ankle contact order for player and AI across sixteen counts in both forward and backward travel. Added missed/extra tap parity recovery coverage. Type check, 117 tests and build pass. Browser captures compared the first and second moving counts after real Space presses; console error logs were empty. These checks establish anatomical ordering, not a claim that every aspect of animation naturalness is final.
+
+## Coherent lower-body preview — November 5
+
+Added a field-space placement sequence and new explicit-pose rig path. Tests verify all eight contacts in both directions, planted support coordinates, continuous preparation/contact/closure transitions, closed hold, heel/forefoot ground pivots on the actual skeletal rig and frame-order independence. Existing gameplay and rig regression tests continue passing: 122 total. Type check and production build pass.
+
+Browser review of the new movement study checked count one, the passing position, count eight, closing at 8-and, and the final feet-together hold. Tested forward/backward, front/side views, both original performer models, direct scrubbing and count buttons. Console error logs were empty. This is a reviewable animation prototype, not a completed replacement of the full game's input-dependent animation.

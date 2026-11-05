@@ -32,6 +32,12 @@ Vite proxies `/api` to the room service on port 8787. Use the URL Vite prints. S
 
 On iPhone, use landscape, enable motion permission, hold the phone comfortably and recenter tilt. Tilt forward/back for travel and sideways for corrections; use the **single STEP button** for rhythm. No touch-steering alternative. Phone motion requires HTTPS (localhost is sufficient only when running on that same device).
 
+## Movement study
+
+Open `/marching.html` for the rebuilt lower-body animation review. It runs one continuous sequence: set, left-foot preparation, eight standard steps, right-foot arrival and left-foot close. Planted feet use fixed field coordinates, with heel/forefoot pivots and no per-frame history.
+
+Use quarter/eighth/half/full speed, the scrubber, numbered contact buttons and Side/Front/Back/Feet cameras. Cyan marks anatomical left; gold marks right. Both performers and forward/backward movement are available. This preview is the review stage before replacing the full game's existing animation driver; it does not change scoring or controls.
+
 ## Multiplayer
 
 Create a private room, share its link or code, and join on separate devices. The host selects the show/difficulty. Every player confirms Ready after assets, audio and peer links are ready. Two to four humans occupy adjacent slots. Each device judges against its own Web Audio clock; position streams use WebRTC data channels through the host.
