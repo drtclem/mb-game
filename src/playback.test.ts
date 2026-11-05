@@ -71,6 +71,11 @@ describe("audio clock scheduling", () => {
     p.pause();
     (p.context as unknown as FakeContext).currentTime += 20;
     p.resume();
+    expect(p.countoffCounts).toBe(4);
+    const anchor = shows[0].tempo.count(12);
+    expect(p.resumeUntil - p.countoffAt).toBeCloseTo(
+      shows[0].tempo.seconds(anchor + 4) - 12,
+    );
     expect(p.seconds).toBeCloseTo(12);
     (p.context as unknown as FakeContext).currentTime = p.resumeUntil;
     expect(p.seconds).toBeCloseTo(12);

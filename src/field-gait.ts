@@ -16,6 +16,7 @@ export class FieldGait {
   private rightFrom?: GroundFoot;
   private rightTarget?: GroundFoot;
   private preciseHalt = false;
+  private prepOrigin?: Point;
   reset() {
     this.beat = -Infinity;
     this.feet = undefined;
@@ -28,6 +29,7 @@ export class FieldGait {
     this.rightFrom = undefined;
     this.rightTarget = undefined;
     this.preciseHalt = false;
+    this.prepOrigin = undefined;
   }
   /** The and before one prepares one contact, not two beats of travel. */
   prepare(
@@ -36,6 +38,16 @@ export class FieldGait {
     contact: Point,
     facing = 0,
   ): LowerBodyPose {
+    this.prepOrigin ??= { ...(this.body ?? origin) };
+    const requestedOrigin = origin;
+    origin = this.prepOrigin;
+    const raw = {
+      x: contact.x - requestedOrigin.x,
+      z: contact.z - requestedOrigin.z,
+    };
+    const length = Math.hypot(raw.x, raw.z),
+      scale = length > 2 ? 2 / length : 1;
+    contact = { x: origin.x + raw.x * scale, z: origin.z + raw.z * scale };
     const u = ease(Math.max(0, Math.min(1, progress)));
     const dx = contact.x - origin.x,
       dz = contact.z - origin.z;
@@ -78,6 +90,7 @@ export class FieldGait {
     facing = 0,
     arrival?: { lastBeat: number; continues: boolean },
   ): LowerBodyPose {
+    this.prepOrigin = undefined;
     const beat = Math.floor(count),
       t = Math.max(0, Math.min(1, count - beat));
     const makeFoot = (side: number, center: Point): GroundFoot => ({
@@ -129,6 +142,16 @@ export class FieldGait {
         this.end.z = this.start.z + ((this.end.z - this.start.z) * 2) / length;
       }
       const side = (((beat + 1) % 2) + 2) % 2;
+      if (arrival && !holding && !this.wasHolding) {
+        const support = this.feet[1 - side];
+        const dx = this.end.x - support.x,
+          dz = this.end.z - support.z;
+        const reach = Math.hypot(dx, dz);
+        if (reach > 1.05) {
+          this.end.x = support.x + (dx * 1.05) / reach;
+          this.end.z = support.z + (dz * 1.05) / reach;
+        }
+      }
       this.from = { ...this.feet[side] };
       const vx = this.end.x - this.start.x,
         vz = this.end.z - this.start.z;
@@ -192,6 +215,16 @@ export class FieldGait {
         };
         this.from = { ...this.feet[0] };
       }
+      if (!holding) {
+        const support = this.feet[1 - side];
+        const dx = this.target.x - support.x,
+          dz = this.target.z - support.z;
+        const span = Math.hypot(dx, dz);
+        if (span > 2) {
+          this.target.x = support.x + (dx * 2) / span;
+          this.target.z = support.z + (dz * 2) / span;
+        }
+      }
       this.beat = beat;
       this.wasHolding = holding;
     }
@@ -225,6 +258,15 @@ export class FieldGait {
         foot.planted = true;
       }
     });
+    if (holding && Math.abs(Math.sin(facing / 2)) > 0.001) {
+      this.feet.forEach((f) => {
+        f.lift = 0;
+        f.planted = true;
+      });
+      const turnSide = ((beat % 2) + 2) % 2;
+      this.feet[turnSide].lift = Math.sin(Math.PI * t) ** 2 * 0.045;
+      this.feet[turnSide].planted = t === 0;
+    }
     return {
       body,
       feet: this.feet.map((f) => ({ ...f })) as [GroundFoot, GroundFoot],

@@ -543,3 +543,11 @@ Added a hard two-standard-step (45-inch, 4-to-5) cap to each rendered body inter
 ## Opening-stride correction — November 5
 
 The contact lead exposed an opening mismatch: the torso started at rest while its first animation interval targeted the second contact, doubling that interval. Added explicit left preparation during the and before one (including movement after a hold). The torso begins between contacts, and gameplay gait intervals use the half-stride body reference rather than the next foot contact itself. The same path serves player and AI. Existing count-eight arrival and 4-to-5 cap regressions still pass; added a test that first left/right contacts are one standard step apart and the torso's first interval is one standard step. Type check, 141 tests and production build pass.
+
+## Turning steps, transition limits and four-count resume — November 5
+
+Four-count turns now mark time with small alternating lifts, one step per count, without body translation. Preparation captures its origin from the current rendered body once, preventing repeated origins ahead of the character. Contact spans are capped at two standard steps and body targets respect supporting-leg reach during sharp direction changes. Existing arrival and body-step caps remain active. Added synthetic abrupt-steering coverage plus every performer through every set of both playable shows.
+
+Solo resume now counts 1–2–3–4 at the current show tempo, freezes show time and the existing pose during that lead-in, then resumes the saved audio offset. Multiplayer rejoin also uses a four-count lead without delaying the shared clock. Initial count-off remains eight. HUD/count blocks reflect the selected lead length, and resumed count-offs no longer run opening-show preparation.
+
+Validation: type check, 144 tests, two room acceptance tests and build pass. Browser pause/resume showed COUNT-IN 4 BEATS, RESUME FOUR COUNTS, 1/4, with no console errors. Tests verify resume lead duration at the paused tempo, alternating turning lifts, bounded contacts under abrupt steering, and all-performer/set transition continuity.

@@ -919,8 +919,8 @@ function frame() {
       : "AIM WITH MOUSE · FEET FOLLOW THE BEAT";
     const countIn = playback.countingIn ? playback.countoffProgress : undefined;
     const localCount = count - setStart(selected, selected.page(count));
-    const beats = countDisplay(localCount, countIn),
-      moves = moveDisplay(selected, count, countIn);
+    const beats = countDisplay(localCount, countIn, playback.countoffCounts),
+      moves = moveDisplay(selected, count, countIn, playback.countoffCounts);
     $("page").textContent =
       `${selected.name.toUpperCase()} · SET ${moves.page + 1} / ${selected.drill.pages.length}`;
     $("current-move").textContent = moves.now.label;
@@ -929,7 +929,9 @@ function frame() {
     $("next-detail").textContent = moves.next?.name ?? "Final release";
     $("counts-left").textContent = `${moves.remaining} LEFT`;
     const setCounts =
-      countIn === undefined ? selected.drill.pages[moves.page].counts : 8;
+      countIn === undefined
+        ? selected.drill.pages[moves.page].counts
+        : playback.countoffCounts;
     $("set-progress").setAttribute(
       "aria-label",
       `Progress through ${setCounts} counts`,
@@ -1052,6 +1054,8 @@ function frame() {
     page = selected.page(c);
   band.forEach((model, i) => {
     if (!model) return;
+    if (mode === "run" && playback?.countingIn && playback.countoffCounts === 4)
+      return;
     const holding =
       mode !== "run" || count < 0 || !!playback?.countingIn || selected.hold(c);
     const current = positions[i];
@@ -1082,7 +1086,10 @@ function frame() {
     model.group.rotation.y = facing;
     const phaseEnd = setEnd(selected, page);
     const preparing = playback?.countingIn
-      ? Math.max(0, (playback.countoffProgress - 7.5) * 2)
+      ? Math.max(
+          0,
+          (playback.countoffProgress - (playback.countoffCounts - 0.5)) * 2,
+        )
       : holding && phaseEnd < 112 && !selected.hold(phaseEnd)
         ? Math.max(0, (c - (phaseEnd - 0.5)) * 2)
         : 0;

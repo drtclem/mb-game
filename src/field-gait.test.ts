@@ -128,3 +128,90 @@ it("prepares left on the and, then uses single standard opening strides", () => 
   expect(second.feet[1].z).toBe(-2);
   expect(Math.abs(second.body.z - first.body.z)).toBe(1);
 });
+
+it("alternates small in-place steps while turning without translating the body", () => {
+  const gait = new FieldGait();
+  const a = gait.sample(
+    8.5,
+    { x: 0, z: 0 },
+    { x: 0, z: 0 },
+    true,
+    false,
+    Math.PI / 4,
+  );
+  const b = gait.sample(
+    9.5,
+    { x: 0, z: 0 },
+    { x: 0, z: 0 },
+    true,
+    false,
+    (Math.PI * 3) / 4,
+  );
+  expect(a.feet[0].lift).toBeGreaterThan(0);
+  expect(a.feet[1].lift).toBe(0);
+  expect(b.feet[1].lift).toBeGreaterThan(0);
+  expect(b.feet[0].lift).toBe(0);
+  expect(b.body).toEqual(a.body);
+});
+it("bounds contact spans during every move with abrupt direction and stride changes", () => {
+  const gait = new FieldGait();
+  let from = { x: 0, z: 0 };
+  for (let beat = 0; beat < 112; beat++) {
+    const direction = beat % 3 === 0 ? 1 : -1;
+    const next = { x: from.x + direction * 2, z: from.z + direction * 0.5 };
+    const pose = gait.sample(beat + 0.999, from, next, false, direction > 0);
+    const [l, r] = pose.feet;
+    expect(Math.hypot(l.x - r.x, l.z - r.z)).toBeLessThanOrEqual(2 + 1e-6);
+    from = pose.body;
+  }
+});
+
+import { shows, turnStudy, contactCount, setEnd } from "./repertoire";
+it("checks every performer through every set transition in both playable shows", () => {
+  for (const show of [turnStudy, shows[1]])
+    for (let id = 0; id < 12; id++) {
+      const gait = new FieldGait(),
+        initial = show.drill.initial[id],
+        first = show.drill.pages[0].dots[id];
+      let previous = gait.prepare(
+        1,
+        { x: initial.x, z: initial.y },
+        {
+          x: initial.x + (first.x - initial.x) / 8,
+          z: initial.y + (first.y - initial.y) / 8,
+        },
+      ).body;
+      for (let count = 0; count < 112; count += 0.125) {
+        const page = show.page(count),
+          end = setEnd(show, page),
+          holding = show.hold(count);
+        const current = show.target(contactCount(show, count))[id];
+        const next = show.target(Math.min(112, Math.floor(count) + 2))[id];
+        const preparation =
+          holding && end < 112 && !show.hold(end)
+            ? Math.max(0, (count - end + 0.5) * 2)
+            : 0;
+        const contact = show.target(end + 1)[id];
+        const pose =
+          preparation > 0
+            ? gait.prepare(
+                preparation,
+                { x: current.x, z: current.y },
+                { x: contact.x, z: contact.y },
+              )
+            : gait.sample(
+                count,
+                { x: current.x, z: current.y },
+                { x: next.x, z: next.y },
+                holding,
+                next.y > current.y,
+                0,
+                { lastBeat: end - 1, continues: end < 112 && !show.hold(end) },
+              );
+        expect(
+          Math.hypot(pose.body.x - previous.x, pose.body.z - previous.z),
+        ).toBeLessThan(0.76);
+        previous = pose.body;
+      }
+    }
+});

@@ -10,6 +10,7 @@ export class Playback {
   paused = false;
   resumeUntil = 0;
   countoffAt = 0;
+  countoffCounts = 8;
   private countoffAnchor = 0;
   rejoining = false;
   show?: GameShow;
@@ -34,11 +35,14 @@ export class Playback {
     this.rejoining = false;
     this.schedule(0, delay);
   }
-  private schedule(offset: number, delay = 0) {
+  private schedule(offset: number, delay = 0, counts = 8) {
     this.source?.stop();
-    this.countoffAnchor = 0;
+    this.countoffCounts = counts;
+    this.countoffAnchor = counts === 4 ? this.show!.tempo.count(offset) : 0;
     const show = this.show!,
-      lead = show.tempo.seconds(8);
+      lead =
+        show.tempo.seconds(this.countoffAnchor + counts) -
+        show.tempo.seconds(this.countoffAnchor);
     this.countoffAt = this.context.currentTime + Math.max(0, delay) + 0.15;
     this.resumeUntil = this.countoffAt + lead;
     this.origin = this.resumeUntil - offset;
@@ -47,9 +51,11 @@ export class Playback {
     source.connect(this.gain);
     source.start(this.resumeUntil, offset);
     this.source = source;
-    for (const count of [0, 2, 4, 5, 6, 7])
+    for (const count of counts === 4 ? [0, 1, 2, 3] : [0, 2, 4, 5, 6, 7])
       this.click(
-        this.countoffAt + show.tempo.seconds(count),
+        this.countoffAt +
+          show.tempo.seconds(this.countoffAnchor + count) -
+          show.tempo.seconds(this.countoffAnchor),
         count === 0 || count === 4,
       );
   }
@@ -71,7 +77,7 @@ export class Playback {
     return this.paused
       ? this.frozen
       : this.context.currentTime < this.resumeUntil &&
-          this.frozen > 0 &&
+          (this.frozen > 0 || this.countoffCounts === 4) &&
           !this.rejoining
         ? this.frozen
         : this.context.currentTime - this.origin;
@@ -91,6 +97,7 @@ export class Playback {
   }
   get countoff() {
     const c = Math.floor(this.countoffProgress);
+    if (this.countoffCounts === 4) return c >= 0 && c < 4 ? String(c + 1) : "·";
     return (
       (
         { 0: "5", 2: "6", 4: "5", 5: "6", 6: "7", 7: "8" } as Record<
@@ -109,7 +116,7 @@ export class Playback {
   resume() {
     this.rejoining = false;
     this.paused = false;
-    this.schedule(this.frozen);
+    this.schedule(this.frozen, 0, 4);
   }
   /** Rejoin the still-running clock; the lead-in must not delay the show. */
   rejoin(elapsed: number) {
@@ -120,7 +127,8 @@ export class Playback {
     this.origin = this.context.currentTime - elapsed;
     this.countoffAnchor = Math.floor(show.tempo.count(elapsed) / 4) * 4 + 4;
     this.countoffAt = this.origin + show.tempo.seconds(this.countoffAnchor);
-    const arrival = this.countoffAnchor + 8;
+    this.countoffCounts = 4;
+    const arrival = this.countoffAnchor + 4;
     this.resumeUntil = this.origin + show.tempo.seconds(arrival);
     const offset = show.tempo.seconds(arrival);
     const buffer = this.buffers.get(show.id)!;
@@ -131,7 +139,7 @@ export class Playback {
       source.start(this.resumeUntil, offset);
       this.source = source;
     }
-    for (const count of [0, 2, 4, 5, 6, 7])
+    for (const count of [0, 1, 2, 3])
       this.click(
         this.origin + show.tempo.seconds(this.countoffAnchor + count),
         count === 0 || count === 4,

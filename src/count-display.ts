@@ -1,6 +1,18 @@
 import { setStart, type GameShow } from "./repertoire";
 const clamp = (n: number, a: number, b: number) => Math.max(a, Math.min(b, n));
-export function countDisplay(count: number, countIn?: number) {
+export function countDisplay(
+  count: number,
+  countIn?: number,
+  countoffCounts = 8,
+) {
+  if (countIn !== undefined && countoffCounts === 4)
+    return {
+      labels: ["1", "2", "3", "4"],
+      active: countIn < 0 ? -1 : Math.min(3, Math.floor(countIn)),
+      caption: "RESUME · FOUR COUNTS",
+      position:
+        countIn < 0 ? "READY" : `${Math.min(4, Math.floor(countIn) + 1)} / 4`,
+    };
   if (countIn !== undefined) {
     const beat = Math.floor(countIn),
       second = beat >= 4;
@@ -20,7 +32,12 @@ export function countDisplay(count: number, countIn?: number) {
     position: `${beat + 1} / 8`,
   };
 }
-export function moveDisplay(show: GameShow, count: number, countIn?: number) {
+export function moveDisplay(
+  show: GameShow,
+  count: number,
+  countIn?: number,
+  countoffCounts = 8,
+) {
   const page = show.page(count),
     local = clamp(
       count - setStart(show, page),
@@ -37,9 +54,12 @@ export function moveDisplay(show: GameShow, count: number, countIn?: number) {
   if (countIn !== undefined)
     return {
       page,
-      now: { label: "COUNT-IN · 8 BEATS", name: "5… 6… 5, 6, 7, 8" },
+      now: {
+        label: `COUNT-IN · ${countoffCounts} BEATS`,
+        name: countoffCounts === 4 ? "1, 2, 3, 4" : "5… 6… 5, 6, 7, 8",
+      },
       next: describe(page),
-      remaining: Math.ceil(8 - clamp(countIn, 0, 8)),
+      remaining: Math.ceil(countoffCounts - clamp(countIn, 0, countoffCounts)),
       progress: Math.floor(clamp(countIn, 0, 7.99999)),
     };
   return {
