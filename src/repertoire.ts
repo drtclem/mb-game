@@ -70,7 +70,7 @@ function makeShow(
   if (turnTrial) {
     dots[0] = line(32);
     dots[1] = line(32);
-    dots[2] = line(32).map((d) => ({ x: d.x + 8, y: d.y }));
+    dots[2] = line(24);
     dots[3] = dots[2];
     dots.push(dots.at(-1)!);
   }

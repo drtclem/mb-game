@@ -1071,7 +1071,7 @@ function frame() {
             ? 1
             : 1 - Math.min(1, (c - setStart(selected, 3)) / 4);
       const eased = turnProgress * turnProgress * (3 - 2 * turnProgress);
-      facing = (-Math.PI / 2) * eased;
+      facing = -Math.PI * eased;
     }
     model.group.rotation.y = facing;
     const frame = fieldGaits[i].sample(

@@ -44,6 +44,12 @@ it("keeps the 8 / 4 turn trial aligned to the original music clock", () => {
   expect(turnStudy.hold(8)).toBe(true);
   expect(turnStudy.hold(11.99)).toBe(true);
   expect(turnStudy.hold(12)).toBe(false);
+  expect(turnStudy.drill.pages[2].dots).toEqual(shows[0].drill.pages[2].dots);
+  expect(
+    turnStudy.drill.pages[2].dots.every(
+      (d, i) => d.x === turnStudy.drill.initial[i].x,
+    ),
+  ).toBe(true);
   expect(setStart(turnStudy, 2)).toBe(12);
   expect(setEnd(turnStudy, 2)).toBe(20);
   expect(moveDisplay(turnStudy, 10).remaining).toBe(2);
