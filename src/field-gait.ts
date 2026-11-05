@@ -18,6 +18,8 @@ export class FieldGait {
   private preciseHalt = false;
   private prepOrigin?: Point;
   private slideYaw = 0;
+  private slideFrom = 0;
+  private slideTarget = 0;
   private pivotBeat = -1;
   private pivotFeet?: [GroundFoot, GroundFoot];
   private pivotFrom?: GroundFoot;
@@ -36,6 +38,8 @@ export class FieldGait {
     this.preciseHalt = false;
     this.prepOrigin = undefined;
     this.slideYaw = 0;
+    this.slideFrom = 0;
+    this.slideTarget = 0;
     this.pivotFeet = undefined;
     this.pivotBeat = -1;
     this.pivotTarget = undefined;
@@ -62,6 +66,8 @@ export class FieldGait {
       dz = contact.z - origin.z;
     const track = Math.atan2(-dx, Math.abs(dz));
     this.slideYaw = track;
+    this.slideFrom = track;
+    this.slideTarget = track;
     const body = { x: origin.x + dx * u * 0.5, z: origin.z + dz * u * 0.5 };
     const foot = (side: number): GroundFoot => ({
       x:
@@ -171,10 +177,18 @@ export class FieldGait {
     if (!holding && beat !== this.beat) {
       const dx = next.x - desired.x,
         dz = next.z - desired.z;
-      if (Math.hypot(dx, dz) > 0.001)
-        this.slideYaw = Math.atan2(-dx, Math.abs(dz));
+      if (Math.hypot(dx, dz) > 0.001) {
+        this.slideFrom = this.slideYaw;
+        const target = Math.atan2(-dx, Math.abs(dz));
+        this.slideTarget =
+          this.slideFrom +
+          Math.atan2(
+            Math.sin(target - this.slideFrom),
+            Math.cos(target - this.slideFrom),
+          );
+      }
     }
-    const track = holding ? facing : this.slideYaw;
+    const track = holding ? facing : this.slideTarget;
     const makeFoot = (side: number, center: Point): GroundFoot => ({
       x: center.x + (side ? 0.12 : -0.12) * Math.cos(track),
       z: center.z - (side ? 0.12 : -0.12) * Math.sin(track),
@@ -219,9 +233,13 @@ export class FieldGait {
         this.end.x - this.start.x,
         this.end.z - this.start.z,
       );
-      if (length > 2) {
-        this.end.x = this.start.x + ((this.end.x - this.start.x) * 2) / length;
-        this.end.z = this.start.z + ((this.end.z - this.start.z) * 2) / length;
+      const turnAngle = Math.abs(this.slideTarget - this.slideFrom);
+      const bodyLimit = 2 / (1 + turnAngle);
+      if (length > bodyLimit) {
+        this.end.x =
+          this.start.x + ((this.end.x - this.start.x) * bodyLimit) / length;
+        this.end.z =
+          this.start.z + ((this.end.z - this.start.z) * bodyLimit) / length;
       }
       const side = (((beat + 1) % 2) + 2) % 2;
       if (arrival && !holding && !this.wasHolding) {
@@ -302,9 +320,10 @@ export class FieldGait {
         const dx = this.target.x - support.x,
           dz = this.target.z - support.z;
         const span = Math.hypot(dx, dz);
-        if (span > 2) {
-          this.target.x = support.x + (dx * 2) / span;
-          this.target.z = support.z + (dz * 2) / span;
+        const spanLimit = 2 / (1 + turnAngle * 0.5);
+        if (span > spanLimit) {
+          this.target.x = support.x + (dx * spanLimit) / span;
+          this.target.z = support.z + (dz * spanLimit) / span;
         }
       }
       this.beat = beat;
@@ -314,6 +333,7 @@ export class FieldGait {
       x: mix(this.start!.x, this.end!.x, t),
       z: mix(this.start!.z, this.end!.z, t),
     };
+    this.slideYaw = mix(this.slideFrom, this.slideTarget, ease(t));
     this.body = body;
     const side = holding ? 0 : (((beat + 1) % 2) + 2) % 2;
     const u = ease(t);
@@ -329,7 +349,7 @@ export class FieldGait {
     this.feet.forEach((foot, i) => {
       foot.yaw = holding
         ? ((i ? -1 : 1) * Math.PI) / 4
-        : this.slideYaw - facing;
+        : this.slideTarget - facing;
       foot.roll = holding
         ? 0
         : backward

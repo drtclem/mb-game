@@ -209,3 +209,32 @@ it("turns the lower-body hip axis for sliding while leaving chest and horn verti
   expect(right.position.z).toBeGreaterThan(left.position.z);
   expect(a.group.rotation.y).toBe(0);
 });
+
+import { FieldGait } from "./field-gait";
+it("keeps sliding recovery feet at their requested height through sharp direction changes", () => {
+  const a = actor(),
+    gait = new FieldGait();
+  let center = { x: 0, z: 0 };
+  for (let beat = 0; beat < 16; beat++) {
+    const angle = beat % 2 ? Math.PI / 2 : -Math.PI / 2;
+    const next = { x: center.x + Math.sin(angle) * 2, z: center.z - 0.2 };
+    for (const phase of [0.05, 0.25, 0.5, 0.75, 0.95]) {
+      const frame = gait.sample(beat + phase, center, next, false, false, 0, {
+        lastBeat: 100,
+        continues: true,
+      });
+      a.poseLowerBody(frame);
+      const actual = a.group.localToWorld(a.at(1));
+      expect(
+        actual.distanceTo(
+          new THREE.Vector3(
+            frame.feet[0].x,
+            0.17 + frame.feet[0].lift,
+            frame.feet[0].z,
+          ),
+        ),
+      ).toBeLessThan(0.12);
+    }
+    center = { x: a.group.position.x, z: a.group.position.z };
+  }
+});

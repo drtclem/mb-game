@@ -30,7 +30,9 @@ it("joins steps continuously and stops body travel at the hold without snapping 
     true,
     false,
   );
-  expect(halt.body).toEqual({ x: 1, z: -2 });
+  const limited = 2 / (1 + Math.PI / 4) / Math.sqrt(2);
+  expect(halt.body.x).toBeCloseTo(limited);
+  expect(halt.body.z).toBeCloseTo(-1 - limited);
   const later = gait.sample(
     12.5,
     { x: 100, z: 100 },
@@ -244,7 +246,15 @@ it("faces feet and the lower body along lateral travel while keeping the upper-b
       false,
       false,
     );
-    expect(pose.lowerYaw).toBeCloseTo((-direction * Math.PI) / 2);
+    expect(pose.lowerYaw).toBeCloseTo(0);
+    const settled = gait.sample(
+      0.999,
+      { x: 0, z: 0 },
+      { x: direction, z: 0 },
+      false,
+      false,
+    );
+    expect(settled.lowerYaw).toBeCloseTo((-direction * Math.PI) / 2, 4);
     expect(
       pose.feet.every(
         (f) => Math.abs(f.yaw + (direction * Math.PI) / 2) < 1e-6,

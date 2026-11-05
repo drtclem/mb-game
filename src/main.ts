@@ -225,7 +225,7 @@ function turnWindow(count: number) {
   if (selected !== turnStudy) return undefined;
   return [1, 3].find(
     (p) =>
-      count >= setStart(selected, p) - 3 &&
+      count >= setStart(selected, p) - 6 &&
       count < setStart(selected, p) + 0.15,
   );
 }
@@ -242,7 +242,7 @@ const turnCue = document.createElement("div");
 turnCue.id = "turn-cue";
 turnCue.hidden = true;
 turnCue.innerHTML =
-  '<strong id="turn-cue-label"></strong><span><button id="turn-left">← Turn left</button><button id="turn-right">Turn right →</button></span>';
+  '<small class="turn-eyebrow">360° TURN COMING UP</small><strong id="turn-cue-label"></strong><p id="turn-help">PRESS ONE ARROW KEY TO CHOOSE YOUR TURN</p><span><button id="turn-left"><kbd>←</kbd><b>LEFT</b></button><button id="turn-right"><kbd>→</kbd><b>RIGHT</b></button></span>';
 $("hud").append(turnCue);
 $("turn-left").onclick = () => chooseTurn(1);
 $("turn-right").onclick = () => chooseTurn(-1);
@@ -1213,8 +1213,25 @@ function frame() {
     $("turn-cue-label").textContent = choice
       ? `TURN ${choice === 1 ? "LEFT" : "RIGHT"} · FOUR PIVOT STEPS`
       : remaining
-        ? `TURN IN ${remaining} · CHOOSE ← OR →`
+        ? `TURN IN ${remaining} COUNTS`
         : "TURN MISSED · WATCH THE NEXT CUE";
+    turnCue.querySelector(".turn-eyebrow")!.textContent = choice
+      ? currentTurn
+        ? "TURNING NOW"
+        : "TURN READY"
+      : remaining
+        ? "360° TURN COMING UP"
+        : "TURN MISSED";
+    turnCue.dataset.state = choice
+      ? "selected"
+      : remaining
+        ? "upcoming"
+        : "missed";
+    $("turn-help").textContent = choice
+      ? "CHOICE LOCKED · YOUR FEET TURN AUTOMATICALLY"
+      : remaining
+        ? "PRESS ← OR → NOW · OR TAP A BUTTON BELOW"
+        : "NO TURN SELECTED · WATCH FOR THE NEXT ARROW CUE";
     $("turn-left").hidden = $("turn-right").hidden =
       !!choice || cuePage === undefined;
     if (
