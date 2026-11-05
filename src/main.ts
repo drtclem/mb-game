@@ -1080,22 +1080,48 @@ function frame() {
       facing = -Math.PI * 2 * eased;
     }
     model.group.rotation.y = facing;
-    const frame = fieldGaits[i].sample(
-      c,
-      { x: current.x, z: current.y },
-      { x: future.x, z: future.y },
-      holding,
-      -(future.x - current.x) * Math.sin(facing) -
-        (future.y - current.y) * Math.cos(facing) <
-        0,
-      facing,
-      {
-        lastBeat: setEnd(selected, page) - 1,
-        continues:
-          setEnd(selected, page) < selected.drill.totalCounts &&
-          !selected.hold(setEnd(selected, page)),
-      },
-    );
+    const phaseEnd = setEnd(selected, page);
+    const preparing = playback?.countingIn
+      ? Math.max(0, (playback.countoffProgress - 7.5) * 2)
+      : holding && phaseEnd < 112 && !selected.hold(phaseEnd)
+        ? Math.max(0, (c - (phaseEnd - 0.5)) * 2)
+        : 0;
+    const origin = { x: current.x, z: current.y };
+    const first = playback?.countingIn
+      ? {
+          x:
+            current.x +
+            (selected.drill.pages[0].dots[i].x - current.x) /
+              selected.drill.pages[0].counts,
+          z:
+            current.y +
+            (selected.drill.pages[0].dots[i].y - current.y) /
+              selected.drill.pages[0].counts,
+        }
+      : step?.to
+        ? { x: step.to.x, z: step.to.y }
+        : run
+          ? { x: run.ai(phaseEnd + 1, i).x, z: run.ai(phaseEnd + 1, i).y }
+          : origin;
+    const frame =
+      preparing > 0
+        ? fieldGaits[i].prepare(preparing, origin, first, facing)
+        : fieldGaits[i].sample(
+            c,
+            { x: current.x, z: current.y },
+            { x: future.x, z: future.y },
+            holding,
+            -(future.x - current.x) * Math.sin(facing) -
+              (future.y - current.y) * Math.cos(facing) <
+              0,
+            facing,
+            {
+              lastBeat: setEnd(selected, page) - 1,
+              continues:
+                setEnd(selected, page) < selected.drill.totalCounts &&
+                !selected.hold(setEnd(selected, page)),
+            },
+          );
     model.poseLowerBody(frame);
     positions = positions.map((p, j) =>
       j === i ? { x: frame.body.x, y: frame.body.z } : p,

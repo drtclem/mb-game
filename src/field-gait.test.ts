@@ -99,3 +99,32 @@ it("settles both shoes beneath the body during a turn hold after long strides", 
     ),
   ).toBe(true);
 });
+it("prepares left on the and, then uses single standard opening strides", () => {
+  const gait = new FieldGait();
+  const prep = gait.prepare(1, { x: 0, z: 0 }, { x: 0, z: -1 });
+  expect(prep.body.z).toBe(-0.5);
+  expect(prep.feet[0].z).toBe(-1);
+  const arrival = { lastBeat: 7, continues: false };
+  const first = gait.sample(
+    0,
+    { x: 0, z: -1 },
+    { x: 0, z: -2 },
+    false,
+    false,
+    0,
+    arrival,
+  );
+  expect(first.body.z).toBe(-0.5);
+  const second = gait.sample(
+    1,
+    { x: 0, z: -2 },
+    { x: 0, z: -3 },
+    false,
+    false,
+    0,
+    arrival,
+  );
+  expect(second.body.z).toBe(-1.5);
+  expect(second.feet[1].z).toBe(-2);
+  expect(Math.abs(second.body.z - first.body.z)).toBe(1);
+});

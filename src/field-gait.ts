@@ -29,6 +29,46 @@ export class FieldGait {
     this.rightTarget = undefined;
     this.preciseHalt = false;
   }
+  /** The and before one prepares one contact, not two beats of travel. */
+  prepare(
+    progress: number,
+    origin: Point,
+    contact: Point,
+    facing = 0,
+  ): LowerBodyPose {
+    const u = ease(Math.max(0, Math.min(1, progress)));
+    const dx = contact.x - origin.x,
+      dz = contact.z - origin.z;
+    const body = { x: origin.x + dx * u * 0.5, z: origin.z + dz * u * 0.5 };
+    const foot = (side: number): GroundFoot => ({
+      x:
+        origin.x +
+        (side ? 0.12 : -0.12) * Math.cos(facing) +
+        (side ? 0 : dx * u),
+      z:
+        origin.z -
+        (side ? 0.12 : -0.12) * Math.sin(facing) +
+        (side ? 0 : dz * u),
+      yaw: 0,
+      lift: side ? 0 : Math.sin(Math.PI * progress) ** 2 * 0.02,
+      roll: side ? -0.22 * u : 0.25 * u,
+      planted: side === 1,
+    });
+    this.feet = [foot(0), foot(1)];
+    this.body = body;
+    this.start = body;
+    this.end = body;
+    this.from = undefined;
+    this.target = undefined;
+    this.beat = -Infinity;
+    this.wasHolding = true;
+    return {
+      body,
+      feet: this.feet.map((f) => ({ ...f })) as [GroundFoot, GroundFoot],
+      phase: "prepare",
+      label: "",
+    };
+  }
   sample(
     count: number,
     desired: Point,
@@ -57,7 +97,29 @@ export class FieldGait {
           planted: true,
         };
       this.start = this.end ?? this.body ?? { ...desired };
-      this.end = holding ? { ...this.start } : { ...next };
+      const remaining = Math.max(0.001, 1 - t);
+      const stride = {
+        x: (next.x - desired.x) / remaining,
+        z: (next.z - desired.z) / remaining,
+      };
+      const strideLength = Math.hypot(stride.x, stride.z);
+      if (strideLength > 2) {
+        stride.x *= 2 / strideLength;
+        stride.z *= 2 / strideLength;
+      }
+      // Feet contact on the beat; the torso is half a stride between contacts.
+      this.end = holding
+        ? { ...this.start }
+        : arrival
+          ? { x: next.x - stride.x * 0.5, z: next.z - stride.z * 0.5 }
+          : { ...next };
+      if (!holding && arrival && this.wasHolding && !this.body)
+        this.start = {
+          x: desired.x - stride.x * 0.5,
+          z: desired.z - stride.z * 0.5,
+        };
+      if (!holding && arrival?.continues && beat === arrival.lastBeat - 1)
+        this.end = { ...next };
       const length = Math.hypot(
         this.end.x - this.start.x,
         this.end.z - this.start.z,
@@ -83,8 +145,8 @@ export class FieldGait {
         // Prepare the final RIGHT contact a count ahead; it lands on eight.
         this.target = {
           ...makeFoot(side, this.end),
-          x: this.end.x,
-          z: this.end.z,
+          x: next.x,
+          z: next.z,
         };
       }
       if (!holding && arrival && beat === arrival.lastBeat) {
