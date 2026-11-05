@@ -20,7 +20,14 @@ export type Room = {
   serverTime: number;
 };
 export type Packet = (
-  | { kind: "position"; id: string; count: number; position: Dot; step?: Step }
+  | {
+      kind: "position";
+      id: string;
+      count: number;
+      position: Dot;
+      step?: Step;
+      turn?: { page: number; direction: number };
+    }
   | {
       kind: "result";
       id: string;
@@ -216,6 +223,15 @@ export class RoomClient {
           !Number.isFinite(packet.result.total) ||
           packet.result.total < 0 ||
           packet.result.total > 100)
+      )
+        return;
+      if (
+        packet.kind === "position" &&
+        packet.turn &&
+        (!Number.isInteger(packet.turn.page) ||
+          packet.turn.page < 0 ||
+          packet.turn.page > 30 ||
+          ![-1, 0, 1].includes(packet.turn.direction))
       )
         return;
       if (packet.kind === "position" && packet.step) {

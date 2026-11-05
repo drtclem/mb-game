@@ -118,6 +118,10 @@ def render(notes):
 
 if __name__ == '__main__':
     reprise = '--reprise' in sys.argv
+    challenge = '--challenge' in sys.argv
+    if challenge:
+        TEMPOS = [(0,120)]
+        SECTIONS = [(0,8,'First move','MOVE'),(8,12,'Pivot turn','HOLD'),(12,20,'Diagonal arc','MOVE'),(20,24,'Pivot turn','HOLD'),(24,40,'Expand','MOVE'),(40,48,'Hold','HOLD'),(48,64,'Shape the arc','MOVE'),(64,72,'Hold','HOLD'),(72,88,'Contract','MOVE'),(88,112,'Release','HOLD')]
     if reprise:
         TEMPOS = [(0, 96), (32, 108), (64, 96), (96, 84)]
     notes = score()
@@ -127,7 +131,7 @@ if __name__ == '__main__':
             if note['voice'] != 'tuba':
                 note['duration'] *= .85
         # A separate brighter reprise, not the same audio played faster.
-    prefix = 'sunrise-reprise' if reprise else 'sunrise-demo'
+    prefix = 'sunrise-challenge' if challenge else 'sunrise-reprise' if reprise else 'sunrise-demo'
     manifest = dict(title='Sunrise — Strauss Fanfare Study', draft=True, revision=2, instrumentation='brass only', totalCounts=TOTAL,
                     tempoChanges=[dict(count=c,bpm=b) for c,b in TEMPOS],
                     beats=[seconds(c) for c in range(TOTAL+1)],
@@ -135,7 +139,7 @@ if __name__ == '__main__':
                     notes=notes)
     folder = ROOT/'public/music'
     folder.mkdir(exist_ok=True)
-    (folder/('sunrise-reprise-score.json' if reprise else 'sunrise-score.json')).write_text(json.dumps(manifest, indent=2)+'\n')
+    (folder/('sunrise-challenge-score.json' if challenge else 'sunrise-reprise-score.json' if reprise else 'sunrise-score.json')).write_text(json.dumps(manifest, indent=2)+'\n')
     audio = render(notes)
     with wave.open(str(folder/(prefix+'.wav')),'wb') as out:
         out.setnchannels(2); out.setsampwidth(2); out.setframerate(RATE)

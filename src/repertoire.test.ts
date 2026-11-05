@@ -44,22 +44,43 @@ it("keeps the 8 / 4 turn trial aligned to the original music clock", () => {
   expect(turnStudy.hold(8)).toBe(true);
   expect(turnStudy.hold(11.99)).toBe(true);
   expect(turnStudy.hold(12)).toBe(false);
-  expect(turnStudy.drill.pages[2].dots).toEqual(shows[0].drill.pages[2].dots);
-  expect(
-    turnStudy.drill.pages[2].dots.every(
-      (d, i) => d.x === turnStudy.drill.initial[i].x,
-    ),
-  ).toBe(true);
+  expect(turnStudy.drill.pages[2].dots[0].x).toBeGreaterThan(
+    shows[0].drill.pages[2].dots[0].x,
+  );
   expect(setStart(turnStudy, 2)).toBe(12);
   expect(setEnd(turnStudy, 2)).toBe(20);
   expect(moveDisplay(turnStudy, 10).remaining).toBe(2);
   expect(moveDisplay(turnStudy, 10).now.label).toBe("HOLD · 4 COUNTS");
   for (let c = 0; c <= 112; c++)
-    expect(turnStudy.tempo.seconds(c)).toBe(shows[0].tempo.seconds(c));
+    expect(turnStudy.tempo.seconds(c)).toBeCloseTo(c * 0.5, 6);
   const run = new PerformanceRun(turnStudy, "Medium", 5, 1);
   run.marchAutomatically(18.9, { forward: 1, side: 0 });
   expect(run.steps).toHaveLength(16);
   expect(
     run.steps.filter((s) => s.timingBeat! >= 8 && s.timingBeat! < 12),
   ).toHaveLength(0);
+});
+it("renders the 120 BPM challenge music to the same beat grid as its diagonal and curved drill", () => {
+  const score = JSON.parse(
+    readFileSync("public/music/sunrise-challenge-score.json", "utf8"),
+  );
+  for (let c = 0; c <= 112; c++)
+    expect(turnStudy.tempo.seconds(c)).toBeCloseTo(score.beats[c]);
+  for (const section of score.sections)
+    for (let c = section.start; c < section.end; c++)
+      expect(turnStudy.hold(c)).toBe(section.action === "HOLD");
+  expect(readFileSync(`public${turnStudy.audio}`).length).toBeGreaterThan(
+    1000000,
+  );
+  expect(
+    turnStudy.drill.pages.some(
+      (p, i) =>
+        i > 0 &&
+        p.dots.some(
+          (d, j) =>
+            d.x !== turnStudy.drill.pages[i - 1].dots[j].x &&
+            d.y !== turnStudy.drill.pages[i - 1].dots[j].y,
+        ),
+    ),
+  ).toBe(true);
 });

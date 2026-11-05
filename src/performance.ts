@@ -38,6 +38,7 @@ export type Sample = {
   discount: number;
 };
 export type Result = {
+  turnMisses?: number;
   total: number;
   dot: number;
   form: number;
@@ -130,6 +131,7 @@ export class PerformanceRun {
   steps: Step[] = [];
   samples: Sample[] = [];
   faults = 0;
+  turnMisses = 0;
   sampled = 0;
   incomplete = false;
   steeringBias = 0;
@@ -489,7 +491,8 @@ export class PerformanceRun {
         (this.automatic ? 0 : (100 - timing) * tuning.timingPenalty) +
           (100 - stepSize) * tuning.sizePenalty +
           (100 - direction) * tuning.directionPenalty +
-          this.faults * tuning.holdPenalty,
+          this.faults * tuning.holdPenalty +
+          this.turnMisses * tuning.turnPenalty,
         0,
         60,
       );
@@ -504,6 +507,7 @@ export class PerformanceRun {
       stepSize,
       direction,
       technique,
+      turnMisses: this.turnMisses,
       faults: this.faults,
       misses: move.reduce((s, p) => s + p.misses, 0),
       extra: move.reduce((s, p) => s + p.extra, 0),

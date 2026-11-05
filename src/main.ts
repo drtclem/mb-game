@@ -67,14 +67,20 @@ let bandSamples: number[] = [];
 const controls = new Controls(),
   remote = new Map<
     string,
-    { position: Dot; count: number; step?: Step; at: number }
+    {
+      position: Dot;
+      count: number;
+      step?: Step;
+      turn?: { page: number; direction: number };
+      at: number;
+    }
   >(),
   results = new Map<
     string,
     { result: Result; incomplete: boolean; band: number }
   >();
 const app = document.querySelector<HTMLDivElement>("#app")!;
-app.innerHTML = `<main><header><a class="brand" href="/">ON THE DOT<span>THE FIELD IS LISTENING</span></a><span class="edition">BRASS / RHYTHM / FORM</span><button id="sound">Sound on</button></header><section id="stage"><div id="scene"></div><div id="labels"></div><div id="hud" hidden><div id="motion-state" role="status"></div><section id="move-card" aria-label="Current and next move"><div id="page"></div><div class="move-row"><span class="move-label">NOW</span><div><strong id="current-move"></strong><small id="current-detail"></small></div><b id="counts-left"></b></div><div id="set-progress" aria-label="Progress through eight counts">${Array.from({ length: 8 }, () => "<i></i>").join("")}</div><div class="move-row next"><span class="move-label">NEXT</span><div><strong id="next-move"></strong><small id="next-detail"></small></div></div></section><section id="count-panel" aria-label="Musical count"><div class="count-caption"><span id="count-label"></span><b id="count-position"></b></div><div id="beat">${Array.from({ length: 4 }, (_, i) => `<span class="pulse-block ${i === 0 ? "downbeat" : ""}">${i + 1}</span>`).join("")}</div></section><aside id="move-preview" hidden role="status"><span id="preview-arrow" aria-hidden="true">↑</span><div><strong id="preview-count"></strong><small id="preview-name"></small></div></aside><div id="feedback" role="status"></div><canvas id="map" width="310" height="170" aria-label="Field overview"></canvas><canvas id="conductor" width="160" height="205" aria-label="Drum major conducting the musical count"></canvas><button id="view">Overhead</button><button id="pause">Pause</button><button id="recenter" hidden>Recenter tilt</button><button id="rhythm" hidden aria-label="Tap once for each step">STEP<span>tap the count</span></button></div><div id="overlay"></div><div id="notice" role="status"></div><div id="rotate">Turn your phone sideways to take the field.</div></section><footer><span>MOUSE · STEER / AUTOMATIC FOOTWORK</span><span>4-TO-5 MAX · EVERY DIRECTION COUNTS</span></footer></main>`;
+app.innerHTML = `<main><header><a class="brand" href="/">ON THE DOT<span>THE FIELD IS LISTENING</span></a><span class="edition">BRASS / RHYTHM / FORM</span><button id="sound">Sound on</button></header><section id="stage"><div id="scene"></div><div id="labels"></div><div id="hud" hidden><div id="motion-state" role="status"></div><section id="move-card" aria-label="Current and next move"><div id="page"></div><div class="move-row"><span class="move-label">NOW</span><div><strong id="current-move"></strong><small id="current-detail"></small></div><b id="counts-left"></b></div><div id="set-progress" aria-label="Progress through eight counts">${Array.from({ length: 8 }, () => "<i></i>").join("")}</div><div class="move-row next"><span class="move-label">NEXT</span><div><strong id="next-move"></strong><small id="next-detail"></small></div></div></section><section id="count-panel" aria-label="Musical count"><div class="count-caption"><span id="count-label"></span><b id="count-position"></b></div><div id="beat">${Array.from({ length: 4 }, (_, i) => `<span class="pulse-block ${i === 0 ? "downbeat" : ""}">${i + 1}</span>`).join("")}</div></section><aside id="move-preview" hidden role="status"><span id="preview-arrow" aria-hidden="true">↑</span><div><strong id="preview-count"></strong><small id="preview-name"></small></div></aside><div id="feedback" role="status"></div><canvas id="map" width="310" height="170" aria-label="Field overview"></canvas><canvas id="conductor" width="160" height="205" aria-label="Drum major conducting the musical count"></canvas><button id="view">Overhead</button><button id="pause">Pause</button><button id="recenter" hidden>Recenter tilt</button><button id="rhythm" hidden aria-label="Tap once for each step">STEP<span>tap the count</span></button></div><div id="overlay"></div><div id="notice" role="status"></div><div id="rotate">Turn your phone sideways to take the field.</div></section><footer><span>MOUSE · STEER / ← → · TURN</span><span>4-TO-5 MAX · EVERY DIRECTION COUNTS</span></footer></main>`;
 const overlay = $("overlay"),
   hud = $("hud");
 const scene = new THREE.Scene();
@@ -213,6 +219,33 @@ function updateFormGuides(actual: Dot[], count: number, visible: boolean) {
   );
   formReadout.textContent = `${labels.join("  /  ")} · ${metrics.shape < 0.3 ? "ON FORM" : curveStatus}`;
 }
+const turnChoices = new Map<number, number>();
+const missedTurns = new Set<number>();
+function turnWindow(count: number) {
+  if (selected !== turnStudy) return undefined;
+  return [1, 3].find(
+    (p) =>
+      count >= setStart(selected, p) - 3 &&
+      count < setStart(selected, p) + 0.15,
+  );
+}
+function chooseTurn(direction: number) {
+  if (mode !== "run" || !playback || playback.paused || playback.countingIn)
+    return;
+  const page = turnWindow(selected.tempo.count(playback.seconds));
+  if (page !== undefined && !turnChoices.has(page)) {
+    turnChoices.set(page, direction);
+    controls.keys.clear();
+  }
+}
+const turnCue = document.createElement("div");
+turnCue.id = "turn-cue";
+turnCue.hidden = true;
+turnCue.innerHTML =
+  '<strong id="turn-cue-label"></strong><span><button id="turn-left">← Turn left</button><button id="turn-right">Turn right →</button></span>';
+$("hud").append(turnCue);
+$("turn-left").onclick = () => chooseTurn(1);
+$("turn-right").onclick = () => chooseTurn(-1);
 let bandReady = false,
   bandError = false;
 Promise.all(
@@ -375,7 +408,7 @@ function menu() {
   hud.hidden = true;
   overlay.hidden = false;
   getPlaybackIfExistsStop();
-  overlay.innerHTML = `<div class="intro"><p class="eyebrow">A MARCHING FIELD GAME</p><h1>Every step.<br>Every interval.</h1><p><strong>Steer with the mouse. Marching follows the music.</strong> Point at the field to choose your direction. Feet march automatically on each count and stop during holds. Reach your dot while keeping the form together. Space is unused during this trial.</p><small>After the count-in: MOVE 8, HOLD / TURN 4, then MOVE 8. Use the ground lines to keep your spacing.</small>${settings()}<small id="personal-best"></small><button class="primary" id="start">Take the field ↗</button><button id="tilt">Enable phone tilt</button><button hidden id="calibrate">Calibrate timing</button><small id="asset-status"></small><details ${location.hash.startsWith("#room=") ? "open" : ""}><summary>March with friends · 2–4 players</summary><label>DISPLAY NAME<input id="name" maxlength="24" value="${esc(localStorage.getItem("mb-name") ?? "Marcher")}" autocomplete="nickname"></label><div class="room-entry"><button id="create">Create room</button><input id="code" aria-label="Room code" maxlength="6" placeholder="ROOM CODE" value="${esc(location.hash.replace("#room=", "").slice(0, 6))}"><button id="join">Join room</button></div><small>Compete on your own score. Make the band better together.</small></details><p class="review-links"><a href="/marching.html">Movement study ↗</a> · <a href="/uniform.html">Uniform studio ↗</a> · <a href="/music.html">Music study ↗</a></p></div>`;
+  overlay.innerHTML = `<div class="intro"><p class="eyebrow">A MARCHING FIELD GAME</p><h1>Every step.<br>Every interval.</h1><p><strong>Steer with the mouse. Marching follows the music.</strong> Point at the field to choose your direction. Feet march automatically on each count and stop during holds. Reach your dot while keeping the form together. When a TURN cue appears, press ← or → once to choose your turn. Space is unused.</p><small>After the count-in: MOVE 8, HOLD / TURN 4, then MOVE 8. Use the ground lines to keep your spacing.</small>${settings()}<small id="personal-best"></small><button class="primary" id="start">Take the field ↗</button><button id="tilt">Enable phone tilt</button><button hidden id="calibrate">Calibrate timing</button><small id="asset-status"></small><details ${location.hash.startsWith("#room=") ? "open" : ""}><summary>March with friends · 2–4 players</summary><label>DISPLAY NAME<input id="name" maxlength="24" value="${esc(localStorage.getItem("mb-name") ?? "Marcher")}" autocomplete="nickname"></label><div class="room-entry"><button id="create">Create room</button><input id="code" aria-label="Room code" maxlength="6" placeholder="ROOM CODE" value="${esc(location.hash.replace("#room=", "").slice(0, 6))}"><button id="join">Join room</button></div><small>Compete on your own score. Make the band better together.</small></details><p class="review-links"><a href="/marching.html">Movement study ↗</a> · <a href="/uniform.html">Uniform studio ↗</a> · <a href="/music.html">Music study ↗</a></p></div>`;
   bindSettings();
   updateBest();
   updateAssetStatus();
@@ -430,6 +463,8 @@ function begin(seed: number, delay = 0, restore = false) {
   remote.clear();
   bandSamples = [];
   fieldGaits.forEach((g) => g.reset());
+  turnChoices.clear();
+  missedTurns.clear();
   lastBandBeat = 0;
   lastPage = -1;
   lastSend = 0;
@@ -515,7 +550,11 @@ function mouseDirection() {
   return length < 0.2 ? { x: 0, y: 0 } : { x: x / length, y: y / length };
 }
 $("stage").addEventListener("pointermove", (e) => {
-  if (e.pointerType !== "mouse") return;
+  if (
+    e.pointerType !== "mouse" ||
+    (e.target as HTMLElement).closest("button,input,select,#turn-cue")
+  )
+    return;
   const rect = renderer.domElement.getBoundingClientRect();
   mousePosition.set(
     ((e.clientX - rect.left) / rect.width) * 2 - 1,
@@ -539,6 +578,9 @@ window.addEventListener("keydown", (e) => {
   if ((e.target as HTMLElement).matches("input,select,textarea")) return;
   if ([" ", "Escape"].includes(e.key)) e.preventDefault();
   if (e.repeat) return;
+  if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+    chooseTurn(e.key === "ArrowLeft" ? 1 : -1);
+  }
   if (e.key === " ") {
     if (mode === "calibrate") calTap();
     else {
@@ -624,6 +666,7 @@ function bindRoom() {
         position: packet.position,
         count: packet.count,
         step: packet.step,
+        turn: packet.turn,
         at: performance.now(),
       });
     } else {
@@ -778,7 +821,7 @@ function renderResults() {
     )
     .join(
       "",
-    )}</div><p>${own.misses} missed counts · ${own.extra} extra steps · ${own.faults} hold faults<br>Average step ${own.averageStep.toFixed(1)} in · largest ${own.maxStep.toFixed(1)} in<br>Technique deduction ${own.technique.toFixed(1)} points · DOT/FORM 50/50</p><details><summary>Inspect every set</summary><div class="table-wrap"><table><thead><tr><th>Set</th><th>DOT</th><th>FORM</th><th>Auto feet</th><th>Size</th><th>Direction</th><th>Off dot</th><th>Faults</th></tr></thead><tbody>${own.sets.map((s, i) => `<tr><th>${i + 1}. ${esc(s.name)}</th><td>${s.dot.toFixed(0)}</td><td>${s.form.toFixed(0)}</td><td>${s.timing.toFixed(0)}</td><td>${s.stepSize.toFixed(0)}</td><td>${s.direction.toFixed(0)}</td><td>${s.distance.toFixed(1)} in<small>${s.discount.toFixed(1)} in discounted for form</small></td><td>${s.misses} missed / ${s.extra} extra / ${s.faults} hold</td></tr>`).join("")}</tbody></table></div></details><p>${readProgress().unlocked.includes("reprise") ? "Sunrise / Reprise unlocked." : `Reach ${tuning.unlock} individual points to unlock Sunrise / Reprise.`}</p>${r ? `${r.isHost ? '<button class="primary" id="room-again">Return room to lobby</button>' : "<p>Waiting for the host to return to the lobby.</p>"}<button id="exit-results">Leave room</button>` : '<button class="primary" id="again">Full-show retry ↗</button><button id="home">Choose show</button>'}</div>`;
+    )}</div><p>${own.turnMisses ?? 0} missed turns · ${own.misses} missed counts · ${own.extra} extra steps · ${own.faults} hold faults<br>Average step ${own.averageStep.toFixed(1)} in · largest ${own.maxStep.toFixed(1)} in<br>Technique deduction ${own.technique.toFixed(1)} points · DOT/FORM 50/50</p><details><summary>Inspect every set</summary><div class="table-wrap"><table><thead><tr><th>Set</th><th>DOT</th><th>FORM</th><th>Auto feet</th><th>Size</th><th>Direction</th><th>Off dot</th><th>Faults</th></tr></thead><tbody>${own.sets.map((s, i) => `<tr><th>${i + 1}. ${esc(s.name)}</th><td>${s.dot.toFixed(0)}</td><td>${s.form.toFixed(0)}</td><td>${s.timing.toFixed(0)}</td><td>${s.stepSize.toFixed(0)}</td><td>${s.direction.toFixed(0)}</td><td>${s.distance.toFixed(1)} in<small>${s.discount.toFixed(1)} in discounted for form</small></td><td>${s.misses} missed / ${s.extra} extra / ${s.faults} hold</td></tr>`).join("")}</tbody></table></div></details><p>${readProgress().unlocked.includes("reprise") ? "Sunrise / Reprise unlocked." : `Reach ${tuning.unlock} individual points to unlock Sunrise / Reprise.`}</p>${r ? `${r.isHost ? '<button class="primary" id="room-again">Return room to lobby</button>' : "<p>Waiting for the host to return to the lobby.</p>"}<button id="exit-results">Leave room</button>` : '<button class="primary" id="again">Full-show retry ↗</button><button id="home">Choose show</button>'}</div>`;
   if (r) {
     const again = document.getElementById("room-again");
     if (again)
@@ -904,6 +947,11 @@ function frame() {
         count,
         position: positions[playerId],
         step: run.steps.at(-1),
+        turn: {
+          page: turnWindow(count) ?? selected.page(count),
+          direction:
+            turnChoices.get(turnWindow(count) ?? selected.page(count)) ?? 0,
+        },
       });
     }
     const page = selected.page(count),
@@ -1071,18 +1119,31 @@ function frame() {
       : step
         ? step.to
         : (run?.ai(Math.min(112, Math.floor(c) + 2), i) ?? current);
-    // Turn only during the four-count preparation hold; the following move keeps that facing.
-    let facing = 0;
-    if (selected === turnStudy && page >= 1 && page <= 3) {
-      const turnProgress =
-        page === 1
-          ? Math.min(1, (c - setStart(selected, 1)) / 4)
-          : page === 2
-            ? 1
-            : 1 - Math.min(1, (c - setStart(selected, 3)) / 4);
-      const eased = turnProgress * turnProgress * (3 - 2 * turnProgress);
-      facing = -Math.PI * 2 * eased;
-    }
+    const turning =
+      selected === turnStudy &&
+      (page === 1 || page === 3) &&
+      holding &&
+      mode === "run" &&
+      !playback?.countingIn;
+    const peerTurn = member ? remote.get(member.id)?.turn : undefined;
+    const direction =
+      i === playerId
+        ? turnChoices.get(page)
+        : member?.connected
+          ? peerTurn?.page === page
+            ? peerTurn.direction
+            : 0
+          : page === 1
+            ? -1
+            : 1;
+    const local = c - setStart(selected, page);
+    const pivotBeat = Math.min(3, Math.max(0, Math.floor(local)));
+    const pivotT = Math.max(0, Math.min(1, (local - pivotBeat) * 2));
+    const facing =
+      turning && direction
+        ? ((direction * Math.PI) / 2) *
+          (pivotBeat + pivotT * pivotT * (3 - 2 * pivotT))
+        : 0;
     model.group.rotation.y = facing;
     const phaseEnd = setEnd(selected, page);
     const preparing = playback?.countingIn
@@ -1111,30 +1172,61 @@ function frame() {
           ? { x: run.ai(phaseEnd + 1, i).x, z: run.ai(phaseEnd + 1, i).y }
           : origin;
     const frame =
-      preparing > 0
-        ? fieldGaits[i].prepare(preparing, origin, first, facing)
-        : fieldGaits[i].sample(
-            c,
-            { x: current.x, z: current.y },
-            { x: future.x, z: future.y },
-            holding,
-            -(future.x - current.x) * Math.sin(facing) -
-              (future.y - current.y) * Math.cos(facing) <
-              0,
-            facing,
-            {
-              lastBeat: setEnd(selected, page) - 1,
-              continues:
-                setEnd(selected, page) < selected.drill.totalCounts &&
-                !selected.hold(setEnd(selected, page)),
-            },
-          );
+      turning && direction && preparing === 0
+        ? fieldGaits[i].pivot(local, { x: current.x, z: current.y }, direction)
+            .pose
+        : preparing > 0
+          ? fieldGaits[i].prepare(preparing, origin, first, facing)
+          : fieldGaits[i].sample(
+              c,
+              { x: current.x, z: current.y },
+              { x: future.x, z: future.y },
+              holding,
+              -(future.x - current.x) * Math.sin(facing) -
+                (future.y - current.y) * Math.cos(facing) <
+                0,
+              facing,
+              {
+                lastBeat: setEnd(selected, page) - 1,
+                continues:
+                  setEnd(selected, page) < selected.drill.totalCounts &&
+                  !selected.hold(setEnd(selected, page)),
+              },
+            );
     model.poseLowerBody(frame);
     positions = positions.map((p, j) =>
       j === i ? { x: frame.body.x, y: frame.body.z } : p,
     );
   });
   updateFormGuides(positions, c, mode === "run");
+  const cuePage = turnWindow(c);
+  const currentTurn =
+    selected === turnStudy && (page === 1 || page === 3) && selected.hold(c);
+  turnCue.hidden =
+    mode !== "run" ||
+    !!playback?.countingIn ||
+    !(cuePage !== undefined || currentTurn);
+  if (!turnCue.hidden) {
+    const p = cuePage ?? page,
+      choice = turnChoices.get(p),
+      remaining = Math.max(0, Math.ceil(setStart(selected, p) - c));
+    $("turn-cue-label").textContent = choice
+      ? `TURN ${choice === 1 ? "LEFT" : "RIGHT"} · FOUR PIVOT STEPS`
+      : remaining
+        ? `TURN IN ${remaining} · CHOOSE ← OR →`
+        : "TURN MISSED · WATCH THE NEXT CUE";
+    $("turn-left").hidden = $("turn-right").hidden =
+      !!choice || cuePage === undefined;
+    if (
+      currentTurn &&
+      c > setStart(selected, page) + 0.15 &&
+      !choice &&
+      !missedTurns.has(page)
+    ) {
+      missedTurns.add(page);
+      if (run) run.turnMisses++;
+    }
+  }
   const player = positions[playerId];
   playerMarker.position.set(player.x, 0.1, player.y);
   ring.visible = mode === "run";

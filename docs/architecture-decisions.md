@@ -551,3 +551,13 @@ Four-count turns now mark time with small alternating lifts, one step per count,
 Solo resume now counts 1–2–3–4 at the current show tempo, freezes show time and the existing pose during that lead-in, then resumes the saved audio offset. Multiplayer rejoin also uses a four-count lead without delaying the shared clock. Initial count-off remains eight. HUD/count blocks reflect the selected lead length, and resumed count-offs no longer run opening-show preparation.
 
 Validation: type check, 144 tests, two room acceptance tests and build pass. Browser pause/resume showed COUNT-IN 4 BEATS, RESUME FOUR COUNTS, 1/4, with no console errors. Tests verify resume lead duration at the paused tempo, alternating turning lifts, bounded contacts under abrupt steering, and all-performer/set transition continuity.
+
+## First 120 BPM challenge and player-selected pivot turns — November 5
+
+Taylor approved beginning the expanded difficulty work. The first slice keeps the eight/four opening and adds 120 BPM throughout, diagonal travel, evolving arcs, and expanding/contracting intervals. Original brass synthesis was rendered again at the new tempo via `scripts/render-sunrise.py --challenge`; the new WAV and score manifest share the drill's 112-count / 56-second clock. Drill validation rejects impossible steps and crossings. The original reference shows and reprise audio remain available to tests; the playable Sunrise trial now uses the challenge arrangement.
+
+Replaced rotating-body/foot-lift approximation with an explicit four-step pivot sequence. Each quarter-turn captures a swing shoe target while the supporting shoe retains both world position and world yaw. The body stays in place. Four quarter-turns complete a 360-degree turn, followed by step-off preparation.
+
+Three counts before a turn, player chooses Left or Right once via arrow key or matching touch button. AI turns automatically; connected players' choices are transmitted in validated optional position-packet metadata. Missing the cue skips that player's turn and adds a configurable two-point technique deduction; turn misses are separate in results. Keyboard timing does not drive feet. Browser verification selected RIGHT during the cue and showed the chosen four-pivot message, with no console errors. Pointer movement over turn buttons no longer changes field aim.
+
+Tests cover both pivot directions, stable support world anchors/yaw, all four quarter arrivals, challenge music/tempo alignment and MOVE/HOLD metadata, safe drill and missed-turn deduction. This is the first difficulty slice; 144/160 BPM levels, guide fading and independent sections remain later work after movement review.

@@ -15,6 +15,7 @@ export const tuning = {
   sizePenalty: 0.1,
   directionPenalty: 0.1,
   holdPenalty: 1.5,
+  turnPenalty: 2,
 };
 export type GameShow = {
   id: string;
@@ -35,6 +36,7 @@ function makeShow(
   name: string,
   reprise = false,
   turnTrial = false,
+  challenge = false,
 ): GameShow {
   const line = (y: number, curve = 0): Dot[] =>
     Array.from({ length: 12 }, (_, i) => ({
@@ -73,6 +75,27 @@ function makeShow(
     dots[2] = line(24);
     dots[3] = dots[2];
     dots.push(dots.at(-1)!);
+  }
+  if (challenge) {
+    const shifts = [0, 0, 4, 4, 0, -4, -4, 0, 4, 4, 0, -4, -4, -4, -4];
+    const curves = [0, 0, 2, 2, -2, -3, -3, 3, 4, 4, -2, 0, 0, 0, 0];
+    const spacing = [4, 4, 4, 4, 4.5, 5, 5, 4.5, 4, 4, 3.5, 3, 3, 3, 3];
+    const depths = [32, 32, 24, 24, 32, 40, 40, 32, 24, 24, 16, 8, 8, 8, 8];
+    const originals = dots.map((ds) => ds.map((d) => ({ ...d })));
+    for (let p = 0; p < dots.length; p++) {
+      const hold =
+        p > 0 &&
+        originals[p].every(
+          (d, i) =>
+            d.x === originals[p - 1][i].x && d.y === originals[p - 1][i].y,
+        );
+      dots[p] = hold
+        ? dots[p - 1]
+        : dots[p].map((d, i) => ({
+            x: q(d.x + shifts[p] + (i - 5.5) * (spacing[p] - 4)),
+            y: q(depths[p] + curves[p] * Math.sin((i / 11) * Math.PI)),
+          }));
+    }
   }
   const counts = dots.map((_, i) =>
     turnTrial && (i === 1 || i === 3) ? 4 : 8,
@@ -118,19 +141,21 @@ function makeShow(
   };
   const errors = checkShow(drill);
   if (errors.length) throw Error(errors.join("\n"));
-  const changes = reprise
-    ? [
-        [0, 96],
-        [32, 108],
-        [64, 96],
-        [96, 84],
-      ]
-    : [
-        [0, 84],
-        [32, 96],
-        [64, 84],
-        [96, 72],
-      ];
+  const changes = challenge
+    ? [[0, 120]]
+    : reprise
+      ? [
+          [0, 96],
+          [32, 108],
+          [64, 96],
+          [96, 84],
+        ]
+      : [
+          [0, 84],
+          [32, 96],
+          [64, 84],
+          [96, 72],
+        ];
   const beats = [0];
   for (let c = 0; c < 112; c++) {
     const bpm = [...changes].reverse().find((x) => c >= x[0])![1];
@@ -154,7 +179,7 @@ function makeShow(
     subtitle: reprise
       ? "A brighter answer · tighter tempo"
       : "Three calls · one arrival",
-    audio: `/music/${reprise ? "sunrise-reprise" : "sunrise-demo"}.wav`,
+    audio: `/music/${challenge ? "sunrise-challenge" : reprise ? "sunrise-reprise" : "sunrise-demo"}.wav`,
     tempo: new TempoMap(beats),
     drill,
     page,
@@ -181,8 +206,9 @@ export const shows = [
 
 export const turnStudy = makeShow(
   "sunrise",
-  "Sunrise · move 8 / hold 4",
+  "Sunrise · 120 BPM",
   false,
+  true,
   true,
 );
 export const setStart = (show: GameShow, page: number) =>

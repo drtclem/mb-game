@@ -215,3 +215,22 @@ it("checks every performer through every set transition in both playable shows",
       }
     }
 });
+it("turns in four planted quarter steps while keeping the supporting shoe fixed in world space", () => {
+  for (const direction of [-1, 1]) {
+    const gait = new FieldGait();
+    for (let beat = 0; beat < 4; beat++) {
+      const a = gait.pivot(beat + 0.1, { x: 0, z: 0 }, direction);
+      const b = gait.pivot(beat + 0.4, { x: 0, z: 0 }, direction);
+      const support = 1 - (beat % 2);
+      expect(b.pose.feet[support].x).toBe(a.pose.feet[support].x);
+      expect(b.pose.feet[support].z).toBe(a.pose.feet[support].z);
+      expect(b.pose.feet[support].yaw + b.facing).toBeCloseTo(
+        a.pose.feet[support].yaw + a.facing,
+      );
+      expect(b.pose.body).toEqual({ x: 0, z: 0 });
+      const landed = gait.pivot(beat + 0.5, { x: 0, z: 0 }, direction);
+      expect(landed.facing).toBeCloseTo((direction * (beat + 1) * Math.PI) / 2);
+      expect(landed.pose.feet[beat % 2].lift).toBeCloseTo(0);
+    }
+  }
+});

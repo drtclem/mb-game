@@ -241,3 +241,11 @@ it("automatic marching schedules one full-beat step, skips holds and follows cha
   ).toBe(true);
   expect(r.faults).toBe(0);
 });
+
+it("deducts a small technique penalty for a missed turn cue", () => {
+  const run = new PerformanceRun(show, "Easy", 5, 1);
+  const before = run.results().technique;
+  run.turnMisses = 1;
+  expect(run.results().technique - before).toBe(2);
+  expect(run.results().turnMisses).toBe(1);
+});

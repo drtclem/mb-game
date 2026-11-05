@@ -17,6 +17,10 @@ export class FieldGait {
   private rightTarget?: GroundFoot;
   private preciseHalt = false;
   private prepOrigin?: Point;
+  private pivotBeat = -1;
+  private pivotFeet?: [GroundFoot, GroundFoot];
+  private pivotFrom?: GroundFoot;
+  private pivotTarget?: GroundFoot;
   reset() {
     this.beat = -Infinity;
     this.feet = undefined;
@@ -30,6 +34,9 @@ export class FieldGait {
     this.rightTarget = undefined;
     this.preciseHalt = false;
     this.prepOrigin = undefined;
+    this.pivotFeet = undefined;
+    this.pivotBeat = -1;
+    this.pivotTarget = undefined;
   }
   /** The and before one prepares one contact, not two beats of travel. */
   prepare(
@@ -81,6 +88,66 @@ export class FieldGait {
       label: "",
     };
   }
+  /** Four quarter-turns. The support shoe retains its world position AND yaw. */
+  pivot(local: number, origin: Point, direction: number) {
+    const beat = Math.min(3, Math.max(0, Math.floor(local)));
+    const t = Math.max(0, Math.min(1, (local - beat) * 2)),
+      u = ease(t);
+    const facing = ((direction * Math.PI) / 2) * (beat + u);
+    const body = this.body ?? origin;
+    if (!this.pivotFeet)
+      this.pivotFeet = [0, 1].map((side) => ({
+        x: body.x + (side ? 0.12 : -0.12),
+        z: body.z,
+        lift: 0,
+        roll: 0,
+        yaw: 0,
+        planted: true,
+      })) as [GroundFoot, GroundFoot];
+    if (beat !== this.pivotBeat) {
+      if (this.pivotTarget && this.pivotBeat >= 0)
+        this.pivotFeet[this.pivotBeat % 2] = { ...this.pivotTarget };
+      const side = beat % 2,
+        angle = ((direction * Math.PI) / 2) * (beat + 1),
+        offset = side ? 0.12 : -0.12;
+      this.pivotFrom = { ...this.pivotFeet[side] };
+      this.pivotTarget = {
+        x: body.x + offset * Math.cos(angle),
+        z: body.z - offset * Math.sin(angle),
+        yaw: angle,
+        roll: 0,
+        lift: 0,
+        planted: true,
+      };
+      this.pivotBeat = beat;
+    }
+    const side = beat % 2,
+      from = this.pivotFrom!,
+      target = this.pivotTarget!;
+    this.pivotFeet[side] = {
+      ...target,
+      x: mix(from.x, target.x, u),
+      z: mix(from.z, target.z, u),
+      yaw: mix(from.yaw, target.yaw, u),
+      lift: Math.sin(Math.PI * t) ** 2 * 0.045,
+      planted: t === 1,
+    };
+    const feet = this.pivotFeet.map((f) => ({ ...f, yaw: f.yaw - facing })) as [
+      GroundFoot,
+      GroundFoot,
+    ];
+    this.feet = feet;
+    this.body = body;
+    this.start = body;
+    this.end = body;
+    this.target = undefined;
+    this.beat = -Infinity;
+    this.wasHolding = true;
+    return {
+      facing,
+      pose: { body, feet, phase: "hold", label: "PIVOT" } as LowerBodyPose,
+    };
+  }
   sample(
     count: number,
     desired: Point,
@@ -91,6 +158,9 @@ export class FieldGait {
     arrival?: { lastBeat: number; continues: boolean },
   ): LowerBodyPose {
     this.prepOrigin = undefined;
+    this.pivotFeet = undefined;
+    this.pivotBeat = -1;
+    this.pivotTarget = undefined;
     const beat = Math.floor(count),
       t = Math.max(0, Math.min(1, count - beat));
     const makeFoot = (side: number, center: Point): GroundFoot => ({
