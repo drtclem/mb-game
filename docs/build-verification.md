@@ -142,3 +142,11 @@ Three counts before a turn, player chooses Left or Right once via arrow key or m
 Tests cover both pivot directions, stable support world anchors/yaw, all four quarter arrivals, challenge music/tempo alignment and MOVE/HOLD metadata, safe drill and missed-turn deduction. This is the first difficulty slice; 144/160 BPM levels, guide fading and independent sections remain later work after movement review.
 
 Final checks for this slice: 147 unit/regression tests, two room acceptance checks, type check and production build pass. Browser turn-cue selection succeeded; cross-device multiplayer turn propagation has protocol validation but still needs a real multi-device playtest.
+
+## Sliding lower-body orientation — November 5
+
+Reviewed Taylor's linked Marching Band Fundamentals section beginning 3:27, including its 30/60/90 twist illustration and incorrect-form warning. Added independent lower-body yaw to the field-space pose. Lateral/diagonal travel turns hip locations, femur orientation and knee bend planes toward the slide while root/chest/arms/horn keep the existing facing. Foot tracks and shoe headings follow the lower-body direction; heel/forefoot pivot compensation now rotates into the shoe heading. Pure backward marching retains its forward-facing toe-raised stance. Pivot turns still rotate the complete performer through their dedicated sequence.
+
+Validation: 149 tests, type check and production build pass. New tests verify left/right sliding shoe and lower-body headings, matching step-off preparation, rotated hip axis, and unchanged upper-body/horn vertices. Existing grounded-foot, count-eight arrival, step-limit and pivot regressions remain green.
+
+Browser check paused the diagonal third set and inspected the differing leg/shoe headings with the upper bodies still front-facing. Console error logs were empty.

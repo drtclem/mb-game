@@ -158,6 +158,7 @@ export function rigCombinedSurface(
       knee,
       ankle,
       foot: foot.clone(),
+      bindHip: hip.position.clone(),
       l1: knee.position.length(),
       l2: ankle.position.length(),
     };
@@ -199,10 +200,14 @@ export function rigCombinedSurface(
       target: THREE.Vector3;
     }[],
     softKnees = false,
+    lowerYaw = 0,
   ) {
     const orientation = group.getWorldQuaternion(new THREE.Quaternion());
     for (const leg of legs) {
-      leg.hip.quaternion.identity();
+      leg.hip.position
+        .copy(leg.bindHip)
+        .applyAxisAngle(new THREE.Vector3(0, 1, 0), lowerYaw);
+      leg.hip.quaternion.setFromAxisAngle(new THREE.Vector3(0, 1, 0), lowerYaw);
       leg.knee.quaternion.identity();
       leg.ankle.quaternion.identity();
     }
@@ -244,7 +249,8 @@ export function rigCombinedSurface(
         target,
         leg.l1 * height,
         leg.l2 * height,
-        new THREE.Vector3(-leg.hip.position.x * 0.4, 0, -1)
+        new THREE.Vector3(-leg.bindHip.x * 0.4, 0, -1)
+          .applyAxisAngle(new THREE.Vector3(0, 1, 0), lowerYaw)
           .normalize()
           .applyQuaternion(orientation),
       );
@@ -293,19 +299,19 @@ export function rigCombinedSurface(
           foot.z - frame.body.z,
         ).applyAxisAngle(new THREE.Vector3(0, 1, 0), -group.rotation.y);
         // Rotate about the heel/forefoot contact, keeping the ground anchor fixed.
+        const yaw = foot.yaw;
+        const lever =
+          leg.foot.y * Math.sin(roll) + pivot * (1 - Math.cos(roll));
         const target = new THREE.Vector3(
-          offset.x / height,
+          offset.x / height + Math.sin(yaw) * (leg.foot.z + lever),
           leg.foot.y * Math.cos(roll) +
             pivot * Math.sin(roll) +
             foot.lift / height,
-          leg.foot.z +
-            offset.z / height +
-            leg.foot.y * Math.sin(roll) +
-            pivot * (1 - Math.cos(roll)),
+          offset.z / height + Math.cos(yaw) * (leg.foot.z + lever),
         );
         return { pose: { roll, yaw: foot.yaw, straighten: true }, target };
       });
-      solveTargets(targets, true);
+      solveTargets(targets, true, frame.lowerYaw ?? 0);
     },
     /** Apply the reviewed gait around the gameplay-owned position and stride. */
     animateReviewed(

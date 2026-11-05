@@ -11,6 +11,7 @@ export type GroundFoot = {
 };
 export type LowerBodyPose = {
   body: { x: number; z: number };
+  lowerYaw?: number;
   feet: [GroundFoot, GroundFoot];
   phase: "stand" | "prepare" | "march" | "close" | "hold";
   label: string;

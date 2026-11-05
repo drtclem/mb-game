@@ -192,3 +192,20 @@ it("uses the reviewed gait without changing gameplay travel and closes into turn
   a.animateReviewed(0, true, false);
   expect(a.at(1).distanceTo(held)).toBeLessThan(1e-7);
 });
+
+import { rehearsalPose } from "./lower-body";
+it("turns the lower-body hip axis for sliding while leaving chest and horn vertices fixed", () => {
+  const a = actor(),
+    upper = a.at(0);
+  const frame = rehearsalPose(1.5);
+  frame.lowerYaw = -Math.PI / 2;
+  frame.feet.forEach((f) => (f.yaw = -Math.PI / 2));
+  a.poseLowerBody(frame);
+  expect(a.at(0).distanceTo(upper)).toBeLessThan(1e-7);
+  const left = a.group.getObjectByName("LeftHip")!,
+    right = a.group.getObjectByName("RightHip")!;
+  expect(left.position.x).toBeCloseTo(0);
+  expect(right.position.x).toBeCloseTo(0);
+  expect(right.position.z).toBeGreaterThan(left.position.z);
+  expect(a.group.rotation.y).toBe(0);
+});

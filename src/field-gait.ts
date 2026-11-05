@@ -17,6 +17,7 @@ export class FieldGait {
   private rightTarget?: GroundFoot;
   private preciseHalt = false;
   private prepOrigin?: Point;
+  private slideYaw = 0;
   private pivotBeat = -1;
   private pivotFeet?: [GroundFoot, GroundFoot];
   private pivotFrom?: GroundFoot;
@@ -34,6 +35,7 @@ export class FieldGait {
     this.rightTarget = undefined;
     this.preciseHalt = false;
     this.prepOrigin = undefined;
+    this.slideYaw = 0;
     this.pivotFeet = undefined;
     this.pivotBeat = -1;
     this.pivotTarget = undefined;
@@ -58,17 +60,19 @@ export class FieldGait {
     const u = ease(Math.max(0, Math.min(1, progress)));
     const dx = contact.x - origin.x,
       dz = contact.z - origin.z;
+    const track = Math.atan2(-dx, Math.abs(dz));
+    this.slideYaw = track;
     const body = { x: origin.x + dx * u * 0.5, z: origin.z + dz * u * 0.5 };
     const foot = (side: number): GroundFoot => ({
       x:
         origin.x +
-        (side ? 0.12 : -0.12) * Math.cos(facing) +
+        (side ? 0.12 : -0.12) * Math.cos(track) +
         (side ? 0 : dx * u),
       z:
         origin.z -
-        (side ? 0.12 : -0.12) * Math.sin(facing) +
+        (side ? 0.12 : -0.12) * Math.sin(track) +
         (side ? 0 : dz * u),
-      yaw: 0,
+      yaw: track - facing,
       lift: side ? 0 : Math.sin(Math.PI * progress) ** 2 * 0.02,
       roll: side ? -0.22 * u : 0.25 * u,
       planted: side === 1,
@@ -84,6 +88,7 @@ export class FieldGait {
     return {
       body,
       feet: this.feet.map((f) => ({ ...f })) as [GroundFoot, GroundFoot],
+      lowerYaw: track - facing,
       phase: "prepare",
       label: "",
     };
@@ -163,9 +168,16 @@ export class FieldGait {
     this.pivotTarget = undefined;
     const beat = Math.floor(count),
       t = Math.max(0, Math.min(1, count - beat));
+    if (!holding && beat !== this.beat) {
+      const dx = next.x - desired.x,
+        dz = next.z - desired.z;
+      if (Math.hypot(dx, dz) > 0.001)
+        this.slideYaw = Math.atan2(-dx, Math.abs(dz));
+    }
+    const track = holding ? facing : this.slideYaw;
     const makeFoot = (side: number, center: Point): GroundFoot => ({
-      x: center.x + (side ? 0.12 : -0.12) * Math.cos(facing),
-      z: center.z - (side ? 0.12 : -0.12) * Math.sin(facing),
+      x: center.x + (side ? 0.12 : -0.12) * Math.cos(track),
+      z: center.z - (side ? 0.12 : -0.12) * Math.sin(track),
       yaw: 0,
       lift: 0,
       roll: 0,
@@ -315,7 +327,9 @@ export class FieldGait {
     swing.lift = holding ? 0 : Math.sin(Math.PI * t) ** 2 * 0.02;
     swing.planted = t === 0;
     this.feet.forEach((foot, i) => {
-      foot.yaw = holding ? ((i ? -1 : 1) * Math.PI) / 4 : 0;
+      foot.yaw = holding
+        ? ((i ? -1 : 1) * Math.PI) / 4
+        : this.slideYaw - facing;
       foot.roll = holding
         ? 0
         : backward
@@ -340,6 +354,7 @@ export class FieldGait {
     return {
       body,
       feet: this.feet.map((f) => ({ ...f })) as [GroundFoot, GroundFoot],
+      lowerYaw: holding ? 0 : this.slideYaw - facing,
       phase: holding ? "hold" : "march",
       label: "",
     };

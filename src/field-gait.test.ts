@@ -234,3 +234,27 @@ it("turns in four planted quarter steps while keeping the supporting shoe fixed 
     }
   }
 });
+it("faces feet and the lower body along lateral travel while keeping the upper-body frame separate", () => {
+  for (const direction of [-1, 1]) {
+    const gait = new FieldGait();
+    const pose = gait.sample(
+      0,
+      { x: 0, z: 0 },
+      { x: direction, z: 0 },
+      false,
+      false,
+    );
+    expect(pose.lowerYaw).toBeCloseTo((-direction * Math.PI) / 2);
+    expect(
+      pose.feet.every(
+        (f) => Math.abs(f.yaw + (direction * Math.PI) / 2) < 1e-6,
+      ),
+    ).toBe(true);
+    const prep = new FieldGait().prepare(
+      1,
+      { x: 0, z: 0 },
+      { x: direction, z: 0 },
+    );
+    expect(prep.lowerYaw).toBeCloseTo((-direction * Math.PI) / 2);
+  }
+});
