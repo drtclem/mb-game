@@ -503,3 +503,5 @@ The shared character module now accepts explicit lower-body poses and rolls each
 The movement study keeps both shoes facing forward in parallel tracks during marching. During the final close, the right shoe turns outward 45 degrees and the left closes with its heel at the right arch, matching Taylor's reference. The same stance is used before step-off, blending back to parallel during preparation. This remains in the review preview pending game integration.
 
 Halt refinement (Nov 5): both feet now turn outward 45 degrees, making a 90-degree angle. The right placement stays fixed; the left turns about its heel to preserve heel-to-arch contact. Marching remains parallel.
+
+Shoe orientation correction (Nov 5): zero ankle yaw did not remove turnout baked into the source mesh. Measure each model's sole long axis and cancel that authored yaw in the explicit lower-body pose adapter before applying the requested march/halt orientation. Legacy gameplay animation is unchanged. Added a synthetic turned-sole regression; all 127 tests, type check and build pass. Browser front and feet views inspected at the passing position confirm parallel visible shoes.

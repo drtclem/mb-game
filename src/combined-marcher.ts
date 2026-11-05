@@ -13,7 +13,7 @@ type Surface = {
 };
 const prepared = new Map<
   string,
-  Promise<{ body: Surface; feet: THREE.Vector3[] }>
+  Promise<{ body: Surface; feet: THREE.Vector3[]; shoeYaw: number[] }>
 >();
 
 function surface(scene: THREE.Group): Surface {
@@ -43,6 +43,30 @@ function surface(scene: THREE.Group): Surface {
   const center = footBox.getCenter(new THREE.Vector3());
   geometry.translate(-center.x, 0, -center.z);
   return { geometry, material: mesh.material };
+}
+
+/** Measure the authored sole's long axis, rather than assuming bone zero means straight. */
+export function authoredShoeYaw(
+  points: THREE.BufferAttribute | THREE.InterleavedBufferAttribute,
+  side: number,
+) {
+  const sole: [number, number][] = [];
+  for (let i = 0; i < points.count; i++)
+    if (points.getY(i) < 0.12 && points.getX(i) * side > 0.03)
+      sole.push([points.getX(i), points.getZ(i)]);
+  if (sole.length < 3) return 0;
+  const cx = sole.reduce((sum, p) => sum + p[0], 0) / sole.length;
+  const cz = sole.reduce((sum, p) => sum + p[1], 0) / sole.length;
+  let xx = 0,
+    zz = 0,
+    xz = 0;
+  for (const [x, z] of sole) {
+    xx += (x - cx) ** 2;
+    zz += (z - cz) ** 2;
+    xz += (x - cx) * (z - cz);
+  }
+  // Principal axis relative to Z; keep the forward-facing solution.
+  return 0.5 * Math.atan2(2 * xz, zz - xx);
 }
 
 async function prepare(gender: "woman" | "man") {
@@ -89,7 +113,11 @@ async function prepare(gender: "woman" | "man") {
           "skinWeight",
           new THREE.Float32BufferAttribute(weights, 4),
         );
-        return { body: source, feet };
+        return {
+          body: source,
+          feet,
+          shoeYaw: FOOT_SIDES.map((side) => authoredShoeYaw(p, side)),
+        };
       })(),
     );
   return prepared.get(gender)!;
@@ -103,7 +131,7 @@ export async function loadCombinedMarcher(
 }
 
 export function rigCombinedSurface(
-  source: { body: Surface; feet: THREE.Vector3[] },
+  source: { body: Surface; feet: THREE.Vector3[]; shoeYaw?: number[] },
   height = 1,
 ) {
   const group = new THREE.Group();
@@ -166,7 +194,10 @@ export function rigCombinedSurface(
     joint.updateWorldMatrix(false, true);
   }
   function solveTargets(
-    targets: { pose: { roll: number; yaw?: number }; target: THREE.Vector3 }[],
+    targets: {
+      pose: { roll: number; yaw?: number; straighten?: boolean };
+      target: THREE.Vector3;
+    }[],
     softKnees = false,
   ) {
     const orientation = group.getWorldQuaternion(new THREE.Quaternion());
@@ -232,6 +263,13 @@ export function rigCombinedSurface(
             pose.roll,
           ),
         );
+      if (pose.straighten)
+        desired.multiply(
+          new THREE.Quaternion().setFromAxisAngle(
+            new THREE.Vector3(0, 1, 0),
+            -(source.shoeYaw?.[i] ?? 0),
+          ),
+        );
       leg.ankle.quaternion.copy(
         leg.ankle
           .parent!.getWorldQuaternion(new THREE.Quaternion())
@@ -260,7 +298,7 @@ export function rigCombinedSurface(
             leg.foot.y * Math.sin(roll) +
             pivot * (1 - Math.cos(roll)),
         );
-        return { pose: { roll, yaw: foot.yaw }, target };
+        return { pose: { roll, yaw: foot.yaw, straighten: true }, target };
       });
       solveTargets(targets, true);
     },

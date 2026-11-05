@@ -1,6 +1,6 @@
 import { expect, it } from "vitest";
 import * as THREE from "three";
-import { rigCombinedSurface } from "./combined-marcher";
+import { authoredShoeYaw, rigCombinedSurface } from "./combined-marcher";
 import { legWeights, FOOT_SIDES } from "./combined-skin";
 
 function actor(height = 1) {
@@ -157,4 +157,21 @@ it("brings both feet level again at a hold after a completed stride", async () =
     .getWorldPosition(new THREE.Vector3());
   expect(left.z).toBeCloseTo(right.z, 6);
   expect(left.y).toBeCloseTo(right.y, 6);
+});
+
+it("measures baked shoe turnout from the sole instead of assuming neutral bones", () => {
+  for (const side of [-1, 1]) {
+    const yaw = -side * 0.4;
+    const points: number[] = [];
+    for (const x of [-0.04, 0.04])
+      for (const z of [-0.22, 0.08]) {
+        points.push(
+          side * 0.3 + x * Math.cos(yaw) + z * Math.sin(yaw),
+          0.02,
+          -x * Math.sin(yaw) + z * Math.cos(yaw),
+        );
+      }
+    const attr = new THREE.Float32BufferAttribute(points, 3);
+    expect(authoredShoeYaw(attr, side)).toBeCloseTo(yaw, 5);
+  }
 });
