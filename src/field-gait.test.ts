@@ -268,3 +268,12 @@ it("faces feet and the lower body along lateral travel while keeping the upper-b
     expect(prep.lowerYaw).toBeCloseTo((-direction * Math.PI) / 2);
   }
 });
+
+it("settles shoe yaw smoothly after a full right pivot instead of snapping to attention", () => {
+  const gait = new FieldGait();
+  for (let c = 0; c <= 3.5; c += 0.125) gait.pivot(c, { x: 0, z: 0 }, -1);
+  const before = gait.pivot(3.5, { x: 0, z: 0 }, -1).pose;
+  const after = gait.sample(68, { x: 0, z: 0 }, { x: 0, z: 0 }, true, false);
+  expect(after.feet[0].yaw).toBeCloseTo(before.feet[0].yaw);
+  expect(after.feet[1].yaw).toBeCloseTo(before.feet[1].yaw);
+});

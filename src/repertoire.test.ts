@@ -84,3 +84,14 @@ it("renders the 120 BPM challenge music to the same beat grid as its diagonal an
     ),
   ).toBe(true);
 });
+
+import { challengeTurn } from "./repertoire";
+it("scripts one later right turn, lasting four counts", () => {
+  expect(challengeTurn.direction).toBe(-1);
+  expect(challengeTurn.counts).toBe(4);
+  expect(setStart(turnStudy, challengeTurn.page)).toBe(64);
+  expect(setStart(turnStudy, challengeTurn.page)).toBeGreaterThan(
+    turnStudy.drill.totalCounts / 2,
+  );
+  expect(turnStudy.hold(setStart(turnStudy, challengeTurn.page))).toBe(true);
+});

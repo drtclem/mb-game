@@ -18,6 +18,7 @@ export class FieldGait {
   private preciseHalt = false;
   private prepOrigin?: Point;
   private slideYaw = 0;
+  private holdYawFrom = [0, 0];
   private slideFrom = 0;
   private slideTarget = 0;
   private pivotBeat = -1;
@@ -277,6 +278,12 @@ export class FieldGait {
           this.preciseHalt = true;
           // Keep the right contact anchored; only the left closes into hold one.
           const right = this.feet[1];
+          // Close the torso over the actual support, not a farther logical endpoint.
+          // This happens during eight, so hold one cannot start in a stranded lunge.
+          this.end = {
+            x: right.x - 0.06 * Math.cos(facing),
+            z: right.z + 0.06 * Math.sin(facing),
+          };
           const halt = rehearsalPose(8).feet;
           this.target = {
             ...halt[0],
@@ -296,6 +303,7 @@ export class FieldGait {
       }
       if (holding) {
         // Close around the planted right shoe, without translating the body.
+        this.holdYawFrom = this.feet.map((f) => f.yaw);
         this.rightFrom = { ...this.feet[1] };
         this.rightTarget = this.preciseHalt
           ? { ...this.feet[1] }
@@ -348,7 +356,7 @@ export class FieldGait {
     swing.planted = t === 0;
     this.feet.forEach((foot, i) => {
       foot.yaw = holding
-        ? ((i ? -1 : 1) * Math.PI) / 4
+        ? mix(this.holdYawFrom[i], ((i ? -1 : 1) * Math.PI) / 4, u)
         : this.slideTarget - facing;
       foot.roll = holding
         ? 0

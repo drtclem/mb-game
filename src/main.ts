@@ -4,6 +4,7 @@ import { distance, type Dot } from "./drill";
 import {
   shows as standardShows,
   turnStudy,
+  challengeTurn,
   setStart,
   setEnd,
   contactCount,
@@ -53,6 +54,7 @@ let lastPage = -1,
   rejoinUntil = 0,
   lastBandBeat = 0;
 let fieldStyle = "";
+const closeView = new URLSearchParams(location.search).get("view") === "feet";
 let overhead = false,
   muted = false,
   warningUntil = 0,
@@ -223,7 +225,7 @@ const turnChoices = new Map<number, number>();
 const missedTurns = new Set<number>();
 function turnWindow(count: number) {
   if (selected !== turnStudy) return undefined;
-  return [1, 3].find(
+  return [challengeTurn.page].find(
     (p) =>
       count >= setStart(selected, p) - 6 &&
       count < setStart(selected, p) + 0.15,
@@ -233,7 +235,11 @@ function chooseTurn(direction: number) {
   if (mode !== "run" || !playback || playback.paused || playback.countingIn)
     return;
   const page = turnWindow(selected.tempo.count(playback.seconds));
-  if (page !== undefined && !turnChoices.has(page)) {
+  if (
+    page !== undefined &&
+    direction === challengeTurn.direction &&
+    !turnChoices.has(page)
+  ) {
     turnChoices.set(page, direction);
     controls.keys.clear();
   }
@@ -408,7 +414,7 @@ function menu() {
   hud.hidden = true;
   overlay.hidden = false;
   getPlaybackIfExistsStop();
-  overlay.innerHTML = `<div class="intro"><p class="eyebrow">A MARCHING FIELD GAME</p><h1>Every step.<br>Every interval.</h1><p><strong>Steer with the mouse. Marching follows the music.</strong> Point at the field to choose your direction. Feet march automatically on each count and stop during holds. Reach your dot while keeping the form together. When a TURN cue appears, press ← or → once to choose your turn. Space is unused.</p><small>After the count-in: MOVE 8, HOLD / TURN 4, then MOVE 8. Use the ground lines to keep your spacing.</small>${settings()}<small id="personal-best"></small><button class="primary" id="start">Take the field ↗</button><button id="tilt">Enable phone tilt</button><button hidden id="calibrate">Calibrate timing</button><small id="asset-status"></small><details ${location.hash.startsWith("#room=") ? "open" : ""}><summary>March with friends · 2–4 players</summary><label>DISPLAY NAME<input id="name" maxlength="24" value="${esc(localStorage.getItem("mb-name") ?? "Marcher")}" autocomplete="nickname"></label><div class="room-entry"><button id="create">Create room</button><input id="code" aria-label="Room code" maxlength="6" placeholder="ROOM CODE" value="${esc(location.hash.replace("#room=", "").slice(0, 6))}"><button id="join">Join room</button></div><small>Compete on your own score. Make the band better together.</small></details><p class="review-links"><a href="/marching.html">Movement study ↗</a> · <a href="/uniform.html">Uniform studio ↗</a> · <a href="/music.html">Music study ↗</a></p></div>`;
+  overlay.innerHTML = `<div class="intro"><p class="eyebrow">A MARCHING FIELD GAME</p><h1>Every step.<br>Every interval.</h1><p><strong>Steer with the mouse. Marching follows the music.</strong> Point at the field to choose your direction. Feet march automatically on each count and stop during holds. Reach your dot while keeping the form together. When the later RIGHT TURN cue appears, press → once to turn with the band. Space is unused.</p><small>After the count-in: MOVE 8, HOLD 4, then MOVE 8. One 360° RIGHT turn comes later in the show.</small>${settings()}<small id="personal-best"></small><button class="primary" id="start">Take the field ↗</button><button id="tilt">Enable phone tilt</button><button hidden id="calibrate">Calibrate timing</button><small id="asset-status"></small><details ${location.hash.startsWith("#room=") ? "open" : ""}><summary>March with friends · 2–4 players</summary><label>DISPLAY NAME<input id="name" maxlength="24" value="${esc(localStorage.getItem("mb-name") ?? "Marcher")}" autocomplete="nickname"></label><div class="room-entry"><button id="create">Create room</button><input id="code" aria-label="Room code" maxlength="6" placeholder="ROOM CODE" value="${esc(location.hash.replace("#room=", "").slice(0, 6))}"><button id="join">Join room</button></div><small>Compete on your own score. Make the band better together.</small></details><p class="review-links"><a href="/marching.html">Movement study ↗</a> · <a href="/uniform.html">Uniform studio ↗</a> · <a href="/music.html">Music study ↗</a></p></div>`;
   bindSettings();
   updateBest();
   updateAssetStatus();
@@ -1121,7 +1127,8 @@ function frame() {
         : (run?.ai(Math.min(112, Math.floor(c) + 2), i) ?? current);
     const turning =
       selected === turnStudy &&
-      (page === 1 || page === 3) &&
+      page === challengeTurn.page &&
+      c - setStart(selected, page) < challengeTurn.counts &&
       holding &&
       mode === "run" &&
       !playback?.countingIn;
@@ -1131,11 +1138,11 @@ function frame() {
         ? turnChoices.get(page)
         : member?.connected
           ? peerTurn?.page === page
-            ? peerTurn.direction
+            ? peerTurn.direction === challengeTurn.direction
+              ? peerTurn.direction
+              : 0
             : 0
-          : page === 1
-            ? -1
-            : 1;
+          : challengeTurn.direction;
     const local = c - setStart(selected, page);
     const pivotBeat = Math.min(3, Math.max(0, Math.floor(local)));
     const pivotT = Math.max(0, Math.min(1, (local - pivotBeat) * 2));
@@ -1201,7 +1208,10 @@ function frame() {
   updateFormGuides(positions, c, mode === "run");
   const cuePage = turnWindow(c);
   const currentTurn =
-    selected === turnStudy && (page === 1 || page === 3) && selected.hold(c);
+    selected === turnStudy &&
+    page === challengeTurn.page &&
+    c - setStart(selected, page) < challengeTurn.counts &&
+    selected.hold(c);
   turnCue.hidden =
     mode !== "run" ||
     !!playback?.countingIn ||
@@ -1213,14 +1223,14 @@ function frame() {
     $("turn-cue-label").textContent = choice
       ? `TURN ${choice === 1 ? "LEFT" : "RIGHT"} · FOUR PIVOT STEPS`
       : remaining
-        ? `TURN IN ${remaining} COUNTS`
+        ? `RIGHT TURN IN ${remaining} COUNTS`
         : "TURN MISSED · WATCH THE NEXT CUE";
     turnCue.querySelector(".turn-eyebrow")!.textContent = choice
       ? currentTurn
         ? "TURNING NOW"
         : "TURN READY"
       : remaining
-        ? "360° TURN COMING UP"
+        ? "360° RIGHT TURN COMING UP"
         : "TURN MISSED";
     turnCue.dataset.state = choice
       ? "selected"
@@ -1228,12 +1238,12 @@ function frame() {
         ? "upcoming"
         : "missed";
     $("turn-help").textContent = choice
-      ? "CHOICE LOCKED · YOUR FEET TURN AUTOMATICALLY"
+      ? "RIGHT TURN CONFIRMED · FEET MOVE AUTOMATICALLY"
       : remaining
-        ? "PRESS ← OR → NOW · OR TAP A BUTTON BELOW"
+        ? "PRESS → RIGHT ARROW NOW · TURN WITH THE BAND"
         : "NO TURN SELECTED · WATCH FOR THE NEXT ARROW CUE";
-    $("turn-left").hidden = $("turn-right").hidden =
-      !!choice || cuePage === undefined;
+    $("turn-left").hidden = true;
+    $("turn-right").hidden = !!choice || cuePage === undefined;
     if (
       currentTurn &&
       c > setStart(selected, page) + 0.15 &&
@@ -1251,10 +1261,16 @@ function frame() {
   camera.position.lerp(
     overhead
       ? new THREE.Vector3(player.x, 65, player.y - 1)
-      : new THREE.Vector3(player.x + 9, 13, player.y + 21),
+      : closeView
+        ? new THREE.Vector3(player.x + 4, 5.5, player.y + 9)
+        : new THREE.Vector3(player.x + 9, 13, player.y + 21),
     0.07,
   );
-  camera.lookAt(player.x, 1, overhead ? player.y : player.y - 8);
+  camera.lookAt(
+    player.x,
+    closeView && !overhead ? 1.4 : 1,
+    overhead ? player.y : closeView ? player.y - 1 : player.y - 8,
+  );
   renderer.render(scene, camera);
   drawNames(positions);
   if (upcomingRing.visible) {

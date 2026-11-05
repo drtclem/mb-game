@@ -128,8 +128,10 @@ function makeShow(
     pages: dots.map((d, i) => ({
       name:
         turnTrial && (i === 1 || i === 3)
-          ? "Turn · prepare the next move"
-          : (names[i] ?? "Final release"),
+          ? "Hold · maintain the form"
+          : turnTrial && i === 9
+            ? "Right turn · 4 counts, then hold"
+            : (names[i] ?? "Final release"),
       counts: counts[i],
       facing: "front",
       form: i >= 7 && i <= 9 ? "arc" : "line",
@@ -221,3 +223,5 @@ export function contactCount(show: GameShow, count: number) {
   const c = Math.max(0, Math.min(show.drill.totalCounts, count));
   return show.hold(c) ? c : Math.min(setEnd(show, show.page(c)), c + 1);
 }
+
+export const challengeTurn = { page: 9, direction: -1, counts: 4 } as const;

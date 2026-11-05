@@ -238,3 +238,25 @@ it("keeps sliding recovery feet at their requested height through sharp directio
     center = { x: a.group.position.x, z: a.group.position.z };
   }
 });
+
+it("finishes an off-dot correction upright over the planted right shoe at hold one", () => {
+  const a = actor(),
+    gait = new FieldGait();
+  let center = { x: 0, z: 0 };
+  for (let beat = 0; beat < 8; beat++)
+    for (const t of [0, 0.25, 0.5, 0.75, 0.999]) {
+      const next = { x: beat > 3 ? 25 : 0, z: beat > 3 ? 20 : -beat - 1 };
+      const pose = gait.sample(beat + t, center, next, false, false, 0, {
+        lastBeat: 7,
+        continues: false,
+      });
+      a.poseLowerBody(pose);
+      if (t === 0.999) center = pose.body;
+    }
+  const halt = gait.sample(8, center, center, true, false);
+  a.poseLowerBody(halt);
+  expect(
+    Math.hypot(halt.body.x - halt.feet[1].x, halt.body.z - halt.feet[1].z),
+  ).toBeLessThan(0.1);
+  expect(a.group.position.y).toBeGreaterThan(-0.08);
+});
