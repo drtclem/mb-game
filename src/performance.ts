@@ -6,6 +6,7 @@ import {
   tuning,
   setStart,
   setEnd,
+  contactCount,
 } from "./repertoire";
 export type Steering = { forward: number; side: number; aim?: Dot };
 export type Step = {
@@ -138,12 +139,18 @@ export class PerformanceRun {
   /** Schedule exactly one step per moving beat; holds never generate inputs. */
   marchAutomatically(count: number, input: Steering) {
     this.automatic = true;
-    const last = Math.min(Math.floor(count), this.show.drill.totalCounts - 1);
+    const last = Math.min(
+      Math.floor(count) + 1,
+      this.show.drill.totalCounts - 1,
+    );
     for (let beat = this.automaticBeat + 1; beat <= last; beat++) {
       if (!this.show.hold(beat)) {
         this.tap(this.show.tempo.seconds(beat), input, 0, "tilt");
         const step = this.steps.at(-1)!;
-        step.end = this.show.tempo.seconds(beat + 1);
+        // Plan the contact one count ahead so it lands ON the numbered beat.
+        step.seconds = this.show.tempo.seconds(beat - 1);
+        step.end = this.show.tempo.seconds(beat);
+        step.visualFrom = { ...step.from };
       }
     }
     this.automaticBeat = Math.max(this.automaticBeat, last);
@@ -166,6 +173,12 @@ export class PerformanceRun {
     }
     const step = this.steps[lo - 1];
     if (!step) return { ...this.show.drill.initial[this.player] };
+    if (
+      this.automatic &&
+      this.show.hold(count) &&
+      (step.timingBeat ?? 0) > count
+    )
+      return { ...step.from };
     const t = clamp((sec - step.seconds) / (step.end - step.seconds), 0, 1);
     const from = step.visualFrom ?? step.from;
     return {
@@ -203,7 +216,8 @@ export class PerformanceRun {
     return this.show.drill.performers.map((_, i) =>
       i === this.player
         ? this.position(count)
-        : (this.remote.get(i) ?? this.ai(count, i)),
+        : (this.remote.get(i) ??
+          this.ai(this.automatic ? contactCount(this.show, count) : count, i)),
     );
   }
   advance(count: number) {
@@ -211,8 +225,11 @@ export class PerformanceRun {
     while (this.sampled < Math.floor(end + 1e-8)) {
       const c = ++this.sampled,
         page = this.show.page(c - 1e-6),
-        actual = this.actual(c),
-        ideal = this.show.target(c),
+        at = this.automatic ? Math.max(0, c - 1e-7) : c,
+        actual = this.actual(at),
+        ideal = this.show.target(
+          this.automatic ? contactCount(this.show, at) : at,
+        ),
         m = formMetrics(actual[this.player], actual, ideal, this.player);
       this.samples.push({
         page,
@@ -239,7 +256,7 @@ export class PerformanceRun {
     const beat = this.show.tempo.nearest(seconds);
     const count = Math.abs(beat.gap) <= 0.09000001 ? beat.count : actualCount;
     if (count >= this.show.drill.totalCounts) return;
-    this.advance(actualCount);
+    if (!this.automatic) this.advance(actualCount);
     const page = this.show.page(count),
       hold = this.show.hold(count),
       visualFrom = this.position(actualCount),

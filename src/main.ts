@@ -5,6 +5,8 @@ import {
   shows as standardShows,
   turnStudy,
   setStart,
+  setEnd,
+  contactCount,
   difficulties,
   tuning,
   type Difficulty,
@@ -165,7 +167,7 @@ function updateFormGuides(actual: Dot[], count: number, visible: boolean) {
   formLines.forEach((l) => (l.visible = visible));
   formReadout.hidden = !visible;
   if (!visible) return;
-  const ideal = selected.target(count);
+  const ideal = selected.target(contactCount(selected, count));
   const metrics = formMetrics(actual[playerId], actual, ideal, playerId);
   const neighbors = [playerId - 1, playerId + 1].filter(
     (i) => i >= 0 && i < actual.length,
@@ -926,8 +928,12 @@ function frame() {
     $("next-move").textContent = moves.next?.label ?? "FINISH";
     $("next-detail").textContent = moves.next?.name ?? "Final release";
     $("counts-left").textContent = `${moves.remaining} LEFT`;
-    const setCounts = countIn === undefined ? selected.drill.pages[moves.page].counts : 8;
-    $("set-progress").setAttribute("aria-label", `Progress through ${setCounts} counts`);
+    const setCounts =
+      countIn === undefined ? selected.drill.pages[moves.page].counts : 8;
+    $("set-progress").setAttribute(
+      "aria-label",
+      `Progress through ${setCounts} counts`,
+    );
     Array.from($("set-progress").children).forEach((tick, index) => {
       (tick as HTMLElement).hidden = index >= setCounts;
       tick.classList.toggle("complete", index < moves.progress);
@@ -978,7 +984,7 @@ function frame() {
       warning("Not yet");
     if (Math.floor(count) > lastBandBeat) {
       lastBandBeat = Math.floor(count);
-      const ideal = selected.target(count);
+      const ideal = selected.target(contactCount(selected, count));
       const visual = positions.map((p, i) => {
         const m = formMetrics(p, positions, ideal, i);
         return (
@@ -1058,9 +1064,9 @@ function frame() {
           : undefined;
     const future = holding
       ? current
-      : step && step.page === page
+      : step
         ? step.to
-        : (run?.ai(Math.min(112, Math.floor(c) + 1), i) ?? current);
+        : (run?.ai(Math.min(112, Math.floor(c) + 2), i) ?? current);
     // Turn only during the four-count preparation hold; the following move keeps that facing.
     let facing = 0;
     if (selected === turnStudy && page >= 1 && page <= 3) {
@@ -1083,6 +1089,12 @@ function frame() {
         (future.y - current.y) * Math.cos(facing) <
         0,
       facing,
+      {
+        lastBeat: setEnd(selected, page) - 1,
+        continues:
+          setEnd(selected, page) < selected.drill.totalCounts &&
+          !selected.hold(setEnd(selected, page)),
+      },
     );
     model.poseLowerBody(frame);
     positions = positions.map((p, j) =>

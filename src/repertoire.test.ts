@@ -57,7 +57,7 @@ it("keeps the 8 / 4 turn trial aligned to the original music clock", () => {
   for (let c = 0; c <= 112; c++)
     expect(turnStudy.tempo.seconds(c)).toBe(shows[0].tempo.seconds(c));
   const run = new PerformanceRun(turnStudy, "Medium", 5, 1);
-  run.marchAutomatically(19.9, { forward: 1, side: 0 });
+  run.marchAutomatically(18.9, { forward: 1, side: 0 });
   expect(run.steps).toHaveLength(16);
   expect(
     run.steps.filter((s) => s.timingBeat! >= 8 && s.timingBeat! < 12),

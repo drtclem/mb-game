@@ -221,21 +221,23 @@ it("restores odd-left/even-right after missed and extra inputs", () => {
 it("automatic marching schedules one full-beat step, skips holds and follows changed aim", () => {
   const r = new PerformanceRun(show, "Medium", 5, 4);
   const input = { forward: 1, side: 0, aim: { x: 1, y: 0 } };
-  r.marchAutomatically(7.99, input);
+  r.marchAutomatically(6.99, input);
   expect(r.steps).toHaveLength(0);
-  r.marchAutomatically(8.2, input);
+  r.marchAutomatically(7.99, input);
+  expect(r.position(7.99)).toEqual(show.drill.initial[5]);
+  r.marchAutomatically(7.99, input);
   expect(r.steps).toHaveLength(1);
-  expect(r.steps[0].end).toBe(show.tempo.seconds(9));
+  expect(r.steps[0].end).toBe(show.tempo.seconds(8));
   expect(r.steps[0].foot).toBe(0);
   expect(r.steps[0].to.x).toBeGreaterThan(r.steps[0].from.x);
-  r.marchAutomatically(8.8, input);
+  r.marchAutomatically(7.99, input);
   expect(r.steps).toHaveLength(1);
-  r.marchAutomatically(9.1, { ...input, aim: { x: -1, y: 0 } });
+  r.marchAutomatically(8.1, { ...input, aim: { x: -1, y: 0 } });
   expect(r.steps[1].foot).toBe(1);
   expect(r.steps[1].to.x).toBeLessThan(r.steps[1].from.x);
   r.marchAutomatically(31.9, input);
-  expect(r.steps.every((s) => !s.hold && s.timing === 100 && s.size <= 2 + 1e-9)).toBe(
-    true,
-  );
+  expect(
+    r.steps.every((s) => !s.hold && s.timing === 100 && s.size <= 2 + 1e-9),
+  ).toBe(true);
   expect(r.faults).toBe(0);
 });

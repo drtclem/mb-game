@@ -189,3 +189,9 @@ export const setStart = (show: GameShow, page: number) =>
   show.drill.pages.slice(0, page).reduce((sum, p) => sum + p.counts, 0);
 export const setEnd = (show: GameShow, page: number) =>
   setStart(show, page) + show.drill.pages[page].counts;
+
+/** Written position at the numbered foot contact rather than the next interval end. */
+export function contactCount(show: GameShow, count: number) {
+  const c = Math.max(0, Math.min(show.drill.totalCounts, count));
+  return show.hold(c) ? c : Math.min(setEnd(show, show.page(c)), c + 1);
+}

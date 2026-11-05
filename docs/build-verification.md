@@ -112,3 +112,9 @@ Retained ground guides; reduced the spacing panel to compact L/R hints. Recovery
 Turn clarification (Nov 5): Taylor intended a full 180-degree about-face during each four-count turn hold. Replaced the quarter-turn with a half-turn and restored the original forward/back field path (removed the invented eight-step lateral shift). Timing, music and form guides remain unchanged. Regression asserts that the resumed move uses the original Sunrise dots.
 
 Turn correction (Nov 5): Taylor clarified a full 360-degree rotation during each four-count turn hold, returning to the original facing. Updated the turn amplitude only; drill paths and count structure remain as approved.
+
+## Count-eight contact and body step limit — November 5
+
+Retimed automatic steps to prepare over the preceding count and contact on the numbered beat, rather than finishing one count later. Planned movement out of a hold does not translate the logical player during the hold. The final right contact is prepared on the preceding beat: on the actual arrival endpoint before a hold, or past that endpoint for a continuing body-centered arrival. Precise halt arrivals preserve the planted right anchor while the left closes. Arrival targets follow accepted movement, so missing a dot does not teleport to it.
+
+Added a hard two-standard-step (45-inch, 4-to-5) cap to each rendered body interval, supplementing the existing accepted-step cap. AI plans use the matching contact lead; form guides and automatic judging use the contact-aligned reference. Regressions simulate player planning plus the field gait through count eight for both halt and continuing arrivals, and cap an extreme catch-up request. Updated automatic scheduling tests for advance preparation. All 140 tests, type check, two room acceptance tests and build pass.

@@ -15,6 +15,7 @@ export class FieldGait {
   private wasHolding = true;
   private rightFrom?: GroundFoot;
   private rightTarget?: GroundFoot;
+  private preciseHalt = false;
   reset() {
     this.beat = -Infinity;
     this.feet = undefined;
@@ -26,6 +27,7 @@ export class FieldGait {
     this.wasHolding = true;
     this.rightFrom = undefined;
     this.rightTarget = undefined;
+    this.preciseHalt = false;
   }
   sample(
     count: number,
@@ -34,6 +36,7 @@ export class FieldGait {
     holding: boolean,
     backward: boolean,
     facing = 0,
+    arrival?: { lastBeat: number; continues: boolean },
   ): LowerBodyPose {
     const beat = Math.floor(count),
       t = Math.max(0, Math.min(1, count - beat));
@@ -55,6 +58,14 @@ export class FieldGait {
         };
       this.start = this.end ?? this.body ?? { ...desired };
       this.end = holding ? { ...this.start } : { ...next };
+      const length = Math.hypot(
+        this.end.x - this.start.x,
+        this.end.z - this.start.z,
+      );
+      if (length > 2) {
+        this.end.x = this.start.x + ((this.end.x - this.start.x) * 2) / length;
+        this.end.z = this.start.z + ((this.end.z - this.start.z) * 2) / length;
+      }
       const side = (((beat + 1) % 2) + 2) % 2;
       this.from = { ...this.feet[side] };
       const vx = this.end.x - this.start.x,
@@ -63,7 +74,34 @@ export class FieldGait {
         x: this.end.x + vx * 0.5,
         z: this.end.z + vz * 0.5,
       });
+      if (
+        !holding &&
+        arrival &&
+        beat === arrival.lastBeat - 1 &&
+        !arrival.continues
+      ) {
+        // Prepare the final RIGHT contact a count ahead; it lands on eight.
+        this.target = {
+          ...makeFoot(side, this.end),
+          x: this.end.x,
+          z: this.end.z,
+        };
+      }
+      if (!holding && arrival && beat === arrival.lastBeat) {
+        if (!arrival.continues) {
+          this.preciseHalt = true;
+          // Keep the right contact anchored; only the left closes into hold one.
+          const right = this.feet[1];
+          const halt = rehearsalPose(8).feet;
+          this.target = {
+            ...halt[0],
+            x: right.x + halt[0].x - halt[1].x,
+            z: right.z + halt[0].z - halt[1].z,
+          };
+        }
+      }
       if (!holding && this.wasHolding) {
+        this.preciseHalt = false;
         // Step-off contact is ahead of the body, never a full stride behind it.
         const support = 1 - side;
         this.feet[support] = makeFoot(support, {
@@ -74,7 +112,9 @@ export class FieldGait {
       if (holding) {
         // Close around the planted right shoe, without translating the body.
         this.rightFrom = { ...this.feet[1] };
-        this.rightTarget = makeFoot(1, this.start);
+        this.rightTarget = this.preciseHalt
+          ? { ...this.feet[1] }
+          : makeFoot(1, this.start);
         const right = this.rightTarget;
         const halt = rehearsalPose(8).feet;
         this.target = {
