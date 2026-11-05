@@ -68,7 +68,7 @@ const controls = new Controls(),
     { result: Result; incomplete: boolean; band: number }
   >();
 const app = document.querySelector<HTMLDivElement>("#app")!;
-app.innerHTML = `<main><header><a class="brand" href="/">ON THE DOT<span>THE FIELD IS LISTENING</span></a><span class="edition">BRASS / RHYTHM / FORM</span><button id="sound">Sound on</button></header><section id="stage"><div id="scene"></div><div id="labels"></div><div id="hud" hidden><div id="motion-state" role="status"></div><section id="move-card" aria-label="Current and next move"><div id="page"></div><div class="move-row"><span class="move-label">NOW</span><div><strong id="current-move"></strong><small id="current-detail"></small></div><b id="counts-left"></b></div><div id="set-progress" aria-label="Progress through eight counts">${Array.from({ length: 8 }, () => "<i></i>").join("")}</div><div class="move-row next"><span class="move-label">NEXT</span><div><strong id="next-move"></strong><small id="next-detail"></small></div></div></section><section id="count-panel" aria-label="Musical count"><div class="count-caption"><span id="count-label"></span><b id="count-position"></b></div><div id="beat">${Array.from({ length: 4 }, (_, i) => `<span class="pulse-block ${i === 0 ? "downbeat" : ""}">${i + 1}</span>`).join("")}</div></section><aside id="move-preview" hidden role="status"><span id="preview-arrow" aria-hidden="true">↑</span><div><strong id="preview-count"></strong><small id="preview-name"></small></div></aside><div id="feedback" role="status"></div><canvas id="map" width="310" height="170" aria-label="Field overview"></canvas><canvas id="conductor" width="160" height="205" aria-label="Drum major conducting the musical count"></canvas><button id="view">Overhead</button><button id="pause">Pause</button><button id="recenter" hidden>Recenter tilt</button><button id="rhythm" hidden aria-label="Tap once for each step">STEP<span>tap the count</span></button></div><div id="overlay"></div><div id="notice" role="status"></div><div id="rotate">Turn your phone sideways to take the field.</div></section><footer><span>MOUSE · AIM YOUR STEP / SPACE · TAP THE COUNT</span><span>4-TO-5 MAX · EVERY TAP COUNTS</span></footer></main>`;
+app.innerHTML = `<main><header><a class="brand" href="/">ON THE DOT<span>THE FIELD IS LISTENING</span></a><span class="edition">BRASS / RHYTHM / FORM</span><button id="sound">Sound on</button></header><section id="stage"><div id="scene"></div><div id="labels"></div><div id="hud" hidden><div id="motion-state" role="status"></div><section id="move-card" aria-label="Current and next move"><div id="page"></div><div class="move-row"><span class="move-label">NOW</span><div><strong id="current-move"></strong><small id="current-detail"></small></div><b id="counts-left"></b></div><div id="set-progress" aria-label="Progress through eight counts">${Array.from({ length: 8 }, () => "<i></i>").join("")}</div><div class="move-row next"><span class="move-label">NEXT</span><div><strong id="next-move"></strong><small id="next-detail"></small></div></div></section><section id="count-panel" aria-label="Musical count"><div class="count-caption"><span id="count-label"></span><b id="count-position"></b></div><div id="beat">${Array.from({ length: 4 }, (_, i) => `<span class="pulse-block ${i === 0 ? "downbeat" : ""}">${i + 1}</span>`).join("")}</div></section><aside id="move-preview" hidden role="status"><span id="preview-arrow" aria-hidden="true">↑</span><div><strong id="preview-count"></strong><small id="preview-name"></small></div></aside><div id="feedback" role="status"></div><canvas id="map" width="310" height="170" aria-label="Field overview"></canvas><canvas id="conductor" width="160" height="205" aria-label="Drum major conducting the musical count"></canvas><button id="view">Overhead</button><button id="pause">Pause</button><button id="recenter" hidden>Recenter tilt</button><button id="rhythm" hidden aria-label="Tap once for each step">STEP<span>tap the count</span></button></div><div id="overlay"></div><div id="notice" role="status"></div><div id="rotate">Turn your phone sideways to take the field.</div></section><footer><span>MOUSE · STEER / AUTOMATIC FOOTWORK</span><span>4-TO-5 MAX · EVERY DIRECTION COUNTS</span></footer></main>`;
 const overlay = $("overlay"),
   hud = $("hud");
 const scene = new THREE.Scene();
@@ -298,7 +298,7 @@ function menu() {
   hud.hidden = true;
   overlay.hidden = false;
   getPlaybackIfExistsStop();
-  overlay.innerHTML = `<div class="intro"><p class="eyebrow">A MARCHING FIELD GAME</p><h1>Every step.<br>Every interval.</h1><p><strong>Aim with the mouse. Tap Space on every moving count.</strong> Point at the field in the direction you want to step. Each Space press takes one step toward your aim; release and tap again for the next count. During holds, stop pressing; an early step stays in place and costs points.</p><small>The show starts with an eight-count HOLD after the count-in. Wait for MOVE before stepping.</small>${settings()}<small id="personal-best"></small><button class="primary" id="start">Take the field ↗</button><button id="tilt">Enable phone tilt</button><button id="calibrate">Calibrate timing</button><small id="asset-status"></small><details ${location.hash.startsWith("#room=") ? "open" : ""}><summary>March with friends · 2–4 players</summary><label>DISPLAY NAME<input id="name" maxlength="24" value="${esc(localStorage.getItem("mb-name") ?? "Marcher")}" autocomplete="nickname"></label><div class="room-entry"><button id="create">Create room</button><input id="code" aria-label="Room code" maxlength="6" placeholder="ROOM CODE" value="${esc(location.hash.replace("#room=", "").slice(0, 6))}"><button id="join">Join room</button></div><small>Compete on your own score. Make the band better together.</small></details><p class="review-links"><a href="/marching.html">Movement study ↗</a> · <a href="/uniform.html">Uniform studio ↗</a> · <a href="/music.html">Music study ↗</a></p></div>`;
+  overlay.innerHTML = `<div class="intro"><p class="eyebrow">A MARCHING FIELD GAME</p><h1>Every step.<br>Every interval.</h1><p><strong>Steer with the mouse. Marching follows the music.</strong> Point at the field to choose your direction. Feet march automatically on each count and stop during holds. Reach your dot while keeping the form together. Space is unused during this trial.</p><small>The show starts with an eight-count HOLD after the count-in. Aim during the hold to prepare for MOVE.</small>${settings()}<small id="personal-best"></small><button class="primary" id="start">Take the field ↗</button><button id="tilt">Enable phone tilt</button><button hidden id="calibrate">Calibrate timing</button><small id="asset-status"></small><details ${location.hash.startsWith("#room=") ? "open" : ""}><summary>March with friends · 2–4 players</summary><label>DISPLAY NAME<input id="name" maxlength="24" value="${esc(localStorage.getItem("mb-name") ?? "Marcher")}" autocomplete="nickname"></label><div class="room-entry"><button id="create">Create room</button><input id="code" aria-label="Room code" maxlength="6" placeholder="ROOM CODE" value="${esc(location.hash.replace("#room=", "").slice(0, 6))}"><button id="join">Join room</button></div><small>Compete on your own score. Make the band better together.</small></details><p class="review-links"><a href="/marching.html">Movement study ↗</a> · <a href="/uniform.html">Uniform studio ↗</a> · <a href="/music.html">Music study ↗</a></p></div>`;
   bindSettings();
   updateBest();
   updateAssetStatus();
@@ -366,7 +366,7 @@ function begin(seed: number, delay = 0, restore = false) {
   stage.tabIndex = 0;
   stage.focus({ preventScroll: true });
   $("pause").hidden = !!room;
-  $("rhythm").hidden = !matchMedia("(pointer:coarse)").matches;
+  $("rhythm").hidden = true;
   $("recenter").hidden = !controls.enabled;
   const p = getPlayback();
   p.start(selected, delay);
@@ -403,28 +403,9 @@ function rhythm(override?: Steering, pressedSeconds?: number) {
     calTap();
     return;
   }
-  if (
-    mode !== "run" ||
-    !run ||
-    !playback ||
-    playback.paused ||
-    playback.countingIn ||
-    playback.context.currentTime < rejoinUntil ||
-    roomInterrupted
-  )
-    return;
-  const input = override ?? controls.value;
-  run.tap(
-    pressedSeconds ?? playback.seconds,
-    input,
-    calibration,
-    override ? "nudge" : "tilt",
-  );
-  if (run.steps.at(-1)?.hold) {
-    warningAt = performance.now() / 1000;
-    warningUntil = performance.now() + 2000;
-    $("feedback").textContent = "Not yet";
-  }
+  // Automatic-footwork trial: manual rhythm inputs do not move the performer.
+  void override;
+  void pressedSeconds;
 }
 $("rhythm").addEventListener("pointerdown", (e) => {
   e.preventDefault();
@@ -709,7 +690,7 @@ function renderResults() {
   overlay.innerHTML = `<div class="panel recap"><p class="eyebrow">${esc(selected.name)} / ${difficulty} / RESULTS</p><h1>${own.total.toFixed(1)}<small> / 100</small></h1><p>${run.incomplete ? "Incomplete performance · no record or unlock awarded." : "Your individual performance. Every step counted."}</p><div class="caption"><span>SHARED BAND SCORE · SEPARATE</span><b>${band === undefined ? "Waiting for host…" : band.toFixed(1)}</b></div>${entries.map((e, i) => `<div class="caption"><span>${i + 1}. ${esc(e.name)}</span><b>${e.data ? `${e.data.result.total.toFixed(1)}${e.data.incomplete ? " · incomplete" : ""}` : e.incomplete ? "Disconnected · incomplete" : "Finishing…"}</b></div>`).join("")}<div class="analytics">${[
     ["DOT", own.dot],
     ["FORM", own.form],
-    ["TIMING", own.timing],
+    ["AUTO FOOTWORK", own.timing],
     ["STEP SIZE", own.stepSize],
     ["DIRECTION", own.direction],
   ]
@@ -719,7 +700,7 @@ function renderResults() {
     )
     .join(
       "",
-    )}</div><p>${own.misses} missed counts · ${own.extra} extra steps · ${own.faults} hold faults<br>Average step ${own.averageStep.toFixed(1)} in · largest ${own.maxStep.toFixed(1)} in<br>Technique deduction ${own.technique.toFixed(1)} points · DOT/FORM 50/50</p><details><summary>Inspect every set</summary><div class="table-wrap"><table><thead><tr><th>Set</th><th>DOT</th><th>FORM</th><th>Timing</th><th>Size</th><th>Direction</th><th>Off dot</th><th>Faults</th></tr></thead><tbody>${own.sets.map((s, i) => `<tr><th>${i + 1}. ${esc(s.name)}</th><td>${s.dot.toFixed(0)}</td><td>${s.form.toFixed(0)}</td><td>${s.timing.toFixed(0)}</td><td>${s.stepSize.toFixed(0)}</td><td>${s.direction.toFixed(0)}</td><td>${s.distance.toFixed(1)} in<small>${s.discount.toFixed(1)} in discounted for form</small></td><td>${s.misses} missed / ${s.extra} extra / ${s.faults} hold</td></tr>`).join("")}</tbody></table></div></details><p>${readProgress().unlocked.includes("reprise") ? "Sunrise / Reprise unlocked." : `Reach ${tuning.unlock} individual points to unlock Sunrise / Reprise.`}</p>${r ? `${r.isHost ? '<button class="primary" id="room-again">Return room to lobby</button>' : "<p>Waiting for the host to return to the lobby.</p>"}<button id="exit-results">Leave room</button>` : '<button class="primary" id="again">Full-show retry ↗</button><button id="home">Choose show</button>'}</div>`;
+    )}</div><p>${own.misses} missed counts · ${own.extra} extra steps · ${own.faults} hold faults<br>Average step ${own.averageStep.toFixed(1)} in · largest ${own.maxStep.toFixed(1)} in<br>Technique deduction ${own.technique.toFixed(1)} points · DOT/FORM 50/50</p><details><summary>Inspect every set</summary><div class="table-wrap"><table><thead><tr><th>Set</th><th>DOT</th><th>FORM</th><th>Auto feet</th><th>Size</th><th>Direction</th><th>Off dot</th><th>Faults</th></tr></thead><tbody>${own.sets.map((s, i) => `<tr><th>${i + 1}. ${esc(s.name)}</th><td>${s.dot.toFixed(0)}</td><td>${s.form.toFixed(0)}</td><td>${s.timing.toFixed(0)}</td><td>${s.stepSize.toFixed(0)}</td><td>${s.direction.toFixed(0)}</td><td>${s.distance.toFixed(1)} in<small>${s.discount.toFixed(1)} in discounted for form</small></td><td>${s.misses} missed / ${s.extra} extra / ${s.faults} hold</td></tr>`).join("")}</tbody></table></div></details><p>${readProgress().unlocked.includes("reprise") ? "Sunrise / Reprise unlocked." : `Reach ${tuning.unlock} individual points to unlock Sunrise / Reprise.`}</p>${r ? `${r.isHost ? '<button class="primary" id="room-again">Return room to lobby</button>' : "<p>Waiting for the host to return to the lobby.</p>"}<button id="exit-results">Leave room</button>` : '<button class="primary" id="again">Full-show retry ↗</button><button id="home">Choose show</button>'}</div>`;
   if (r) {
     const again = document.getElementById("room-again");
     if (again)
@@ -791,8 +772,18 @@ function frame() {
   $("move-preview").hidden = true;
   if (mode === "run" && run && playback) {
     count = Math.min(112, selected.tempo.count(playback.seconds));
-    if (count >= 0 && !playback.paused && !playback.countingIn)
+    if (count >= 0 && !playback.paused && !playback.countingIn) {
+      if (!roomInterrupted && !returningControl) {
+        const aim = mouseDirection();
+        const input = mouseActive
+          ? { forward: Math.hypot(aim.x, aim.y) > 0 ? 1 : 0, side: 0, aim }
+          : controls.enabled
+            ? controls.value
+            : { forward: 1, side: 0, aim: { x: 0, y: -1 } };
+        run.marchAutomatically(count, input);
+      }
       run.advance(count);
+    }
     if (room?.room) {
       for (const m of room.room.members) {
         if (m.id === room.id) continue;
@@ -846,8 +837,8 @@ function frame() {
       !selected.hold(count);
     $("motion-state").hidden = !movingPhase;
     $("motion-state").textContent = controls.enabled
-      ? "TILT TO STEER · TAP STEP ON THE COUNT"
-      : "AIM WITH MOUSE · TAP SPACE ON THE COUNT";
+      ? "TILT TO STEER · FEET FOLLOW THE BEAT"
+      : "AIM WITH MOUSE · FEET FOLLOW THE BEAT";
     const countIn = playback.countingIn ? playback.countoffProgress : undefined;
     const beats = countDisplay(count, countIn),
       moves = moveDisplay(selected, count, countIn);
@@ -1044,7 +1035,7 @@ function frame() {
         },
       );
       model.animateReviewed(
-        pose.count,
+        selected.hold(c) ? pose.count : contactGaitCount(c),
         pose.hold,
         pose.backward,
         pose.dx,

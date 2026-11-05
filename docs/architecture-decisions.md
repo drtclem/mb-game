@@ -509,3 +509,7 @@ Shoe orientation correction (Nov 5): zero ankle yaw did not remove turnout baked
 ## Reviewed gait integrated into gameplay — November 5
 
 All game roster animation calls now use the reviewed lower-body solver and contact profiles. A stride adapter scales the sequence to the actual movement vector while preserving gameplay-owned world position, input timing, scoring and remote step handling. Shoes cancel their authored turnout, stay parallel while moving, and turn out at halts; backward motion retains raised heels. Final closure now spans count eight to hold one without the old half-count delay. The standalone movement study remains available. Type check, 128 unit tests, two room acceptance checks and production build pass.
+
+## Automatic-footwork steering trial — November 5
+
+Taylor approved trying music-clock steps with mouse/tilt steering instead of rhythm taps. Schedule one step on each moving count, interpolate travel for the full beat, alternate left/right from musical counts, and suppress all steps during holds. Mouse aim is sampled for each beat; mobile retains tilt steering. Desktop starts facing forward until the mouse is moved. Space does not move the performer; horn cues remain deferred. The beat-clock gait now drives the player as well as AI. Timing deductions are disabled for automatic runs; dot/form, step size and direction remain judged. The manual rhythm button and timing-calibration entry are hidden for this trial.

@@ -127,6 +127,21 @@ export class PerformanceRun {
   incomplete = false;
   steeringBias = 0;
   private steeringPage = -1;
+  private automaticBeat = -1;
+  automatic = false;
+  /** Schedule exactly one step per moving beat; holds never generate inputs. */
+  marchAutomatically(count: number, input: Steering) {
+    this.automatic = true;
+    const last = Math.min(Math.floor(count), this.show.drill.totalCounts - 1);
+    for (let beat = this.automaticBeat + 1; beat <= last; beat++) {
+      if (!this.show.hold(beat)) {
+        this.tap(this.show.tempo.seconds(beat), input, 0, "tilt");
+        const step = this.steps.at(-1)!;
+        step.end = this.show.tempo.seconds(beat + 1);
+      }
+    }
+    this.automaticBeat = Math.max(this.automaticBeat, last);
+  }
   remote = new Map<number, Dot>();
   constructor(
     readonly show: GameShow,
@@ -433,7 +448,7 @@ export class PerformanceRun {
     const dot = mean(set.map((s) => s.dot)),
       form = mean(set.map((s) => s.form)),
       technique = clamp(
-        (100 - timing) * tuning.timingPenalty +
+        (this.automatic ? 0 : (100 - timing) * tuning.timingPenalty) +
           (100 - stepSize) * tuning.sizePenalty +
           (100 - direction) * tuning.directionPenalty +
           this.faults * tuning.holdPenalty,
