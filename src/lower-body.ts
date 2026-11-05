@@ -69,10 +69,15 @@ export function rehearsalPose(count: number, backward = false): LowerBodyPose {
       roll = -0.34 * (1 - ease((count - 7.75) * 4));
     // March in parallel tracks; form the heel-to-arch stance only at rest.
     const halted = count < 0 ? 1 - ease((count + 0.5) * 2) : ease(count - 7);
+    const yaw = (side === 0 ? 1 : -1) * (Math.PI / 4) * halted;
+    // Turn the left shoe about its heel so it stays at the right arch.
     return {
-      x: side === 0 ? mix(-0.12, 0, halted) : 0.12,
-      z: travel * direction - (side === 0 ? 0.12 * halted : 0),
-      yaw: side === 1 ? (-Math.PI / 4) * halted : 0,
+      x: side === 0 ? mix(-0.12, 0, halted) - 0.08 * Math.sin(yaw) : 0.12,
+      z:
+        travel * direction -
+        (side === 0 ? 0.12 * halted : 0) +
+        (side === 0 ? 0.08 * (1 - Math.cos(yaw)) : 0),
+      yaw,
       lift,
       roll,
       planted,

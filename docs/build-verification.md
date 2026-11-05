@@ -80,3 +80,5 @@ Backward marching now keeps both heels raised through movement and settles them 
 ## Track and halt stance — November 5
 
 Added explicit shoe yaw to the lower-body pose and rig adapter. Marching yaw remains zero, while the halt blends to a 45-degree right turnout and offset left heel-to-arch placement. Regression coverage checks both travel directions; 126 tests and type check pass.
+
+Halt refinement (Nov 5): both feet now turn outward 45 degrees, making a 90-degree angle. The right placement stays fixed; the left turns about its heel to preserve heel-to-arch contact. Marching remains parallel.

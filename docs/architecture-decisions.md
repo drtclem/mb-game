@@ -501,3 +501,5 @@ The shared character module now accepts explicit lower-body poses and rolls each
 ### Parallel tracks and halt stance (Taylor, Nov 5)
 
 The movement study keeps both shoes facing forward in parallel tracks during marching. During the final close, the right shoe turns outward 45 degrees and the left closes with its heel at the right arch, matching Taylor's reference. The same stance is used before step-off, blending back to parallel during preparation. This remains in the review preview pending game integration.
+
+Halt refinement (Nov 5): both feet now turn outward 45 degrees, making a 90-degree angle. The right placement stays fixed; the left turns about its heel to preserve heel-to-arch contact. Marching remains parallel.

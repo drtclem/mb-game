@@ -19,7 +19,10 @@ it("keeps a supporting foot fixed in field space while the body travels", () => 
   }
 });
 it("prepares only the left first, then closes it to the anchored right on hold one", () => {
-  expect(rehearsalPose(-0.6).feet.map((f) => f.z)).toEqual([-0.12, -0]);
+  expect(rehearsalPose(-0.6).feet.map((f) => f.z)).toEqual([
+    -0.12 + 0.08 * (1 - Math.cos(Math.PI / 4)),
+    0,
+  ]);
   expect(rehearsalPose(-0.25).feet[0].lift).toBeGreaterThan(0);
   expect(rehearsalPose(-0.25).feet[1].planted).toBe(true);
   for (const c of [7, 7.25, 7.5, 7.75, 8, 9])
@@ -70,7 +73,7 @@ it("does not jerk body velocity after the first contact or final arrival", () =>
   }
 });
 
-it("keeps marching feet parallel and forms a right turnout heel-to-arch halt", () => {
+it("keeps marching feet parallel and forms a ninety-degree heel-to-arch halt", () => {
   for (const backward of [false, true]) {
     for (const count of [0, 1, 2.5, 6.9, 7])
       expect(rehearsalPose(count, backward).feet.map((f) => f.yaw)).toEqual([
@@ -78,8 +81,11 @@ it("keeps marching feet parallel and forms a right turnout heel-to-arch halt", (
       ]);
     const [left, right] = rehearsalPose(8, backward).feet;
     expect(right.yaw).toBe(-Math.PI / 4);
-    expect(left.yaw).toBe(0);
-    expect(left.x).toBeCloseTo(right.x - 0.12);
-    expect(left.z).toBeCloseTo(right.z - 0.12);
+    expect(left.yaw).toBe(Math.PI / 4);
+    expect(left.yaw - right.yaw).toBe(Math.PI / 2);
+    expect(left.x + 0.08 * Math.sin(left.yaw)).toBeCloseTo(right.x - 0.12);
+    expect(left.z - 0.08 * (1 - Math.cos(left.yaw))).toBeCloseTo(
+      right.z - 0.12,
+    );
   }
 });
