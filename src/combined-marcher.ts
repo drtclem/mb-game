@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import type { LowerBodyPose } from "./lower-body";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { footPose, haltFootPose, stepOffFootPose } from "./marching-motion";
 import { twoBoneTargets } from "./skeletal-motion";
@@ -164,8 +165,90 @@ export function rigCombinedSurface(
     );
     joint.updateWorldMatrix(false, true);
   }
+  function solveTargets(
+    targets: { pose: { roll: number }; target: THREE.Vector3 }[],
+  ) {
+    const orientation = group.getWorldQuaternion(new THREE.Quaternion());
+    for (const leg of legs) {
+      leg.hip.quaternion.identity();
+      leg.knee.quaternion.identity();
+      leg.ankle.quaternion.identity();
+    }
+    // Lower the pelvis only as far as needed to keep ordinary strides reachable.
+    // Foot targets stay on the field; the rigid upper body never deforms.
+    const drop = Math.max(
+      -0.12,
+      Math.min(
+        0,
+        ...legs.map((leg, i) => {
+          const target = targets[i].target;
+          const horizontal =
+            (target.x - leg.hip.position.x) ** 2 +
+            (target.z - leg.hip.position.z) ** 2;
+          const reach = leg.l1 + leg.l2 - 1e-4;
+          return (
+            target.y +
+            Math.sqrt(Math.max(0, reach * reach - horizontal)) -
+            leg.hip.position.y
+          );
+        }),
+      ),
+    );
+    group.position.y = drop * height;
+    group.updateMatrixWorld(true);
+    legs.forEach((leg, i) => {
+      const { pose, target } = targets[i];
+      target.y -= drop;
+      group.localToWorld(target);
+      const solved = twoBoneTargets(
+        world(leg.hip),
+        target,
+        leg.l1 * height,
+        leg.l2 * height,
+        new THREE.Vector3(-leg.hip.position.x * 0.4, 0, -1)
+          .normalize()
+          .applyQuaternion(orientation),
+      );
+      aim(leg.hip, leg.knee, solved.knee);
+      aim(leg.knee, leg.ankle, solved.end);
+      const desired = new THREE.Quaternion()
+        .setFromAxisAngle(
+          new THREE.Vector3(1, 0, 0).applyQuaternion(orientation),
+          pose.roll,
+        )
+        .multiply(orientation);
+      leg.ankle.quaternion.copy(
+        leg.ankle
+          .parent!.getWorldQuaternion(new THREE.Quaternion())
+          .invert()
+          .multiply(desired),
+      );
+      leg.ankle.updateWorldMatrix(false, true);
+    });
+  }
   return {
     group,
+    poseLowerBody(frame: LowerBodyPose) {
+      group.position.set(frame.body.x, 0, frame.body.z);
+      const targets = legs.map((leg, i) => {
+        const foot = frame.feet[i],
+          roll = foot.roll;
+        const pivot = roll >= 0 ? 0.08 : -0.2;
+        // Rotate about the heel/forefoot contact, keeping the ground anchor fixed.
+        const target = new THREE.Vector3(
+          (foot.x - frame.body.x) / height,
+          leg.foot.y * Math.cos(roll) +
+            pivot * Math.sin(roll) +
+            foot.lift / height,
+          leg.foot.z +
+            (foot.z - frame.body.z) / height +
+            leg.foot.y * Math.sin(roll) +
+            pivot * (1 - Math.cos(roll)),
+        );
+        return { pose: { roll }, target };
+      });
+      solveTargets(targets);
+    },
     animate(
       count: number,
       hold: boolean,
@@ -175,14 +258,8 @@ export function rigCombinedSurface(
       closure = 1,
       preparation = 0,
     ) {
-      const orientation = group.getWorldQuaternion(new THREE.Quaternion());
       const direction = new THREE.Vector3(dx, 0, dz).normalize(),
         stride = Math.hypot(dx, dz) / height;
-      for (const leg of legs) {
-        leg.hip.quaternion.identity();
-        leg.knee.quaternion.identity();
-        leg.ankle.quaternion.identity();
-      }
       const targets = legs.map((leg, i) => {
         const pose =
           preparation > 0
@@ -200,57 +277,7 @@ export function rigCombinedSurface(
           Math.sin(Math.abs(pose.roll)) * (pose.roll < 0 ? 0.2 : 0.08);
         return { pose, target };
       });
-      // Lower the pelvis only as far as needed to keep ordinary strides reachable.
-      // Foot targets stay on the field; the rigid upper body never deforms.
-      const drop = Math.max(
-        -0.12,
-        Math.min(
-          0,
-          ...legs.map((leg, i) => {
-            const target = targets[i].target;
-            const horizontal =
-              (target.x - leg.hip.position.x) ** 2 +
-              (target.z - leg.hip.position.z) ** 2;
-            const reach = leg.l1 + leg.l2 - 1e-4;
-            return (
-              target.y +
-              Math.sqrt(Math.max(0, reach * reach - horizontal)) -
-              leg.hip.position.y
-            );
-          }),
-        ),
-      );
-      group.position.y = drop * height;
-      group.updateMatrixWorld(true);
-      legs.forEach((leg, i) => {
-        const { pose, target } = targets[i];
-        target.y -= drop;
-        group.localToWorld(target);
-        const solved = twoBoneTargets(
-          world(leg.hip),
-          target,
-          leg.l1 * height,
-          leg.l2 * height,
-          new THREE.Vector3(-leg.hip.position.x * 0.4, 0, -1)
-            .normalize()
-            .applyQuaternion(orientation),
-        );
-        aim(leg.hip, leg.knee, solved.knee);
-        aim(leg.knee, leg.ankle, solved.end);
-        const desired = new THREE.Quaternion()
-          .setFromAxisAngle(
-            new THREE.Vector3(1, 0, 0).applyQuaternion(orientation),
-            pose.roll,
-          )
-          .multiply(orientation);
-        leg.ankle.quaternion.copy(
-          leg.ankle
-            .parent!.getWorldQuaternion(new THREE.Quaternion())
-            .invert()
-            .multiply(desired),
-        );
-        leg.ankle.updateWorldMatrix(false, true);
-      });
+      solveTargets(targets);
     },
   };
 }

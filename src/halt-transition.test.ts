@@ -137,3 +137,32 @@ it("matches player and AI anatomical feet on every odd/even count, forward and b
     }
   }
 });
+
+it("rebuilds world-space heel and forefoot anchors without sliding on the actual rig", async () => {
+  const { rehearsalPose } = await import("./lower-body");
+  const actor = marcher();
+  for (const c of [0, 0.1, 0.2, 0.3, 0.4, 0.6, 0.7, 0.8, 0.9]) {
+    const pose = rehearsalPose(c);
+    actor.poseLowerBody(pose);
+    actor.group.updateMatrixWorld(true);
+    const ankle = actor.group.getObjectByName("LeftAnkle")!;
+    const pivot = pose.feet[0].roll >= 0 ? 0.08 : -0.2;
+    const contact = ankle.localToWorld(new THREE.Vector3(0, -0.17, pivot));
+    expect(contact.z).toBeCloseTo(-1 + pivot, 4);
+    expect(contact.y).toBeCloseTo(0, 4);
+    expect(contact.x).toBeCloseTo(-0.12, 4);
+  }
+  actor.poseLowerBody(rehearsalPose(3.8));
+  actor.poseLowerBody(rehearsalPose(0.3));
+  const first = actor.group
+    .getObjectByName("LeftAnkle")!
+    .getWorldPosition(new THREE.Vector3());
+  actor.poseLowerBody(rehearsalPose(-1));
+  actor.poseLowerBody(rehearsalPose(0.3));
+  expect(
+    actor.group
+      .getObjectByName("LeftAnkle")!
+      .getWorldPosition(new THREE.Vector3())
+      .distanceTo(first),
+  ).toBeLessThan(1e-7);
+});
