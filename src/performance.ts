@@ -327,7 +327,19 @@ export class PerformanceRun {
       .find((s) => !s.hold && !s.synthetic);
     const stepOff =
       !hold && (!previousMoving || previousMoving.page < phraseStart);
-    const foot: 0 | 1 = stepOff ? 0 : previousMoving?.foot === 0 ? 1 : 0;
+    const timingBeat = Math.round(
+      this.show.tempo.count(seconds - timingOffset),
+    );
+    const repeatedBeat = previousMoving?.timingBeat === timingBeat;
+    const foot: 0 | 1 = stepOff
+      ? 0
+      : repeatedBeat
+        ? previousMoving?.foot === 0
+          ? 1
+          : 0
+        : timingBeat % 2 === 0
+          ? 0
+          : 1;
     this.steps.push({
       stepOff,
       foot: hold ? undefined : foot,
@@ -343,7 +355,7 @@ export class PerformanceRun {
       page,
       number: this.steps.length,
       timing,
-      timingBeat: Math.round(this.show.tempo.count(seconds - timingOffset)),
+      timingBeat,
       direction: forward === 0 && !hold ? Math.PI / 2 : direction,
       sizeError: hold
         ? size

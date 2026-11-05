@@ -15,6 +15,6 @@ it("assigns normalized nonnegative leg weights with mirrored independent legs", 
       expect(w.weights.reduce((a, b) => a + b, 0)).toBeCloseTo(1);
       expect(w.weights.every((n) => n >= 0 && n <= 1)).toBe(true);
     }
-  expect(legWeights(0.3, 0.1, 1.5, 0.84, 0.2).joints).toContain(3);
-  expect(legWeights(-0.3, 0.1, 1.5, 0.84, 0.2).joints).toContain(6);
+  expect(legWeights(-0.3, 0.1, 1.5, 0.84, 0.2).joints).toContain(3);
+  expect(legWeights(0.3, 0.1, 1.5, 0.84, 0.2).joints).toContain(6);
 });

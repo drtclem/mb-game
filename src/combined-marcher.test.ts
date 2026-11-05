@@ -1,11 +1,11 @@
 import { expect, it } from "vitest";
 import * as THREE from "three";
 import { rigCombinedSurface } from "./combined-marcher";
-import { legWeights } from "./combined-skin";
+import { legWeights, FOOT_SIDES } from "./combined-skin";
 
 function actor(height = 1) {
   const geometry = new THREE.BufferGeometry();
-  const points = [0, 2.9, -0.6, 0.3, 0.17, 0];
+  const points = [0, 2.9, -0.6, -0.3, 0.17, 0];
   geometry.setAttribute(
     "position",
     new THREE.Float32BufferAttribute(points, 3),
@@ -28,7 +28,7 @@ function actor(height = 1) {
   const result = rigCombinedSurface(
     {
       body: { geometry, material: new THREE.MeshStandardMaterial() },
-      feet: [new THREE.Vector3(0.3, 0.17, 0), new THREE.Vector3(-0.3, 0.17, 0)],
+      feet: FOOT_SIDES.map((side) => new THREE.Vector3(side * 0.3, 0.17, 0)),
     },
     height,
   );
@@ -96,8 +96,8 @@ it("keeps forward/backward leg tracks close without crossing or bowing the knees
         const right = a.group
           .getObjectByName("RightAnkle")!
           .getWorldPosition(new THREE.Vector3());
-        expect(left.x - right.x).toBeLessThan(0.35);
-        expect(left.x - right.x).toBeGreaterThan(0.15);
+        expect(right.x - left.x).toBeLessThan(0.35);
+        expect(right.x - left.x).toBeGreaterThan(0.15);
         for (const side of ["Left", "Right"]) {
           const hip = a.group
             .getObjectByName(`${side}Hip`)!

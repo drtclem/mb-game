@@ -1,5 +1,6 @@
 import { expect, it } from "vitest";
 import * as THREE from "three";
+import { FOOT_SIDES } from "./combined-skin";
 import { rigCombinedSurface } from "./combined-marcher";
 import {
   haltClosure,
@@ -25,7 +26,7 @@ function marcher() {
   return rigCombinedSurface(
     {
       body: { geometry, material: new THREE.MeshStandardMaterial() },
-      feet: [new THREE.Vector3(0.2, 0.17, 0), new THREE.Vector3(-0.2, 0.17, 0)],
+      feet: FOOT_SIDES.map((side) => new THREE.Vector3(side * 0.2, 0.17, 0)),
     },
     1,
   );
@@ -65,4 +66,74 @@ it("hands the actual rig from the final swing to right-foot contact without a fu
   expect(Math.abs(before.z - after.z)).toBeLessThan(0.001);
   // Heel contact settles to a flat shoe; it must not move a stride forward.
   expect(before.distanceTo(after)).toBeLessThan(0.03);
+});
+
+it("puts LeftHip on the character's anatomical left when facing downfield", () => {
+  const model = marcher();
+  const facing = new THREE.Vector3(0, 0, -1);
+  const right = facing.clone().cross(new THREE.Vector3(0, 1, 0));
+  expect(
+    model.group.getObjectByName("LeftHip")!.position.dot(right),
+  ).toBeLessThan(0);
+  expect(
+    model.group.getObjectByName("RightHip")!.position.dot(right),
+  ).toBeGreaterThan(0);
+  model.animate(1, false, false, 0, -1);
+  model.group.updateMatrixWorld(true);
+  const leftFoot = model.group
+    .getObjectByName("LeftAnkle")!
+    .getWorldPosition(new THREE.Vector3());
+  const rightFoot = model.group
+    .getObjectByName("RightAnkle")!
+    .getWorldPosition(new THREE.Vector3());
+  expect(leftFoot.dot(facing)).toBeGreaterThan(rightFoot.dot(facing));
+  model.animate(2, false, false, 0, -1);
+  model.group.updateMatrixWorld(true);
+  expect(
+    model.group
+      .getObjectByName("RightAnkle")!
+      .getWorldPosition(new THREE.Vector3())
+      .dot(facing),
+  ).toBeGreaterThan(
+    model.group
+      .getObjectByName("LeftAnkle")!
+      .getWorldPosition(new THREE.Vector3())
+      .dot(facing),
+  );
+});
+
+it("matches player and AI anatomical feet on every odd/even count, forward and backward", async () => {
+  const { PerformanceRun } = await import("./performance");
+  const { shows } = await import("./repertoire");
+  const { stepAnimation } = await import("./step-animation");
+  for (const backward of [false, true]) {
+    const run = new PerformanceRun(shows[0], "Easy", 5, 1);
+    const player = marcher(),
+      ai = marcher();
+    const direction = new THREE.Vector3(0, 0, backward ? 1 : -1);
+    for (let count = 8; count < 24; count++) {
+      const seconds = shows[0].tempo.seconds(count);
+      run.tap(seconds, {
+        forward: backward ? -1 : 1,
+        side: 0,
+        aim: { x: 0, y: direction.z },
+      });
+      const pose = stepAnimation(run.steps.at(-1)!, seconds);
+      player.animate(pose.count, pose.hold, pose.backward, pose.dx, pose.dz);
+      ai.animate(contactGaitCount(count), false, backward, 0, direction.z);
+      for (const actor of [player, ai]) {
+        actor.group.updateMatrixWorld(true);
+        const left = actor.group
+          .getObjectByName("LeftAnkle")!
+          .getWorldPosition(new THREE.Vector3());
+        const right = actor.group
+          .getObjectByName("RightAnkle")!
+          .getWorldPosition(new THREE.Vector3());
+        expect(left.x).toBeLessThan(right.x);
+        const lead = (count % 2 === 0 ? left : right).dot(direction);
+        const trail = (count % 2 === 0 ? right : left).dot(direction);
+        expect(lead).toBeGreaterThan(trail);
+      }
+    }
+  }
 });

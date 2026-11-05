@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { footPose, haltFootPose, stepOffFootPose } from "./marching-motion";
 import { twoBoneTargets } from "./skeletal-motion";
-import { legWeights } from "./combined-skin";
+import { legWeights, FOOT_SIDES } from "./combined-skin";
 
 const loader = new GLTFLoader();
 const sources = new Map<string, ReturnType<GLTFLoader["loadAsync"]>>();
@@ -60,7 +60,8 @@ async function prepare(gender: "woman" | "man") {
           );
         const source = surface((await sources.get(gender)!).scene);
         const p = source.geometry.getAttribute("position"),
-          feet = [1, -1].map((side) => {
+          // Characters face -Z: anatomical left is -X, right is +X.
+          feet = FOOT_SIDES.map((side) => {
             const box = new THREE.Box3();
             for (let i = 0; i < p.count; i++)
               if (p.getY(i) < 0.22 && p.getX(i) * side > 0.03)

@@ -483,3 +483,9 @@ Reviewed Tyler Loretz's “Marching Basics: THE FIRST STEP Breakdown, Practice S
 Step-offs now record the actual leading foot independently of the total input counter: the first moving input in each phrase after a hold is left, subsequent moving taps alternate, and hold mistakes never change that sequence. Clean on-time phrases therefore put left on odd counts and right on even counts; extra/missed taps can put a player out of phase until the next left-foot step-off reset, as expected under tap-driven movement.
 
 Preparation pushes from the right forefoot with a raised rear heel while extending the left foot low. Forward contact presents the left heel with toes raised; backward preparation keeps lower clearance and modest heel lift with support on the balls of both feet. Moving tap poses use the chosen foot's contact immediately, prepare the next foot in the half-count before its predicted contact, and abort that preparation if the input never comes. Preparation never supplies travel or scoring credit. Upper body stability and the existing recovery cap remain unchanged.
+
+### Anatomical left/right correction and count parity (Taylor, Nov 4)
+
+Characters face -Z after geometry normalization. Their anatomical left is -X and right is +X; the previous feet ordering and skin assignments had those reversed. Share FOOT_SIDES=[-1,+1] between model preparation and rig fixtures, with negative-X vertices bound to the left leg. This applies to both genders and all player/AI models.
+
+For distinct written beats, select left on odd displayed counts (zero-based even timingBeat) and right on even displayed counts. Every first actual step-off still starts left. Extra taps within the same beat may alternate as mistake steps, but the next distinct beat restores written foot parity; missing a tap does not permanently reverse subsequent feet. This supersedes the earlier rule that carried tap-count parity through an entire phrase.

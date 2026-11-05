@@ -204,3 +204,16 @@ describe("left-foot step-offs", () => {
     expect(run.steps.at(-1)!.foot).toBe(0);
   });
 });
+
+it("restores odd-left/even-right after missed and extra inputs", () => {
+  const run = new PerformanceRun(show, "Easy", 5, 1);
+  run.tap(show.tempo.seconds(8), { forward: 1, side: 0 });
+  // Miss written count 2: written count 3 is still left, not the second tap's right.
+  run.tap(show.tempo.seconds(10), { forward: 1, side: 0 });
+  expect(run.steps.at(-1)!.foot).toBe(0);
+  run.tap(show.tempo.seconds(10) + 0.1, { forward: 1, side: 0 });
+  run.tap(show.tempo.seconds(11), { forward: 1, side: 0 });
+  expect(run.steps.at(-1)!.foot).toBe(1);
+  run.tap(show.tempo.seconds(12), { forward: 1, side: 0 });
+  expect(run.steps.at(-1)!.foot).toBe(0);
+});

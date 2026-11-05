@@ -1,5 +1,8 @@
 import { MathUtils } from "three";
 
+/** Facing -Z: index 0 is anatomical left, index 1 is anatomical right. */
+export const FOOT_SIDES = [-1, 1] as const;
+
 /** Root plus two three-bone legs. Upper body and instrument stay rigid on root. */
 export function legWeights(
   x: number,
@@ -11,7 +14,7 @@ export function legWeights(
   const joints = [0, 0, 0, 0],
     weights = [1, 0, 0, 0];
   if (y >= hip + 0.2) return { joints, weights };
-  const left = MathUtils.smoothstep(x, -0.05, 0.05);
+  const left = MathUtils.smoothstep(-x, -0.05, 0.05);
   const upper = 1 - MathUtils.smoothstep(y, hip - 0.15, hip + 0.2);
   const shin = 1 - MathUtils.smoothstep(y, knee - 0.12, knee + 0.12);
   const foot = 1 - MathUtils.smoothstep(y, ankle - 0.07, ankle + 0.07);
@@ -21,7 +24,7 @@ export function legWeights(
       weights: [1 - upper, upper * left, upper * (1 - left), 0],
     };
   }
-  const base = x >= 0 ? 1 : 4;
+  const base = x <= 0 ? 1 : 4;
   if (foot > 0)
     return {
       joints: [base + 1, base + 2, 0, 0],
