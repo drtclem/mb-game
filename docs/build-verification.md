@@ -110,3 +110,5 @@ Leg correction: swing contacts now aim ahead of the body instead of leaving supp
 Retained ground guides; reduced the spacing panel to compact L/R hints. Recovery feedback now directs attention to the local form. Validation includes 137 tests, type check, room checks and build. New trial regression verifies eight moving counts, four held counts, resuming at count twelve, correct four-count HUD, and identical music-clock times. Browser inspection confirmed HOLD 4 and 3/4 count display with no console errors. Visual leg quality remains under review.
 
 Turn clarification (Nov 5): Taylor intended a full 180-degree about-face during each four-count turn hold. Replaced the quarter-turn with a half-turn and restored the original forward/back field path (removed the invented eight-step lateral shift). Timing, music and form guides remain unchanged. Regression asserts that the resumed move uses the original Sunrise dots.
+
+Turn correction (Nov 5): Taylor clarified a full 360-degree rotation during each four-count turn hold, returning to the original facing. Updated the turn amplitude only; drill paths and count structure remain as approved.
