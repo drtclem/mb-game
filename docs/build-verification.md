@@ -72,3 +72,7 @@ Found mirrored model preparation and skin binding: the nominal Left leg occupied
 Added a field-space placement sequence and new explicit-pose rig path. Tests verify all eight contacts in both directions, planted support coordinates, continuous preparation/contact/closure transitions, closed hold, heel/forefoot ground pivots on the actual skeletal rig and frame-order independence. Existing gameplay and rig regression tests continue passing: 122 total. Type check and production build pass.
 
 Browser review of the new movement study checked count one, the passing position, count eight, closing at 8-and, and the final feet-together hold. Tested forward/backward, front/side views, both original performer models, direct scrubbing and count buttons. Console error logs were empty. This is a reviewable animation prototype, not a completed replacement of the full game's input-dependent animation.
+
+## Movement study refinement — November 5
+
+Backward marching now keeps both heels raised through movement and settles them into the halt. Reduced swing clearance with smooth lift-off, smoothed body velocity at step-off and arrival, and softened the new rig path's knee extension constraint. Left-foot closure starts just after count eight and finishes on hold one. These changes apply to the movement study; the full game's legacy animation is unchanged. Added three regressions for backward heel elevation, prompt closure and continuous body speed. All 125 tests, type check and production build pass. Browser side-view inspection confirmed the raised-heel backward pose.

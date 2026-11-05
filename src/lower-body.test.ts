@@ -44,3 +44,28 @@ it("is continuous through contacts, preparation, closure and hold", () => {
       }
     }
 });
+
+it("keeps both heels raised through backward travel, then settles at the halt", () => {
+  for (const count of [0, 0.2, 0.9, 1, 2.5, 5.5, 7, 7.6])
+    expect(
+      rehearsalPose(count, true).feet.every((foot) => foot.roll <= -0.33),
+    ).toBe(true);
+  expect(rehearsalPose(8, true).feet.every((foot) => foot.roll === 0)).toBe(
+    true,
+  );
+});
+it("starts closing promptly after eight and eases foot lift off the ground", () => {
+  expect(rehearsalPose(7.15).phase).toBe("close");
+  expect(rehearsalPose(7.15).feet[0].z).toBeLessThan(-7);
+  expect(rehearsalPose(0.001).feet[1].lift).toBeLessThan(0.000001);
+});
+it("does not jerk body velocity after the first contact or final arrival", () => {
+  const h = 0.0001;
+  for (const count of [0, 7, 8]) {
+    const before =
+      (rehearsalPose(count).body.z - rehearsalPose(count - h).body.z) / h;
+    const after =
+      (rehearsalPose(count + h).body.z - rehearsalPose(count).body.z) / h;
+    expect(Math.abs(before - after)).toBeLessThan(0.001);
+  }
+});

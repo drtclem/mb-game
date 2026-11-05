@@ -167,6 +167,7 @@ export function rigCombinedSurface(
   }
   function solveTargets(
     targets: { pose: { roll: number }; target: THREE.Vector3 }[],
+    softKnees = false,
   ) {
     const orientation = group.getWorldQuaternion(new THREE.Quaternion());
     for (const leg of legs) {
@@ -176,24 +177,31 @@ export function rigCombinedSurface(
     }
     // Lower the pelvis only as far as needed to keep ordinary strides reachable.
     // Foot targets stay on the field; the rigid upper body never deforms.
-    const drop = Math.max(
-      -0.12,
-      Math.min(
-        0,
-        ...legs.map((leg, i) => {
-          const target = targets[i].target;
-          const horizontal =
-            (target.x - leg.hip.position.x) ** 2 +
-            (target.z - leg.hip.position.z) ** 2;
-          const reach = leg.l1 + leg.l2 - 1e-4;
-          return (
-            target.y +
-            Math.sqrt(Math.max(0, reach * reach - horizontal)) -
-            leg.hip.position.y
-          );
-        }),
-      ),
-    );
+    const reaches = legs.map((leg, i) => {
+      const target = targets[i].target;
+      const horizontal =
+        (target.x - leg.hip.position.x) ** 2 +
+        (target.z - leg.hip.position.z) ** 2;
+      const reach = leg.l1 + leg.l2 - (softKnees ? 0.008 : 1e-4);
+      return (
+        target.y +
+        Math.sqrt(Math.max(0, reach * reach - horizontal)) -
+        leg.hip.position.y
+      );
+    });
+    // A smooth minimum avoids a knee-lock pop when support changes sides.
+    const minimum = Math.min(0, ...reaches);
+    const floor = softKnees
+      ? minimum -
+        Math.log(
+          [0, ...reaches].reduce(
+            (sum, value) => sum + Math.exp((minimum - value) * 100),
+            0,
+          ),
+        ) /
+          100
+      : minimum;
+    const drop = Math.max(softKnees ? -0.18 : -0.12, floor);
     group.position.y = drop * height;
     group.updateMatrixWorld(true);
     legs.forEach((leg, i) => {
@@ -247,7 +255,7 @@ export function rigCombinedSurface(
         );
         return { pose: { roll }, target };
       });
-      solveTargets(targets);
+      solveTargets(targets, true);
     },
     animate(
       count: number,
