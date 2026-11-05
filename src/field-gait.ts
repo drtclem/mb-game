@@ -13,6 +13,8 @@ export class FieldGait {
   private start?: Point;
   private end?: Point;
   private wasHolding = true;
+  private rightFrom?: GroundFoot;
+  private rightTarget?: GroundFoot;
   reset() {
     this.beat = -Infinity;
     this.feet = undefined;
@@ -22,6 +24,8 @@ export class FieldGait {
     this.target = undefined;
     this.from = undefined;
     this.wasHolding = true;
+    this.rightFrom = undefined;
+    this.rightTarget = undefined;
   }
   sample(
     count: number,
@@ -29,12 +33,13 @@ export class FieldGait {
     next: Point,
     holding: boolean,
     backward: boolean,
+    facing = 0,
   ): LowerBodyPose {
     const beat = Math.floor(count),
       t = Math.max(0, Math.min(1, count - beat));
     const makeFoot = (side: number, center: Point): GroundFoot => ({
-      x: center.x + (side ? 0.12 : -0.12),
-      z: center.z,
+      x: center.x + (side ? 0.12 : -0.12) * Math.cos(facing),
+      z: center.z - (side ? 0.12 : -0.12) * Math.sin(facing),
       yaw: 0,
       lift: 0,
       roll: 0,
@@ -52,15 +57,36 @@ export class FieldGait {
       this.end = holding ? { ...this.start } : { ...next };
       const side = (((beat + 1) % 2) + 2) % 2;
       this.from = { ...this.feet[side] };
-      this.target = makeFoot(side, this.end);
+      const vx = this.end.x - this.start.x,
+        vz = this.end.z - this.start.z;
+      this.target = makeFoot(side, {
+        x: this.end.x + vx * 0.5,
+        z: this.end.z + vz * 0.5,
+      });
+      if (!holding && this.wasHolding) {
+        // Step-off contact is ahead of the body, never a full stride behind it.
+        const support = 1 - side;
+        this.feet[support] = makeFoot(support, {
+          x: this.start.x + vx * 0.5,
+          z: this.start.z + vz * 0.5,
+        });
+      }
       if (holding) {
         // Close around the planted right shoe, without translating the body.
-        const right = this.feet[1];
+        this.rightFrom = { ...this.feet[1] };
+        this.rightTarget = makeFoot(1, this.start);
+        const right = this.rightTarget;
         const halt = rehearsalPose(8).feet;
         this.target = {
           ...halt[0],
-          x: right.x + halt[0].x - halt[1].x,
-          z: right.z + halt[0].z - halt[1].z,
+          x:
+            right.x +
+            (halt[0].x - halt[1].x) * Math.cos(facing) +
+            (halt[0].z - halt[1].z) * Math.sin(facing),
+          z:
+            right.z -
+            (halt[0].x - halt[1].x) * Math.sin(facing) +
+            (halt[0].z - halt[1].z) * Math.cos(facing),
         };
         this.from = { ...this.feet[0] };
       }
@@ -74,6 +100,10 @@ export class FieldGait {
     this.body = body;
     const side = holding ? 0 : (((beat + 1) % 2) + 2) % 2;
     const u = ease(t);
+    if (holding && this.rightFrom && this.rightTarget) {
+      this.feet[1].x = mix(this.rightFrom.x, this.rightTarget.x, u);
+      this.feet[1].z = mix(this.rightFrom.z, this.rightTarget.z, u);
+    }
     const swing = this.feet[side];
     swing.x = mix(this.from!.x, this.target!.x, u);
     swing.z = mix(this.from!.z, this.target!.z, u);

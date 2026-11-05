@@ -31,3 +31,29 @@ describe("playable show and music alignment", () => {
           ).toBeLessThan(6);
     });
 });
+
+import { turnStudy, setStart, setEnd } from "./repertoire";
+import { PerformanceRun } from "./performance";
+import { moveDisplay } from "./count-display";
+it("keeps the 8 / 4 turn trial aligned to the original music clock", () => {
+  expect(checkShow(turnStudy.drill)).toEqual([]);
+  expect(turnStudy.drill.pages.slice(0, 3).map((p) => p.counts)).toEqual([
+    8, 4, 8,
+  ]);
+  expect(turnStudy.hold(7.99)).toBe(false);
+  expect(turnStudy.hold(8)).toBe(true);
+  expect(turnStudy.hold(11.99)).toBe(true);
+  expect(turnStudy.hold(12)).toBe(false);
+  expect(setStart(turnStudy, 2)).toBe(12);
+  expect(setEnd(turnStudy, 2)).toBe(20);
+  expect(moveDisplay(turnStudy, 10).remaining).toBe(2);
+  expect(moveDisplay(turnStudy, 10).now.label).toBe("HOLD · 4 COUNTS");
+  for (let c = 0; c <= 112; c++)
+    expect(turnStudy.tempo.seconds(c)).toBe(shows[0].tempo.seconds(c));
+  const run = new PerformanceRun(turnStudy, "Medium", 5, 1);
+  run.marchAutomatically(19.9, { forward: 1, side: 0 });
+  expect(run.steps).toHaveLength(16);
+  expect(
+    run.steps.filter((s) => s.timingBeat! >= 8 && s.timingBeat! < 12),
+  ).toHaveLength(0);
+});

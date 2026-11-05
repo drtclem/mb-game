@@ -63,7 +63,8 @@ export function checkShow(show: Show): string[] {
   let neighbors = 0;
   for (const [pageIndex, p] of show.pages.entries()) {
     const tag = `Page ${pageIndex + 1}`;
-    if (p.counts !== 8) errors.push(`${tag}: pages must be 8 counts`);
+    if (![4, 8, 12, 16].includes(p.counts))
+      errors.push(`${tag}: pages must contain complete four-count bars`);
     if (p.dots.length !== n || prev.length !== n) {
       errors.push(`${tag}: missing dots`);
       prev = p.dots;

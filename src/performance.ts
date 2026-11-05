@@ -1,6 +1,12 @@
 import { distance, type Dot } from "./drill";
 import { judge } from "./tempo";
-import { type Difficulty, type GameShow, tuning } from "./repertoire";
+import {
+  type Difficulty,
+  type GameShow,
+  tuning,
+  setStart,
+  setEnd,
+} from "./repertoire";
 export type Steering = { forward: number; side: number; aim?: Dot };
 export type Step = {
   seconds: number;
@@ -169,8 +175,13 @@ export class PerformanceRun {
   }
   ai(count: number, id: number): Dot {
     let travel = 0;
-    for (let p = 0; p < 14; p++)
-      if (!this.show.hold(p * 8)) travel += clamp(count - p * 8, 0, 8);
+    for (let p = 0; p < this.show.drill.pages.length; p++)
+      if (!this.show.hold(setStart(this.show, p)))
+        travel += clamp(
+          count - setStart(this.show, p),
+          0,
+          this.show.drill.pages[p].counts,
+        );
     const factor = { Easy: 0.2, Medium: 0.55, Hard: 1 }[this.difficulty],
       rate = { Easy: 0.08, Medium: 0.15, Hard: 0.25 }[this.difficulty];
     const ideal = this.show.target(Math.max(0, count))[id];
@@ -238,7 +249,8 @@ export class PerformanceRun {
       ? this.show.drill.pages[page - 1].dots[this.player]
       : this.show.drill.initial[this.player];
     const written = { x: goal.x - previous.x, y: goal.y - previous.y },
-      nominal = Math.hypot(written.x, written.y) / 8;
+      nominal =
+        Math.hypot(written.x, written.y) / this.show.drill.pages[page].counts;
     const backward = this.show.backward(count),
       correct = backward ? -1 : 1;
     const forward = clamp(input.forward, -1, 1),
@@ -284,7 +296,7 @@ export class PerformanceRun {
         ? Math.min(
             tuning.maxStep,
             Math.hypot(goal.x - from.x, goal.y - from.y) /
-              Math.max(1, page * 8 + 8 - Math.floor(count)),
+              Math.max(1, setEnd(this.show, page) - Math.floor(count)),
           )
         : 0;
     if (hold) size = 0.12;
@@ -333,9 +345,15 @@ export class PerformanceRun {
             : gap <= 0.15
               ? 45
               : 0;
-    const startSeconds = Math.max(seconds, this.show.tempo.seconds(page * 8));
+    const startSeconds = Math.max(
+      seconds,
+      this.show.tempo.seconds(setStart(this.show, page)),
+    );
     let phraseStart = page;
-    while (phraseStart > 0 && !this.show.hold((phraseStart - 1) * 8))
+    while (
+      phraseStart > 0 &&
+      !this.show.hold(setStart(this.show, phraseStart - 1))
+    )
       phraseStart--;
     const previousMoving = [...this.steps]
       .reverse()
@@ -361,7 +379,7 @@ export class PerformanceRun {
       seconds: startSeconds,
       end: Math.min(
         startSeconds + duration,
-        this.show.tempo.seconds((page + 1) * 8),
+        this.show.tempo.seconds(setEnd(this.show, page)),
       ),
       from: { ...from },
       visualFrom: startSeconds > seconds ? { ...from } : visualFrom,
@@ -400,7 +418,10 @@ export class PerformanceRun {
     };
   }
   results(): Result {
-    const intended = (page: number) => (this.show.hold(page * 8) ? 0 : 8);
+    const intended = (page: number) =>
+      this.show.hold(setStart(this.show, page))
+        ? 0
+        : this.show.drill.pages[page].counts;
     const set = this.show.drill.pages.map((p, page) => {
       const samples = this.samples.filter((s) => s.page === page),
         steps = this.steps.filter((s) => s.page === page && !s.synthetic),
@@ -409,7 +430,7 @@ export class PerformanceRun {
       for (const step of moving) {
         const beat =
           step.timingBeat ?? Math.round(this.show.tempo.count(step.seconds));
-        if (beat >= page * 8 && beat < (page + 1) * 8)
+        if (beat >= setStart(this.show, page) && beat < setEnd(this.show, page))
           byBeat.set(beat, Math.max(byBeat.get(beat) ?? 0, step.timing));
       }
       const expected = intended(page),
@@ -441,7 +462,7 @@ export class PerformanceRun {
         discount: mean(samples.map((s) => s.discount)) * 22.5,
       };
     });
-    const move = set.filter((_, i) => !this.show.hold(i * 8)),
+    const move = set.filter((_, i) => !this.show.hold(setStart(this.show, i))),
       timing = mean(move.map((s) => s.timing)),
       stepSize = mean(move.map((s) => s.stepSize)),
       direction = mean(move.map((s) => s.direction));

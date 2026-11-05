@@ -56,3 +56,46 @@ it("clears all previous field anchors on retry", () => {
     true,
   );
 });
+it("places maximum-size stride contacts ahead, within leg reach of the body", () => {
+  const gait = new FieldGait();
+  for (let beat = 0; beat < 8; beat++) {
+    for (const fraction of [0, 0.25, 0.5, 0.75, 0.999]) {
+      const pose = gait.sample(
+        beat + fraction,
+        { x: 0, z: -beat * 2 },
+        { x: 0, z: -(beat + 1) * 2 },
+        false,
+        false,
+      );
+      expect(
+        pose.feet.every(
+          (f) => Math.hypot(f.x - pose.body.x, f.z - pose.body.z) < 1.1,
+        ),
+      ).toBe(true);
+    }
+  }
+});
+it("settles both shoes beneath the body during a turn hold after long strides", () => {
+  const gait = new FieldGait();
+  for (let beat = 0; beat < 8; beat++)
+    gait.sample(
+      beat + 0.99,
+      { x: 0, z: -beat * 2 },
+      { x: 0, z: -(beat + 1) * 2 },
+      false,
+      false,
+    );
+  gait.sample(8, { x: 0, z: -16 }, { x: 0, z: -16 }, true, false);
+  const halt = gait.sample(
+    8.999,
+    { x: 0, z: -16 },
+    { x: 0, z: -16 },
+    true,
+    false,
+  );
+  expect(
+    halt.feet.every(
+      (f) => Math.hypot(f.x - halt.body.x, f.z - halt.body.z) < 0.3,
+    ),
+  ).toBe(true);
+});

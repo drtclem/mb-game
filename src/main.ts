@@ -1,7 +1,14 @@
 import * as THREE from "three";
 import "./style.css";
 import { distance, type Dot } from "./drill";
-import { shows, difficulties, tuning, type Difficulty } from "./repertoire";
+import {
+  shows as standardShows,
+  turnStudy,
+  setStart,
+  difficulties,
+  tuning,
+  type Difficulty,
+} from "./repertoire";
 import {
   PerformanceRun,
   formMetrics,
@@ -30,6 +37,7 @@ const esc = (value: unknown) =>
         c
       ]!,
   );
+const shows = [turnStudy, standardShows[1]];
 let selected = shows[0],
   difficulty: Difficulty = "Medium",
   playerId = 5;
@@ -180,7 +188,7 @@ function updateFormGuides(actual: Dot[], count: number, visible: boolean) {
       Math.abs(delta) < 0.3 ? 0x8fe3cb : 0xffbc75,
     );
     labels.push(
-      `${id < playerId ? "LEFT" : "RIGHT"}: ${gap.toFixed(1)} steps · ${status}`,
+      `${id < playerId ? "L" : "R"}: ${gap.toFixed(1)} · ${status.replace("TOO CLOSE", "CLOSE").replace("TOO FAR", "WIDE")}`,
     );
   });
   const left = actual[neighbors[0]],
@@ -201,7 +209,7 @@ function updateFormGuides(actual: Dot[], count: number, visible: boolean) {
     metrics.reference,
     actual[playerId],
   );
-  formReadout.textContent = `${labels.join("   |   ")} · FORM: ${metrics.shape < 0.3 ? "ON FORM" : curveStatus}`;
+  formReadout.textContent = `${labels.join("  /  ")} · ${metrics.shape < 0.3 ? "ON FORM" : curveStatus}`;
 }
 let bandReady = false,
   bandError = false;
@@ -365,7 +373,7 @@ function menu() {
   hud.hidden = true;
   overlay.hidden = false;
   getPlaybackIfExistsStop();
-  overlay.innerHTML = `<div class="intro"><p class="eyebrow">A MARCHING FIELD GAME</p><h1>Every step.<br>Every interval.</h1><p><strong>Steer with the mouse. Marching follows the music.</strong> Point at the field to choose your direction. Feet march automatically on each count and stop during holds. Reach your dot while keeping the form together. Space is unused during this trial.</p><small>The show starts with an eight-count HOLD after the count-in. Aim during the hold to prepare for MOVE.</small>${settings()}<small id="personal-best"></small><button class="primary" id="start">Take the field ↗</button><button id="tilt">Enable phone tilt</button><button hidden id="calibrate">Calibrate timing</button><small id="asset-status"></small><details ${location.hash.startsWith("#room=") ? "open" : ""}><summary>March with friends · 2–4 players</summary><label>DISPLAY NAME<input id="name" maxlength="24" value="${esc(localStorage.getItem("mb-name") ?? "Marcher")}" autocomplete="nickname"></label><div class="room-entry"><button id="create">Create room</button><input id="code" aria-label="Room code" maxlength="6" placeholder="ROOM CODE" value="${esc(location.hash.replace("#room=", "").slice(0, 6))}"><button id="join">Join room</button></div><small>Compete on your own score. Make the band better together.</small></details><p class="review-links"><a href="/marching.html">Movement study ↗</a> · <a href="/uniform.html">Uniform studio ↗</a> · <a href="/music.html">Music study ↗</a></p></div>`;
+  overlay.innerHTML = `<div class="intro"><p class="eyebrow">A MARCHING FIELD GAME</p><h1>Every step.<br>Every interval.</h1><p><strong>Steer with the mouse. Marching follows the music.</strong> Point at the field to choose your direction. Feet march automatically on each count and stop during holds. Reach your dot while keeping the form together. Space is unused during this trial.</p><small>After the count-in: MOVE 8, HOLD / TURN 4, then MOVE 8. Use the ground lines to keep your spacing.</small>${settings()}<small id="personal-best"></small><button class="primary" id="start">Take the field ↗</button><button id="tilt">Enable phone tilt</button><button hidden id="calibrate">Calibrate timing</button><small id="asset-status"></small><details ${location.hash.startsWith("#room=") ? "open" : ""}><summary>March with friends · 2–4 players</summary><label>DISPLAY NAME<input id="name" maxlength="24" value="${esc(localStorage.getItem("mb-name") ?? "Marcher")}" autocomplete="nickname"></label><div class="room-entry"><button id="create">Create room</button><input id="code" aria-label="Room code" maxlength="6" placeholder="ROOM CODE" value="${esc(location.hash.replace("#room=", "").slice(0, 6))}"><button id="join">Join room</button></div><small>Compete on your own score. Make the band better together.</small></details><p class="review-links"><a href="/marching.html">Movement study ↗</a> · <a href="/uniform.html">Uniform studio ↗</a> · <a href="/music.html">Music study ↗</a></p></div>`;
   bindSettings();
   updateBest();
   updateAssetStatus();
@@ -908,7 +916,8 @@ function frame() {
       ? "TILT TO STEER · FEET FOLLOW THE BEAT"
       : "AIM WITH MOUSE · FEET FOLLOW THE BEAT";
     const countIn = playback.countingIn ? playback.countoffProgress : undefined;
-    const beats = countDisplay(count, countIn),
+    const localCount = count - setStart(selected, selected.page(count));
+    const beats = countDisplay(localCount, countIn),
       moves = moveDisplay(selected, count, countIn);
     $("page").textContent =
       `${selected.name.toUpperCase()} · SET ${moves.page + 1} / ${selected.drill.pages.length}`;
@@ -917,7 +926,10 @@ function frame() {
     $("next-move").textContent = moves.next?.label ?? "FINISH";
     $("next-detail").textContent = moves.next?.name ?? "Final release";
     $("counts-left").textContent = `${moves.remaining} LEFT`;
+    const setCounts = countIn === undefined ? selected.drill.pages[moves.page].counts : 8;
+    $("set-progress").setAttribute("aria-label", `Progress through ${setCounts} counts`);
     Array.from($("set-progress").children).forEach((tick, index) => {
+      (tick as HTMLElement).hidden = index >= setCounts;
       tick.classList.toggle("complete", index < moves.progress);
       tick.classList.toggle("current", index === moves.progress);
     });
@@ -926,7 +938,10 @@ function frame() {
       : returningControl
         ? "REJOIN COUNT-IN"
         : beats.caption;
-    $("count-position").textContent = beats.position;
+    $("count-position").textContent =
+      countIn === undefined
+        ? `${Math.floor(localCount) + 1} / ${selected.drill.pages[selected.page(count)].counts}`
+        : beats.position;
     Array.from($("beat").children).forEach((tile, index) => {
       tile.textContent = beats.labels[index];
       tile.classList.toggle("active", index === beats.active);
@@ -947,12 +962,14 @@ function frame() {
     if (performance.now() > warningUntil) $("feedback").textContent = "";
     if (
       !selected.hold(count) &&
-      distance(
+      formMetrics(
         positions[playerId],
-        selected.target(Math.max(0, count))[playerId],
-      ) > 2.5
+        positions,
+        selected.target(Math.max(0, count)),
+        playerId,
+      ).shape > 1
     )
-      warning("Recover toward your dot");
+      warning("Find the form between your neighbors");
     if (
       run.steps.at(-1)?.hold &&
       performance.now() > warningUntil &&
@@ -1044,12 +1061,28 @@ function frame() {
       : step && step.page === page
         ? step.to
         : (run?.ai(Math.min(112, Math.floor(c) + 1), i) ?? current);
+    // Turn only during the four-count preparation hold; the following move keeps that facing.
+    let facing = 0;
+    if (selected === turnStudy && page >= 1 && page <= 3) {
+      const turnProgress =
+        page === 1
+          ? Math.min(1, (c - setStart(selected, 1)) / 4)
+          : page === 2
+            ? 1
+            : 1 - Math.min(1, (c - setStart(selected, 3)) / 4);
+      const eased = turnProgress * turnProgress * (3 - 2 * turnProgress);
+      facing = (-Math.PI / 2) * eased;
+    }
+    model.group.rotation.y = facing;
     const frame = fieldGaits[i].sample(
       c,
       { x: current.x, z: current.y },
       { x: future.x, z: future.y },
       holding,
-      future.y > current.y,
+      -(future.x - current.x) * Math.sin(facing) -
+        (future.y - current.y) * Math.cos(facing) <
+        0,
+      facing,
     );
     model.poseLowerBody(frame);
     positions = positions.map((p, j) =>

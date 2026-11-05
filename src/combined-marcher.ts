@@ -232,7 +232,7 @@ export function rigCombinedSurface(
         ) /
           100
       : minimum;
-    const drop = Math.max(softKnees ? -0.18 : -0.12, floor);
+    const drop = Math.max(softKnees ? -0.55 : -0.12, floor);
     group.position.y = drop * height;
     group.updateMatrixWorld(true);
     legs.forEach((leg, i) => {
@@ -287,14 +287,19 @@ export function rigCombinedSurface(
         const foot = frame.feet[i],
           roll = foot.roll;
         const pivot = roll >= 0 ? 0.08 : -0.2;
+        const offset = new THREE.Vector3(
+          foot.x - frame.body.x,
+          0,
+          foot.z - frame.body.z,
+        ).applyAxisAngle(new THREE.Vector3(0, 1, 0), -group.rotation.y);
         // Rotate about the heel/forefoot contact, keeping the ground anchor fixed.
         const target = new THREE.Vector3(
-          (foot.x - frame.body.x) / height,
+          offset.x / height,
           leg.foot.y * Math.cos(roll) +
             pivot * Math.sin(roll) +
             foot.lift / height,
           leg.foot.z +
-            (foot.z - frame.body.z) / height +
+            offset.z / height +
             leg.foot.y * Math.sin(roll) +
             pivot * (1 - Math.cos(roll)),
         );

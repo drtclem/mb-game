@@ -30,7 +30,12 @@ export type GameShow = {
   backward: (count: number) => boolean;
 };
 const q = (v: number) => Math.round(v * 4) / 4;
-function makeShow(id: string, name: string, reprise = false): GameShow {
+function makeShow(
+  id: string,
+  name: string,
+  reprise = false,
+  turnTrial = false,
+): GameShow {
   const line = (y: number, curve = 0): Dot[] =>
     Array.from({ length: 12 }, (_, i) => ({
       x: (i - 5.5) * 4,
@@ -62,6 +67,19 @@ function makeShow(id: string, name: string, reprise = false): GameShow {
       }));
     }
   }
+  if (turnTrial) {
+    dots[0] = line(32);
+    dots[1] = line(32);
+    dots[2] = line(32).map((d) => ({ x: d.x + 8, y: d.y }));
+    dots[3] = dots[2];
+    dots.push(dots.at(-1)!);
+  }
+  const counts = dots.map((_, i) =>
+    turnTrial && (i === 1 || i === 3) ? 4 : 8,
+  );
+  const starts = counts.map((_, i) =>
+    counts.slice(0, i).reduce((a, b) => a + b, 0),
+  );
   const names = [
     "First light",
     "First call",
@@ -85,8 +103,11 @@ function makeShow(id: string, name: string, reprise = false): GameShow {
     })),
     initial,
     pages: dots.map((d, i) => ({
-      name: names[i],
-      counts: 8,
+      name:
+        turnTrial && (i === 1 || i === 3)
+          ? "Turn · prepare the next move"
+          : (names[i] ?? "Final release"),
+      counts: counts[i],
       facing: "front",
       form: i >= 7 && i <= 9 ? "arc" : "line",
       dots: d,
@@ -115,12 +136,13 @@ function makeShow(id: string, name: string, reprise = false): GameShow {
     const bpm = [...changes].reverse().find((x) => c >= x[0])![1];
     beats.push(beats[c] + 60 / bpm);
   }
-  const page = (c: number) => Math.max(0, Math.min(13, Math.floor(c / 8)));
+  const page = (c: number) =>
+    Math.max(0, starts.filter((start) => c >= start).length - 1);
   const goal = (c: number) => dots[page(c)];
   const target = (c: number) => {
     const p = page(c),
       from = p ? dots[p - 1] : initial,
-      t = Math.max(0, Math.min(1, (c - p * 8) / 8));
+      t = Math.max(0, Math.min(1, (c - starts[p]) / counts[p]));
     return from.map((d, i) => ({
       x: d.x + (dots[p][i].x - d.x) * t,
       y: d.y + (dots[p][i].y - d.y) * t,
@@ -156,3 +178,14 @@ export const shows = [
   makeShow("sunrise", "Sunrise"),
   makeShow("reprise", "Sunrise / Reprise", true),
 ];
+
+export const turnStudy = makeShow(
+  "sunrise",
+  "Sunrise · move 8 / hold 4",
+  false,
+  true,
+);
+export const setStart = (show: GameShow, page: number) =>
+  show.drill.pages.slice(0, page).reduce((sum, p) => sum + p.counts, 0);
+export const setEnd = (show: GameShow, page: number) =>
+  setStart(show, page) + show.drill.pages[page].counts;

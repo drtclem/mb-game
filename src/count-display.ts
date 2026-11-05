@@ -1,4 +1,4 @@
-import type { GameShow } from "./repertoire";
+import { setStart, type GameShow } from "./repertoire";
 const clamp = (n: number, a: number, b: number) => Math.max(a, Math.min(b, n));
 export function countDisplay(count: number, countIn?: number) {
   if (countIn !== undefined) {
@@ -22,12 +22,16 @@ export function countDisplay(count: number, countIn?: number) {
 }
 export function moveDisplay(show: GameShow, count: number, countIn?: number) {
   const page = show.page(count),
-    local = clamp(count - page * 8, 0, 8);
+    local = clamp(
+      count - setStart(show, page),
+      0,
+      show.drill.pages[page].counts,
+    );
   const describe = (p: number) =>
     p >= show.drill.pages.length
       ? null
       : {
-          label: `${show.hold(p * 8) ? "HOLD" : "MOVE"} · ${show.drill.pages[p].counts} COUNTS`,
+          label: `${show.hold(setStart(show, p)) ? "HOLD" : "MOVE"} · ${show.drill.pages[p].counts} COUNTS`,
           name: show.drill.pages[p].name,
         };
   if (countIn !== undefined)
@@ -42,7 +46,7 @@ export function moveDisplay(show: GameShow, count: number, countIn?: number) {
     page,
     now: describe(page)!,
     next: describe(page + 1),
-    remaining: Math.ceil(8 - local),
+    remaining: Math.ceil(show.drill.pages[page].counts - local),
     progress: Math.floor(Math.min(7.99999, local)),
   };
 }

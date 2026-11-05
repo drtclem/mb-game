@@ -955,3 +955,22 @@ td small {
     font-size: 9px;
   }
 }
+
+/* Compact form hints; the field lines carry the main visual guidance. */
+#form-readout {
+  max-width: 340px;
+  padding: 6px 10px;
+  border: 0;
+  background: #10232eb3;
+  font-size: 10px;
+  line-height: 1.4;
+  border-radius: 3px;
+  bottom: 18px;
+}
+@media (max-width: 850px) {
+  #form-readout {
+    max-width: 260px;
+    bottom: 8px;
+    font-size: 9px;
+  }
+}
