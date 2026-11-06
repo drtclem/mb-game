@@ -1,11 +1,14 @@
 import { shows, tuning, type Difficulty } from "./repertoire";
 export type Progress = { best: Record<string, number>; unlocked: string[] };
+// shortcut: every show is unlocked for Game Week judging; restore score-based unlocks (tuning.unlock) afterward.
+const everyShow = () => shows.map((s) => s.id);
 export function readProgress(): Progress {
   try {
     const p = JSON.parse(localStorage.getItem("mb-progress") ?? "null");
-    if (p && p.best && Array.isArray(p.unlocked)) return p;
+    if (p && p.best && Array.isArray(p.unlocked))
+      return { ...p, unlocked: everyShow() };
   } catch {}
-  return { best: {}, unlocked: [shows[0].id] };
+  return { best: {}, unlocked: everyShow() };
 }
 export function recordResult(
   show: string,

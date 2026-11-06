@@ -360,6 +360,8 @@ Allow pausing in single-player. Multiplayer does not pause the shared show for a
 
 Players earn scores to unlock additional shows; do not make every show available from the start. Unlocks require reaching a target individual score in one completed performance, not accumulating points across attempts or using the shared band score. In multiplayer, everyone may play a show unlocked by the host, even if guests have not unlocked it. Permanent unlocks still require each player’s own qualifying individual score. Initial show availability and numerical thresholds remain undecided.
 
+**Game Week override (Taylor, Nov 5):** every show is unlocked from the start so judges can reach the second track. The score-based unlock code (`tuning.unlock`, `recordResult`) is kept; `readProgress` simply reports all shows unlocked. Restore after judging.
+
 ### Local progression saves (Taylor, Nov 3)
 
 Save personal bests and unlocked shows in the current browser/device for now, without requiring an account. Cross-device progress syncing is deferred. Progress is specific to that browser’s stored data; do not imply it follows an invite link or player display name.

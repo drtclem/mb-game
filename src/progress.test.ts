@@ -8,14 +8,10 @@ describe("browser-local progression", () => {
       setItem: (k: string, v: string) => data.set(k, v),
     });
   });
-  it("requires a completed qualifying individual score, not accumulated retries", () => {
+  it("unlocks every show for judging, with or without saved progress", () => {
+    expect(readProgress().unlocked).toEqual(["sunrise", "reprise"]);
     recordResult("sunrise", "Easy", 40, true);
-    recordResult("sunrise", "Easy", 40, true);
-    expect(readProgress().unlocked).toEqual(["sunrise"]);
-    recordResult("sunrise", "Hard", 99, false);
-    expect(readProgress().unlocked).toEqual(["sunrise"]);
-    recordResult("sunrise", "Medium", 65, true);
-    expect(readProgress().unlocked).toContain("reprise");
+    expect(readProgress().unlocked).toEqual(["sunrise", "reprise"]);
   });
   it("keeps separate bests and never replaces a higher score", () => {
     recordResult("sunrise", "Easy", 80, true);
