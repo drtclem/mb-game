@@ -27,7 +27,7 @@ Vite proxies `/api` to the room service on port 8787. Use the URL Vite prints. S
 - **Escape / Pause** pauses solo only. Resume counts **1, 2, 3, 4** before continuing. Multiplayer keeps its shared clock.
 - The bottom-left beat blocks show the pulse and current set count; sets can contain four or eight counts. Top-left shows current/next movement and counts remaining. The initial count-off is eight beats: `5… 6… 5, 6, 7, 8`.
 - Ground links show neighbor spacing; a local curve guide and compact readout indicate even/close/wide spacing and inside/outside form position. Mouse aim remains visible during holds; the next dot gets a three-count preview.
-- **Sliding:** hips, knee planes, and foot tracks turn toward lateral travel while chest and horn remain front-facing. Backward marching stays on the toes. Pivot turns use separate planted-foot quarter steps.
+- **Sliding:** hips, knee planes, and foot tracks turn toward lateral travel while chest and horn remain front-facing. Backward marching stays on the toes and square to the front, including on diagonals up to 60° off straight back; only mostly-sideways travel slides. Pivot turns use separate planted-foot quarter steps.
 - **Overhead** toggles the camera. The drum-major sketch conducts 4/4 from the same audio clock. For close movement inspection, open `/?view=feet`.
 
 On iPhone, use landscape and enable/recenter tilt. Tilt steers while stepping follows the music automatically; turn cues provide a Right touch button. Motion permission requires HTTPS (localhost applies only to that same device). Real iPhone and cross-device play verification remain outstanding.

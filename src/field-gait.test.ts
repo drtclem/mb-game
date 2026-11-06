@@ -277,3 +277,16 @@ it("settles shoe yaw smoothly after a full right pivot instead of snapping to at
   expect(after.feet[0].yaw).toBeCloseTo(before.feet[0].yaw);
   expect(after.feet[1].yaw).toBeCloseTo(before.feet[1].yaw);
 });
+it("backs up square to the front on backward diagonals, but still slides on mostly sideways travel", () => {
+  for (const direction of [-1, 1]) {
+    const back = new FieldGait();
+    back.sample(0, { x: 0, z: 0 }, { x: direction, z: 1 }, false, true);
+    const square = back.sample(0.999, { x: 0, z: 0 }, { x: direction, z: 1 }, false, true);
+    expect(square.lowerYaw).toBeCloseTo(0, 4);
+    expect(square.feet.every((f) => Math.abs(f.yaw) < 1e-6 && f.roll === -0.34)).toBe(true);
+    const slide = new FieldGait();
+    slide.sample(0, { x: 0, z: 0 }, { x: direction, z: 0.2 }, false, true);
+    const sideways = slide.sample(0.999, { x: 0, z: 0 }, { x: direction, z: 0.2 }, false, true);
+    expect(Math.abs(sideways.lowerYaw ?? 0)).toBeGreaterThan(1);
+  }
+});

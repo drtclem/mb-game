@@ -180,7 +180,13 @@ export class FieldGait {
         dz = next.z - desired.z;
       if (Math.hypot(dx, dz) > 0.001) {
         this.slideFrom = this.slideYaw;
-        const target = Math.atan2(-dx, Math.abs(dz));
+        // Backward marching stays square to the front; only mostly-sideways travel (over 60° off straight back) slides.
+        const lateral = dx * Math.cos(facing) - dz * Math.sin(facing),
+          back = dx * Math.sin(facing) + dz * Math.cos(facing);
+        const target =
+          backward && Math.abs(lateral) <= Math.tan(Math.PI / 3) * back
+            ? facing
+            : Math.atan2(-dx, Math.abs(dz));
         this.slideTarget =
           this.slideFrom +
           Math.atan2(
