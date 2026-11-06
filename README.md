@@ -1,6 +1,6 @@
 # On the Dot
 
-A browser marching game: tap the musical count, find your dot, and preserve the form around imperfect neighbors. Play solo or compete beside 1–3 friends while contributing to a separate band score.
+A browser marching game: steer automatic marching, find your dot, and preserve the form around imperfect neighbors. Play solo or compete beside 1–3 friends while contributing to a separate band score.
 
 ## Run locally
 
@@ -21,22 +21,22 @@ Vite proxies `/api` to the room service on port 8787. Use the URL Vite prints. S
 
 ## Play
 
-- **Aim with the mouse; tap Space on each moving count.** Point at the field in the direction you want to step. One press means one step, with no movement from aiming alone. Release between taps; held-key repeat is ignored.
-- Mouse aim directly controls travel direction instead of nudging an automatically guided route. The gold arrow shows your aim. Step size still adapts toward the current dot with the 4-to-5 recovery cap.
-- The camera does not flip for backward sets. Wrong-direction and extra presses visibly affect the marcher; recovery still tops out at **4-to-5 (45 inches)**.
-- **HOLD:** stop pressing. A Space press animates a small step in place, leaves the actual position unchanged, shows **Not yet**, and incurs a fault.
-- **Escape / Pause** pauses solo only. Resume has a fresh count-in. Multiplayer keeps running.
-- The bottom-left beat blocks show the musical pulse and count within each eight-count set. Top-left shows the current move/hold, counts left and next move.
-- A cyan next-dot marker and arrow appear with **3 → 2 → 1** counts before a moving set. A gold arrow shows the current heading during travel.
-- **Overhead** toggles the camera view. The top-right drum-major sketch conducts **down–in–out–up in 4/4**, synchronized to the music and beat blocks through holds and count-ins.
+- **Aim with the mouse. Feet march automatically on the musical clock.** Space is unused. Your aim controls direction; recovery is capped at **4-to-5 (45 inches per count)**, with shorter steps during sharp corrections.
+- **Holds stop travel automatically**, wherever you actually arrived. Right foot contacts on the last moving count; the left closes by hold one. Continuing sets use body-centered dot arrivals. Left contacts odd counts, right contacts even counts.
+- **One prescribed RIGHT 360° turn** occurs later in Sunrise, starting at count 65. The large six-count warning asks you to press **→** once (or tap the Right button). The band turns right together; a missed cue skips your turn and adds a technique deduction.
+- **Escape / Pause** pauses solo only. Resume counts **1, 2, 3, 4** before continuing. Multiplayer keeps its shared clock.
+- The bottom-left beat blocks show the pulse and current set count; sets can contain four or eight counts. Top-left shows current/next movement and counts remaining. The initial count-off is eight beats: `5… 6… 5, 6, 7, 8`.
+- Ground links show neighbor spacing; a local curve guide and compact readout indicate even/close/wide spacing and inside/outside form position. Mouse aim remains visible during holds; the next dot gets a three-count preview.
+- **Sliding:** hips, knee planes, and foot tracks turn toward lateral travel while chest and horn remain front-facing. Backward marching stays on the toes. Pivot turns use separate planted-foot quarter steps.
+- **Overhead** toggles the camera. The drum-major sketch conducts 4/4 from the same audio clock. For close movement inspection, open `/?view=feet`.
 
-On iPhone, use landscape, enable motion permission, hold the phone comfortably and recenter tilt. Tilt forward/back for travel and sideways for corrections; use the **single STEP button** for rhythm. No touch-steering alternative. Phone motion requires HTTPS (localhost is sufficient only when running on that same device).
+On iPhone, use landscape and enable/recenter tilt. Tilt steers while stepping follows the music automatically; turn cues provide a Right touch button. Motion permission requires HTTPS (localhost applies only to that same device). Real iPhone and cross-device play verification remain outstanding.
 
 ## Movement study
 
 Open `/marching.html` for the rebuilt lower-body animation review. It runs one continuous sequence: set, left-foot preparation, eight standard steps, right-foot arrival and left-foot close. Planted feet use fixed field coordinates, with heel/forefoot pivots and no per-frame history.
 
-Use quarter/eighth/half/full speed, the scrubber, numbered contact buttons and Side/Front/Back/Feet cameras. Cyan marks anatomical left; gold marks right. Both performers and forward/backward movement are available. This preview is the review stage before replacing the full game's existing animation driver; it does not change scoring or controls.
+Use quarter/eighth/half/full speed, the scrubber, numbered contact buttons and Side/Front/Back/Feet cameras. Cyan marks anatomical left; gold marks right. Both performers and forward/backward movement are available. The game now uses the same explicit-pose rig with its field-space gait, sliding and pivot sequences. This standalone fixed sequence remains available for slow-motion review.
 
 ## Multiplayer
 
@@ -49,7 +49,7 @@ A disconnected marcher becomes AI for the others and the player’s result is in
 - DOT / FORM start at **50/50**.
 - FORM splits nearby spacing / fitted line-or-curve alignment **50/50**, excluding self from the fit and bounding each neighbor’s influence.
 - Justified form adjustment receives **half the usual DOT penalty** for eligible displacement. Analytics still show actual distance.
-- Timing, step-size and direction errors incur separate technique deductions; hold taps add faults. These defaults live in `src/repertoire.ts` for tuning.
+- Automatic footwork removes rhythm timing deductions. Step-size, direction and missed-turn errors incur technique deductions. These defaults live in `src/repertoire.ts` for tuning.
 - During play, show coaching warnings and HOLD/MOVE cues, not performance numbers.
 - Results show individual ranking, a separate host-calculated shared band score, and per-set analytics.
 - **65 individual points** unlock the second show on any difficulty. Full completed solo/multiplayer runs qualify; incomplete runs do not. Personal bests are separate per show/difficulty and saved in the current browser. Host-unlocked shows are playable by guests.
@@ -57,11 +57,11 @@ A disconnected marcher becomes AI for the others and the player’s result is in
 
 ## Shows and assets
 
-**Sunrise:** original brass-only Strauss fanfare study; 112 counts / about 79 seconds. **Sunrise / Reprise:** separately rendered, transposed and articulated brass score with a faster tempo map, diagonal drill and twilight lighting; 112 counts / about 69 seconds. Both include mapped holds. The eight-count `5… 6… 5, 6, 7, 8` is scheduled separately from the music.
+**Sunrise:** 120 BPM challenge, 112 counts / 56 seconds, with diagonal travel, changing intervals, evolving curves and one later right turn. The original slower Sunrise remains a reference fixture. **Sunrise / Reprise:** separately rendered, transposed and articulated brass score with a faster tempo map, diagonal drill and twilight lighting; 112 counts / about 69 seconds. Both include mapped holds. The eight-count `5… 6… 5, 6, 7, 8` is scheduled separately from the music.
 
 All visuals and audio are original generated or code-built assets. The 12 complete playing-pose marchers remain six women and six men. No player model picker yet; gender/instrument/possibly uniform customization is deferred. The drum major is the requested sketch-stage visual, not final character art. Music remains the approved synthesized draft.
 
-Review pages: `/uniform.html` and `/music.html`. Provenance: `docs/art/character-pipeline.md`, `docs/music/sunrise-arrangement.md`. Regenerate the reprise with `python3 scripts/render-sunrise.py --reprise` in an environment with numpy.
+Review pages: `/uniform.html` and `/music.html`. Provenance: `docs/art/character-pipeline.md`, `docs/music/sunrise-arrangement.md`. Regenerate the challenge with `python3 scripts/render-sunrise.py --challenge`, or the reprise with `--reprise`, in an environment with numpy.
 
 ## Verify
 
@@ -73,7 +73,7 @@ npm run build
 npm audit --audit-level=high
 ```
 
-GitLab CI runs all five gates and retains `dist/`. The legacy `game.ts`/`show.ts` tests remain as historical prototype coverage; the live game uses `performance.ts`/`repertoire.ts`. Tests cover tap consequences, recovery/hold boundaries, scoring, progression, both music maps and drill safety, plus room authority/readiness/capacity/disconnect behavior.
+GitLab CI runs all five gates and retains `dist/`. The legacy `game.ts`/`show.ts` tests remain as historical prototype coverage; the live game uses `performance.ts`/`repertoire.ts`. Tests cover automatic contact scheduling, capped body/foot travel, planted turns, sliding, off-dot halt balance, scoring, progression, music maps and drill safety, plus room authority/readiness/capacity/disconnect behavior. Historical tap-driven regression coverage is retained.
 
 ## Deployment and outstanding device checks
 
