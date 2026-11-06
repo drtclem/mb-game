@@ -81,7 +81,7 @@ After `npm run build`, `npm start` serves both `dist/` and room signaling on por
 
 Environment:
 
-- `HOST` (default `127.0.0.1`), `PORT` (8787), `STATIC_DIR` (`dist`).
+- `HOST` (default `127.0.0.1`), `PORT` (8787), `STATIC_DIR` (`dist`), `TRUST_PROXY` (`1` behind a host proxy, so rate limits are per player; the Dockerfile sets it).
 - `ALLOWED_ORIGINS`: comma-separated production HTTPS origins.
 - `ICE_SERVERS`: JSON array of WebRTC ICE servers. Default: Cloudflare’s public STUN server. For reliable cross-network play, configure a TURN relay with short-lived client credentials. Do not put a provider’s master API token here: ICE configuration is sent to room participants. Avoid logging SSE token query strings.
 

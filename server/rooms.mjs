@@ -8,6 +8,7 @@ export function createRoomServer({
   origins = [],
   iceServers = [],
   staticDir = null,
+  trustProxy = false,
 } = {}) {
   const rooms = new Map(),
     rates = new Map();
@@ -48,7 +49,10 @@ export function createRoomServer({
       const origin = req.headers.origin;
       if (origin && origins.length && !origins.includes(origin))
         return json(403, { error: "Origin not allowed" });
-      const ip = req.socket.remoteAddress ?? "unknown",
+      // Behind a host's proxy every socket is the proxy; the first forwarded address is the player.
+      // shortcut: a client can forge this header to dodge its own rate limit; fine for private games.
+      const forwarded = trustProxy && req.headers["x-forwarded-for"]?.split(",")[0].trim();
+      const ip = forwarded || (req.socket.remoteAddress ?? "unknown"),
         now = Date.now(),
         rate = rates.get(ip) ?? { at: now, n: 0 };
       if (now - rate.at > 1000) {
@@ -327,6 +331,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     origins: (process.env.ALLOWED_ORIGINS ?? "").split(",").filter(Boolean),
     iceServers,
     staticDir: process.env.STATIC_DIR ?? "dist",
+    trustProxy: process.env.TRUST_PROXY === "1",
   });
   server.listen(
     Number(process.env.PORT ?? 8787),

@@ -140,3 +140,23 @@ test("production entry serves built files and byte ranges without exposing paren
     await rm(root, { recursive: true });
   }
 });
+test("behind a trusted proxy, rate limits apply per player, not per proxy", async () => {
+  const server = createRoomServer({ trustProxy: true });
+  await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
+  const base = `http://127.0.0.1:${server.address().port}`;
+  const burst = (ip, n) =>
+    Promise.all(
+      Array.from({ length: n }, () =>
+        fetch(base + "/api/health", {
+          headers: { "X-Forwarded-For": `${ip}, 10.0.0.1` },
+        }).then((r) => r.status),
+      ),
+    );
+  try {
+    assert.ok((await burst("203.0.113.1", 40)).every((s) => s === 200));
+    assert.ok((await burst("203.0.113.2", 40)).every((s) => s === 200));
+    assert.ok((await burst("203.0.113.1", 5)).includes(429));
+  } finally {
+    server.close();
+  }
+});
