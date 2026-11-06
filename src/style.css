@@ -1089,7 +1089,7 @@ td small {
 #steer-hint {
   position: absolute;
   left: 50%;
-  bottom: 24%;
+  top: 14%; /* the far end of the field: clear of your marcher, dot and the move preview */
   transform: translateX(-50%);
   display: grid;
   gap: 6px;
