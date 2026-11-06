@@ -1,7 +1,7 @@
 {
   "title": "Sunrise \u2014 Strauss Fanfare Study",
   "draft": true,
-  "revision": 2,
+  "revision": 3,
   "instrumentation": "brass only",
   "totalCounts": 112,
   "tempoChanges": [
@@ -371,6 +371,14 @@
       "pan": 0.25
     },
     {
+      "count": 23,
+      "duration": 0.765,
+      "midi": 69,
+      "voice": "trumpet",
+      "level": 0.2,
+      "pan": 0.1
+    },
+    {
       "count": 24,
       "duration": 4,
       "midi": 38,
@@ -425,6 +433,14 @@
       "voice": "trumpet",
       "level": 0.17386365758424452,
       "pan": 0.45
+    },
+    {
+      "count": 24,
+      "duration": 2.975,
+      "midi": 77,
+      "voice": "trumpet",
+      "level": 0.3,
+      "pan": 0.1
     },
     {
       "count": 28,
@@ -483,6 +499,14 @@
       "pan": 0.45
     },
     {
+      "count": 28,
+      "duration": 2.975,
+      "midi": 78,
+      "voice": "trumpet",
+      "level": 0.32,
+      "pan": 0.1
+    },
+    {
       "count": 32,
       "duration": 16,
       "midi": 26,
@@ -523,6 +547,14 @@
       "pan": 0.55
     },
     {
+      "count": 32,
+      "duration": 3.4,
+      "midi": 74,
+      "voice": "trumpet",
+      "level": 0.22,
+      "pan": 0.1
+    },
+    {
       "count": 36,
       "duration": 3.4,
       "midi": 69,
@@ -547,6 +579,14 @@
       "pan": 0.55
     },
     {
+      "count": 36,
+      "duration": 3.4,
+      "midi": 81,
+      "voice": "trumpet",
+      "level": 0.22,
+      "pan": 0.1
+    },
+    {
       "count": 40,
       "duration": 5.1,
       "midi": 74,
@@ -569,6 +609,14 @@
       "voice": "trumpet",
       "level": 0.15454545454545454,
       "pan": 0.55
+    },
+    {
+      "count": 40,
+      "duration": 5.1,
+      "midi": 86,
+      "voice": "trumpet",
+      "level": 0.22,
+      "pan": 0.1
     },
     {
       "count": 44,
@@ -659,6 +707,14 @@
       "pan": 0.25
     },
     {
+      "count": 47,
+      "duration": 0.765,
+      "midi": 69,
+      "voice": "trumpet",
+      "level": 0.2,
+      "pan": 0.1
+    },
+    {
       "count": 48,
       "duration": 4,
       "midi": 38,
@@ -713,6 +769,14 @@
       "voice": "trumpet",
       "level": 0.19654152596479815,
       "pan": 0.45
+    },
+    {
+      "count": 48,
+      "duration": 2.975,
+      "midi": 77,
+      "voice": "trumpet",
+      "level": 0.3,
+      "pan": 0.1
     },
     {
       "count": 52,
@@ -771,6 +835,22 @@
       "pan": 0.45
     },
     {
+      "count": 52,
+      "duration": 2.975,
+      "midi": 78,
+      "voice": "trumpet",
+      "level": 0.32,
+      "pan": 0.1
+    },
+    {
+      "count": 52,
+      "duration": 2.975,
+      "midi": 86,
+      "voice": "trumpet",
+      "level": 0.2,
+      "pan": -0.1
+    },
+    {
       "count": 56,
       "duration": 16,
       "midi": 26,
@@ -811,6 +891,14 @@
       "pan": 0.55
     },
     {
+      "count": 56,
+      "duration": 3.4,
+      "midi": 74,
+      "voice": "trumpet",
+      "level": 0.24,
+      "pan": 0.1
+    },
+    {
       "count": 60,
       "duration": 3.4,
       "midi": 69,
@@ -835,6 +923,14 @@
       "pan": 0.55
     },
     {
+      "count": 60,
+      "duration": 3.4,
+      "midi": 81,
+      "voice": "trumpet",
+      "level": 0.26,
+      "pan": 0.1
+    },
+    {
       "count": 64,
       "duration": 5.1,
       "midi": 74,
@@ -857,6 +953,30 @@
       "voice": "trumpet",
       "level": 0.1909090909090909,
       "pan": 0.55
+    },
+    {
+      "count": 64,
+      "duration": 1.7,
+      "midi": 86,
+      "voice": "trumpet",
+      "level": 0.28,
+      "pan": 0.1
+    },
+    {
+      "count": 66,
+      "duration": 0.765,
+      "midi": 78,
+      "voice": "trumpet",
+      "level": 0.26,
+      "pan": 0.1
+    },
+    {
+      "count": 67,
+      "duration": 0.765,
+      "midi": 79,
+      "voice": "trumpet",
+      "level": 0.28,
+      "pan": 0.1
     },
     {
       "count": 68,
@@ -867,12 +987,28 @@
       "pan": 0.25
     },
     {
+      "count": 68,
+      "duration": 0.765,
+      "midi": 81,
+      "voice": "trumpet",
+      "level": 0.3,
+      "pan": 0.1
+    },
+    {
       "count": 69,
       "duration": 0.6375,
       "midi": 57,
       "voice": "baritone",
       "level": 0.16,
       "pan": 0.25
+    },
+    {
+      "count": 69,
+      "duration": 0.765,
+      "midi": 83,
+      "voice": "trumpet",
+      "level": 0.32,
+      "pan": 0.1
     },
     {
       "count": 70,
@@ -939,12 +1075,28 @@
       "pan": 0.25
     },
     {
+      "count": 70,
+      "duration": 0.765,
+      "midi": 85,
+      "voice": "trumpet",
+      "level": 0.34,
+      "pan": 0.1
+    },
+    {
       "count": 71,
       "duration": 0.6375,
       "midi": 57,
       "voice": "baritone",
       "level": 0.16,
       "pan": 0.25
+    },
+    {
+      "count": 71,
+      "duration": 0.85,
+      "midi": 85,
+      "voice": "trumpet",
+      "level": 0.34,
+      "pan": 0.1
     },
     {
       "count": 72,
@@ -1019,6 +1171,14 @@
       "pan": 0.45
     },
     {
+      "count": 72,
+      "duration": 6.375,
+      "midi": 86,
+      "voice": "trumpet",
+      "level": 0.38,
+      "pan": 0.1
+    },
+    {
       "count": 80,
       "duration": 16,
       "midi": 26,
@@ -1051,6 +1211,14 @@
       "pan": 0.4
     },
     {
+      "count": 80,
+      "duration": 1.4875,
+      "midi": 74,
+      "voice": "trumpet",
+      "level": 0.2,
+      "pan": 0.1
+    },
+    {
       "count": 82,
       "duration": 1.4875,
       "midi": 64,
@@ -1067,6 +1235,14 @@
       "pan": 0.4
     },
     {
+      "count": 82,
+      "duration": 1.4875,
+      "midi": 76,
+      "voice": "trumpet",
+      "level": 0.2,
+      "pan": 0.1
+    },
+    {
       "count": 84,
       "duration": 1.4875,
       "midi": 66,
@@ -1081,6 +1257,14 @@
       "voice": "baritone",
       "level": 0.19,
       "pan": 0.4
+    },
+    {
+      "count": 84,
+      "duration": 1.4875,
+      "midi": 78,
+      "voice": "trumpet",
+      "level": 0.2,
+      "pan": 0.1
     },
     {
       "count": 86,
@@ -1099,6 +1283,14 @@
       "pan": 0.4
     },
     {
+      "count": 86,
+      "duration": 1.4875,
+      "midi": 81,
+      "voice": "trumpet",
+      "level": 0.2,
+      "pan": 0.1
+    },
+    {
       "count": 88,
       "duration": 1.4875,
       "midi": 66,
@@ -1115,6 +1307,14 @@
       "pan": 0.4
     },
     {
+      "count": 88,
+      "duration": 1.4875,
+      "midi": 78,
+      "voice": "trumpet",
+      "level": 0.2,
+      "pan": 0.1
+    },
+    {
       "count": 90,
       "duration": 1.4875,
       "midi": 69,
@@ -1129,6 +1329,14 @@
       "voice": "baritone",
       "level": 0.19,
       "pan": 0.4
+    },
+    {
+      "count": 90,
+      "duration": 1.4875,
+      "midi": 81,
+      "voice": "trumpet",
+      "level": 0.2,
+      "pan": 0.1
     },
     {
       "count": 92,
@@ -1153,6 +1361,14 @@
       "voice": "baritone",
       "level": 0.16,
       "pan": 0.25
+    },
+    {
+      "count": 92,
+      "duration": 1.4875,
+      "midi": 86,
+      "voice": "trumpet",
+      "level": 0.2,
+      "pan": 0.1
     },
     {
       "count": 93,
@@ -1185,6 +1401,14 @@
       "voice": "mellophone",
       "level": 0.16,
       "pan": 0.25
+    },
+    {
+      "count": 94,
+      "duration": 1.4875,
+      "midi": 88,
+      "voice": "trumpet",
+      "level": 0.2,
+      "pan": 0.1
     },
     {
       "count": 95,
@@ -1283,6 +1507,30 @@
       "pan": 0.45
     },
     {
+      "count": 96,
+      "duration": 3.4,
+      "midi": 81,
+      "voice": "trumpet",
+      "level": 0.3,
+      "pan": 0.1
+    },
+    {
+      "count": 100,
+      "duration": 1.7,
+      "midi": 83,
+      "voice": "trumpet",
+      "level": 0.32,
+      "pan": 0.1
+    },
+    {
+      "count": 102,
+      "duration": 1.7,
+      "midi": 85,
+      "voice": "trumpet",
+      "level": 0.34,
+      "pan": 0.1
+    },
+    {
       "count": 104,
       "duration": 8,
       "midi": 26,
@@ -1361,6 +1609,14 @@
       "voice": "trumpet",
       "level": 0.2466576574931336,
       "pan": 0.45
+    },
+    {
+      "count": 104,
+      "duration": 6.8,
+      "midi": 86,
+      "voice": "trumpet",
+      "level": 0.42,
+      "pan": 0.1
     }
   ]
 }
