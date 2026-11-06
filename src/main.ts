@@ -845,11 +845,13 @@ function renderResults() {
 }
 function resize() {
   const stage = $("stage");
-  renderer.setSize(stage.clientWidth, stage.clientHeight);
+  // false: CSS keeps the canvas filling the stage; only the drawing buffer is resized here.
+  renderer.setSize(stage.clientWidth, stage.clientHeight, false);
   camera.aspect = stage.clientWidth / stage.clientHeight;
   camera.updateProjectionMatrix();
 }
-window.addEventListener("resize", resize);
+// Watch the stage itself: Safari can settle its height after load without a window resize.
+new ResizeObserver(resize).observe($("stage"));
 resize();
 const nameLabels = new Map<string, HTMLElement>();
 function drawNames(positions: Dot[]) {
